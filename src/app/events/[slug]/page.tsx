@@ -6,6 +6,11 @@ import { Calendar, Clock, MapPin, Users, Sparkles, CheckCircle2, Award } from 'l
 
 export const revalidate = 60;
 
+export async function generateStaticParams() {
+  const events = await prisma.event.findMany({ select: { slug: true } });
+  return events.map((e) => ({ slug: e.slug }));
+}
+
 interface EventPageProps {
   params: Promise<{ slug: string }>;
 }

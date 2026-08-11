@@ -7,6 +7,11 @@ import { Star, Clock, Laptop, Layers, Users, Sparkles } from 'lucide-react';
 
 export const revalidate = 60;
 
+export async function generateStaticParams() {
+  const courses = await prisma.course.findMany({ select: { slug: true } });
+  return courses.map((c) => ({ slug: c.slug }));
+}
+
 interface CoursePageProps {
   params: Promise<{ slug: string }>;
 }

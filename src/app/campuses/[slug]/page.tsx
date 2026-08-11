@@ -6,6 +6,11 @@ import HomeClientSection from '@/components/HomeClientSection';
 
 export const revalidate = 60;
 
+export async function generateStaticParams() {
+  const campuses = await prisma.campus.findMany({ select: { slug: true } });
+  return campuses.map((c) => ({ slug: c.slug }));
+}
+
 interface CampusPageProps {
   params: Promise<{ slug: string }>;
 }

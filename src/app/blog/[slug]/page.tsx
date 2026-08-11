@@ -7,6 +7,11 @@ import HomeClientSection from '@/components/HomeClientSection';
 
 export const revalidate = 60;
 
+export async function generateStaticParams() {
+  const posts = await prisma.blogPost.findMany({ select: { slug: true } });
+  return posts.map((p) => ({ slug: p.slug }));
+}
+
 interface BlogPageProps {
   params: Promise<{ slug: string }>;
 }
