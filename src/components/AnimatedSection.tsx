@@ -208,13 +208,17 @@ export function StaggerItem({
   );
 }
 
-// Interactive Hover Card Wrapper (Lift + Glow + Scale)
+// Interactive Hover Card Wrapper (Lift + Glow + Scale Zoom In)
 export function MotionCard({
   children,
   className = '',
+  hoverScale = 1.045,
+  hoverY = -8,
 }: {
   children: ReactNode;
   className?: string;
+  hoverScale?: number;
+  hoverY?: number;
 }) {
   const shouldReduceMotion = useReducedMotion();
 
@@ -224,15 +228,70 @@ export function MotionCard({
         shouldReduceMotion
           ? {}
           : {
-              y: -8,
-              scale: 1.015,
-              transition: { duration: 0.25, ease: 'easeOut' },
+              y: hoverY,
+              scale: hoverScale,
+              transition: { duration: 0.22, ease: [0.16, 1, 0.3, 1] },
             }
       }
-      whileTap={{ scale: 0.98 }}
+      whileTap={{ scale: 0.97 }}
       className={className}
     >
       {children}
     </motion.div>
   );
 }
+
+
+// Fast Pop-in Scale Effect
+export function ScalePop({
+  children,
+  className = '',
+  delay = 0,
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  const shouldReduceMotion = useReducedMotion();
+
+  return (
+    <motion.div
+      initial={shouldReduceMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.88, y: 15 }}
+      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{
+        type: 'spring',
+        stiffness: 280,
+        damping: 22,
+        delay,
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+// Fast Snappy Hover Button Effect
+export function FastHoverButton({
+  children,
+  className = '',
+  onClick,
+}: {
+  children: ReactNode;
+  className?: string;
+  onClick?: () => void;
+}) {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.04, y: -2 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+      className={className}
+      onClick={onClick}
+    >
+      {children}
+    </motion.div>
+  );
+}
+

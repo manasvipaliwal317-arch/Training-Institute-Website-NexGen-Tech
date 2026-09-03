@@ -253,3 +253,263 @@ body.light,
   mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
+
+/* Announcement Bar Triggering Effect */
+@keyframes trigger-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+@keyframes trigger-pulse-glow {
+  0%, 100% { box-shadow: 0 0 8px rgba(245, 158, 11, 0.4), 0 0 20px rgba(245, 158, 11, 0.2); }
+  50% { box-shadow: 0 0 18px rgba(245, 158, 11, 0.9), 0 0 35px rgba(239, 68, 68, 0.6); }
+}
+
+@keyframes phone-ring {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  10%, 30%, 50% { transform: rotate(-12deg) scale(1.15); }
+  20%, 40% { transform: rotate(12deg) scale(1.15); }
+  60% { transform: rotate(0deg) scale(1); }
+}
+
+.animate-trigger-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-trigger-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  animation: trigger-shimmer 3.5s infinite;
+  pointer-events: none;
+}
+
+.animate-trigger-pulse {
+  animation: trigger-pulse-glow 2s infinite ease-in-out;
+}
+
+.animate-phone-ring {
+  animation: phone-ring 2.5s infinite ease-in-out;
+}
+
+/* Fast Motion & Dynamic Reveal Enhancements */
+@keyframes float-subtle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes fast-glow-pulse {
+  0%, 100% { opacity: 0.6; filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.4)); }
+  50% { opacity: 1; filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.7)); }
+}
+
+.animate-float {
+  animation: float-subtle 4s infinite ease-in-out;
+}
+
+.animate-fast-glow {
+  animation: fast-glow-pulse 3s infinite ease-in-out;
+}
+
+.will-change-transform-opacity {
+  will-change: transform, opacity;
+}
+
+/* ==========================================================================
+   NAVIGATION BAR THEME OVERRIDES & SHIMMERING EFFECT
+   ========================================================================== */
+@keyframes nav-shimmer-sweep {
+  0% {
+    transform: translateX(-120%) skewX(-20deg);
+  }
+  50%, 100% {
+    transform: translateX(250%) skewX(-20deg);
+  }
+}
+
+@keyframes nav-border-pulse {
+  0%, 100% {
+    border-color: rgba(99, 102, 241, 0.35);
+    box-shadow: 0 10px 40px -10px rgba(79, 70, 229, 0.25);
+  }
+  50% {
+    border-color: rgba(236, 72, 153, 0.45);
+    box-shadow: 0 10px 45px -5px rgba(236, 72, 153, 0.3);
+  }
+}
+
+@keyframes nav-line-flow {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.glass-nav-shimmer {
+  background: linear-gradient(
+    135deg,
+    rgba(11, 15, 25, 0.94) 0%,
+    rgba(26, 21, 62, 0.92) 50%,
+    rgba(11, 15, 25, 0.94) 100%
+  );
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.35);
+  position: relative;
+  overflow: visible;
+  animation: nav-border-pulse 4s infinite ease-in-out;
+}
+
+html.light .glass-nav-shimmer,
+.light .glass-nav-shimmer {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.97) 0%,
+    rgba(255, 244, 237, 0.96) 50%,
+    rgba(254, 243, 199, 0.95) 100%
+  ) !important;
+  border-bottom: 1px solid rgba(249, 115, 22, 0.4) !important;
+  box-shadow: 0 10px 30px rgba(234, 88, 12, 0.1) !important;
+}
+
+.nav-shimmer-beam {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 30%,
+    rgba(168, 85, 247, 0.18) 50%,
+    rgba(59, 130, 246, 0.18) 70%,
+    transparent 100%
+  );
+  animation: nav-shimmer-sweep 5s infinite ease-in-out;
+  pointer-events: none;
+}
+
+html.light .nav-shimmer-beam,
+.light .nav-shimmer-beam {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(249, 115, 22, 0.12) 40%,
+    rgba(234, 88, 12, 0.2) 50%,
+    transparent 100%
+  ) !important;
+}
+
+.nav-shimmer-bottom-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #38bdf8 20%,
+    #c084fc 40%,
+    #f472b6 60%,
+    #fbbf24 80%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: nav-line-flow 3.5s infinite linear;
+  pointer-events: none;
+}
+
+/* Certificate Light Sweep & Gold Sheen Effect */
+@keyframes light-sweep {
+  0% {
+    transform: translateX(-150%) skewX(-25deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  45% {
+    transform: translateX(250%) skewX(-25deg);
+    opacity: 1;
+  }
+  60%, 100% {
+    transform: translateX(250%) skewX(-25deg);
+    opacity: 0;
+  }
+}
+
+.animate-light-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-light-sweep::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.6) 48%,
+    rgba(245, 158, 11, 0.4) 52%,
+    transparent 65%
+  );
+  animation: light-sweep 4.5s infinite ease-in-out;
+  pointer-events: none;
+  z-index: 30;
+}
+
+
+/* Certificate Light Sweep & Gold Sheen Effect */
+@keyframes light-sweep {
+  0% {
+    transform: translateX(-150%) skewX(-25deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  45% {
+    transform: translateX(250%) skewX(-25deg);
+    opacity: 1;
+  }
+  60%, 100% {
+    transform: translateX(250%) skewX(-25deg);
+    opacity: 0;
+  }
+}
+
+.animate-light-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-light-sweep::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.6) 48%,
+    rgba(245, 158, 11, 0.4) 52%,
+    transparent 65%
+  );
+  animation: light-sweep 4.5s infinite ease-in-out;
+  pointer-events: none;
+  z-index: 30;
+}
+
+
+

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Users,
   BookOpen,
@@ -93,7 +94,12 @@ export default function AdminDashboardClient({
   return (
     <div className="space-y-10 py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Top Header Bar */}
-      <div className="glass-card rounded-2xl p-6 sm:p-8 border border-purple-500/20 bg-gradient-to-r from-slate-900 via-purple-950/30 to-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        className="glass-card rounded-2xl p-6 sm:p-8 border border-purple-500/20 bg-gradient-to-r from-slate-900 via-purple-950/30 to-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4"
+      >
         <div className="space-y-1 text-center sm:text-left">
           <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase text-purple-400">
             <Sparkles className="w-4 h-4" />
@@ -105,39 +111,60 @@ export default function AdminDashboardClient({
 
         <button
           onClick={handleLogout}
-          className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-rose-400 font-semibold text-xs border border-rose-500/30 flex items-center gap-2 transition-colors"
+          className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-rose-400 font-semibold text-xs border border-rose-500/30 flex items-center gap-2 transition-all hover:scale-105 active:scale-95"
         >
           <LogOut className="w-4 h-4" />
           <span>Sign Out Admin</span>
         </button>
-      </div>
+      </motion.div>
 
       {/* Metrics Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="glass-card rounded-2xl p-5 border border-slate-800 space-y-1">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.94 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, delay: 0.05 }}
+          className="glass-card rounded-2xl p-5 border border-slate-800 space-y-1 hover:border-purple-500/40 transition-colors"
+        >
           <span className="text-xs text-slate-400 font-medium block">Total Inquiries</span>
           <span className="text-3xl font-extrabold text-white">{inquiries.length}</span>
           <span className="text-[11px] text-slate-500 block">All time captured leads</span>
-        </div>
+        </motion.div>
 
-        <div className="glass-card rounded-2xl p-5 border border-slate-800 space-y-1">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.94 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          className="glass-card rounded-2xl p-5 border border-slate-800 space-y-1 hover:border-blue-500/40 transition-colors"
+        >
           <span className="text-xs text-slate-400 font-medium block">New Leads</span>
           <span className="text-3xl font-extrabold text-blue-400">{newLeadsCount}</span>
           <span className="text-[11px] text-blue-400/80 block">Requires counselor call</span>
-        </div>
+        </motion.div>
 
-        <div className="glass-card rounded-2xl p-5 border border-slate-800 space-y-1">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.94 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, delay: 0.15 }}
+          className="glass-card rounded-2xl p-5 border border-slate-800 space-y-1 hover:border-amber-500/40 transition-colors"
+        >
           <span className="text-xs text-slate-400 font-medium block">In Counseling</span>
           <span className="text-3xl font-extrabold text-amber-400">{contactedCount}</span>
           <span className="text-[11px] text-amber-400/80 block">Follow-up in progress</span>
-        </div>
+        </motion.div>
 
-        <div className="glass-card rounded-2xl p-5 border border-slate-800 space-y-1">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.94 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+          className="glass-card rounded-2xl p-5 border border-slate-800 space-y-1 hover:border-emerald-500/40 transition-colors"
+        >
           <span className="text-xs text-slate-400 font-medium block">Confirmed Enrolled</span>
           <span className="text-3xl font-extrabold text-emerald-400">{enrolledCount}</span>
           <span className="text-[11px] text-emerald-400/80 block">Converted students</span>
-        </div>
+        </motion.div>
       </div>
+
 
       {/* Leads Table Section */}
       <div className="glass-card rounded-2xl p-6 sm:p-8 border border-slate-800 space-y-6">

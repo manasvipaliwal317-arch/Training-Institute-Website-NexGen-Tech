@@ -71,7 +71,7 @@ export default async function AboutPage() {
                 <MotionCard>
                   <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-blue-500/30 shadow-2xl group">
                     <Image
-                      src="/institute-reception.png"
+                      src="/institute-reception.webp"
                       alt="NexGen Tech Academy Reception Lobby"
                       fill
                       sizes="(max-width: 768px) 100vw, 500px"

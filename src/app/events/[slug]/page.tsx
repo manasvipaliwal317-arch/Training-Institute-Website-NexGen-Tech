@@ -77,7 +77,7 @@ export default async function SingleEventPage({ params }: EventPageProps) {
           </div>
 
           <div className="lg:col-span-4 h-64 rounded-2xl overflow-hidden relative border border-slate-700 shadow-2xl">
-            <Image src={event.bannerImage} alt={event.title} fill className="object-cover" />
+            <Image src={event.bannerImage || 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80'} alt={event.title} fill className="object-cover" />
           </div>
         </div>
       </div>

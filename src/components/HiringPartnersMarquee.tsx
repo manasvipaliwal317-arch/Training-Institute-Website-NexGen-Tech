@@ -111,30 +111,38 @@ const PARTNERS: Partner[] = [
   },
 ];
 
-export default function HiringPartnersMarquee() {
+function EqualizerBars() {
   const [randomHeights, setRandomHeights] = useState<number[]>([]);
 
-  // Generate dynamic random equalizer heights for the moving bars effect
   useEffect(() => {
+    // initial state to avoid hydration mismatch delay if possible, but it's client side anyway.
+    setRandomHeights(Array.from({ length: 32 }, () => Math.floor(Math.random() * 28) + 8));
+
     const interval = setInterval(() => {
       const heights = Array.from({ length: 32 }, () => Math.floor(Math.random() * 28) + 8);
       setRandomHeights(heights);
-    }, 250);
+    }, 500);
     return () => clearInterval(interval);
   }, []);
 
   return (
+    <div className="absolute inset-0 pointer-events-none opacity-25 flex items-end justify-between px-4 z-0">
+      {randomHeights.map((h, i) => (
+        <div
+          key={i}
+          className="w-1.5 rounded-t-full bg-gradient-to-t from-blue-600 via-indigo-500 to-purple-400 transition-all duration-500 ease-out"
+          style={{ height: `${h || 0}px` }}
+        />
+      ))}
+    </div>
+  );
+}
+
+export default function HiringPartnersMarquee() {
+  return (
     <div className="glass-card rounded-3xl p-6 sm:p-10 border border-blue-500/20 bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-950 shadow-2xl relative overflow-hidden space-y-8">
       {/* Background Animated Random Equalizer Bars */}
-      <div className="absolute inset-0 pointer-events-none opacity-25 flex items-end justify-between px-4 z-0">
-        {randomHeights.map((h, i) => (
-          <div
-            key={i}
-            className="w-1.5 rounded-t-full bg-gradient-to-t from-blue-600 via-indigo-500 to-purple-400 transition-all duration-300 ease-out"
-            style={{ height: `${h}px` }}
-          />
-        ))}
-      </div>
+      <EqualizerBars />
 
       {/* Header Info */}
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">

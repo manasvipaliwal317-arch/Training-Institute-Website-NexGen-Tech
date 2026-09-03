@@ -5,6 +5,8 @@ import HomeClientSection from '@/components/HomeClientSection';
 import ThemeToggle from '@/components/ThemeToggle';
 import HiringPartnersMarquee from '@/components/HiringPartnersMarquee';
 import FacultyMovingChain from '@/components/FacultyMovingChain';
+import InteractiveCertificate from '@/components/InteractiveCertificate';
+import InstituteCollageWheel from '@/components/InstituteCollageWheel';
 import { getCourseTheme } from '@/lib/courseThemes';
 import {
   FadeInUp,
@@ -46,7 +48,7 @@ export default async function HomePage() {
   const courses = await prisma.course.findMany({
     where: { bestseller: true },
     include: { category: true },
-    take: 6,
+    take: 4,
   });
 
   const batches = await prisma.batch.findMany({
@@ -67,7 +69,15 @@ export default async function HomePage() {
   });
 
   const events = await prisma.event.findMany({
-    take: 2,
+    take: 3,
+  });
+
+  const campuses = await prisma.campus.findMany({
+    take: 3,
+  });
+
+  const blogPosts = await prisma.blogPost.findMany({
+    take: 3,
   });
 
   return (
@@ -161,8 +171,8 @@ export default async function HomePage() {
                 <div className="relative w-full max-w-lg aspect-square rounded-3xl overflow-hidden glass-card border border-blue-500/30 p-2 shadow-2xl group hover:border-blue-500/60 transition-all duration-500 min-h-[320px]">
                   <div className="relative w-full h-full rounded-2xl overflow-hidden bg-gradient-to-br from-slate-900/90 via-indigo-950/80 to-slate-950 flex items-center justify-center">
                     <Image
-                      src="/hero-ultra-attractive-tech.png"
-                      alt="Next-Gen 3D Tech Academy & AI Lab Illustration"
+                      src="/hero-realistic-students.png"
+                      alt="NexGen Tech Academy Real Student Coding Session"
                       fill
                       priority
                       unoptimized
@@ -189,13 +199,6 @@ export default async function HomePage() {
 
           </div>
         </div>
-      </section>
-
-      {/* TOP HIRING COMPANY PARTNERS SECTION */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <ZoomIn>
-          <HiringPartnersMarquee />
-        </ZoomIn>
       </section>
 
       {/* 2. STATS SECTION */}
@@ -231,64 +234,18 @@ export default async function HomePage() {
         </FadeInUp>
       </section>
 
-      {/* ABOUT US SECTION */}
+      {/* TOP HIRING COMPANY PARTNERS SECTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="glass-card rounded-3xl p-8 sm:p-12 border border-blue-500/20 bg-gradient-to-br from-slate-900 via-blue-950/40 to-slate-900 shadow-2xl relative overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
-            <div className="lg:col-span-7 space-y-6">
-              <FadeInLeft>
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs font-semibold uppercase tracking-wider">
-                  <Sparkles className="w-4 h-4 text-amber-500 dark:text-amber-300" />
-                  <span>Empowering Tech Careers Since 2014</span>
-                </div>
-                <h2 className="text-3xl sm:text-4xl font-black dark:text-white text-slate-900 tracking-tight leading-tight mt-3">
-                  Shaping the Next Generation of <span className="gradient-text">Global Tech Leaders</span>
-                </h2>
-                <p className="dark:text-slate-300 text-slate-700 text-base sm:text-lg leading-relaxed mt-3">
-                  NexGen Tech Academy is a premier IT training and research institute. Founded by software architects and AI researchers, our goal is to bridge the gap between academic education and modern industry demands through immersive project-based learning.
-                </p>
-                <div className="pt-4 flex flex-wrap items-center gap-4">
-                  <HomeClientSection mode="demo-btn" buttonText="Book Campus Visit & Demo" />
-                  <Link
-                    href="/about"
-                    className="px-6 py-3.5 rounded-xl border dark:border-slate-700 border-slate-300 hover:border-blue-500/40 dark:text-white text-slate-800 font-semibold text-sm transition-all"
-                  >
-                    Explore Academic Programs
-                  </Link>
-                </div>
-              </FadeInLeft>
-            </div>
-
-            {/* Reception Photo Column */}
-            <div className="lg:col-span-5 relative w-full">
-              <FadeInRight className="w-full">
-                <MotionCard className="w-full">
-                  <div className="relative w-full aspect-[4/3] min-h-[260px] rounded-2xl overflow-hidden border border-blue-500/30 shadow-2xl group">
-                    <Image
-                      src="/institute-reception.png"
-                      alt="NexGen Tech Academy Reception Lobby"
-                      fill
-                      unoptimized
-                      sizes="(max-width: 768px) 100vw, 500px"
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-                    <div className="absolute bottom-3 left-3 right-3 bg-slate-900/90 backdrop-blur-md border border-white/10 rounded-xl p-3 text-xs text-slate-200 font-medium flex items-center justify-between shadow-lg">
-                      <span className="font-bold text-white">NexGen Tech Academy Flagship Reception</span>
-                      <span className="text-emerald-400 font-semibold flex items-center gap-1">
-                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                        Live Campus
-                      </span>
-                    </div>
-                  </div>
-                </MotionCard>
-              </FadeInRight>
-            </div>
-          </div>
-        </div>
+        <ZoomIn>
+          <HiringPartnersMarquee />
+        </ZoomIn>
       </section>
 
-      {/* 3. FEATURED COURSES SECTION */}
+
+      {/* 3. REAL CAMPUS LIFE COLLAGE WHEEL */}
+      <InstituteCollageWheel />
+
+      {/* 4. FEATURED COURSES SECTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <FadeInUp>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -315,89 +272,89 @@ export default async function HomePage() {
           </div>
         </FadeInUp>
 
-        {/* Courses Grid */}
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Courses Grid - Compressed to fit 4 in a line with Hover Zoom Effect */}
+        <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {courses.map((course, idx) => {
             const theme = getCourseTheme(idx);
             return (
               <StaggerItem key={course.id}>
-                <MotionCard className="h-full">
+                <MotionCard hoverScale={1.05} hoverY={-8} className="h-full">
                   <div
-                    className={`glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col border ${theme.borderColor} ${theme.bgGradient} ${theme.lightCardBg} shadow-xl ${theme.glowColor} transition-all duration-300 group h-full`}
+                    className={`glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col border ${theme.borderColor} ${theme.bgGradient} ${theme.lightCardBg} shadow-xl ${theme.glowColor} transition-all duration-300 group h-full hover:shadow-2xl hover:border-blue-500/50`}
                   >
-                    {/* Image Hero */}
-                    <div className="relative h-48 w-full bg-slate-800 overflow-hidden">
+                    {/* Image Hero - Compact Height with Image Zoom */}
+                    <div className="relative h-36 sm:h-40 w-full bg-slate-800 overflow-hidden">
                       <Image
                         src={course.heroImage}
                         alt={course.title}
                         fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
-                      <div className="absolute top-3 left-3 flex items-center gap-2">
-                        <span className={`px-2.5 py-1 rounded-md ${theme.badgeBg} ${theme.badgeText} font-semibold text-[11px] shadow-sm`}>
+                      <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+                        <span className={`px-2 py-0.5 rounded-md ${theme.badgeBg} ${theme.badgeText} font-semibold text-[10px] shadow-sm`}>
                           {course.category.name}
                         </span>
                         {course.bestseller && (
-                          <span className="px-2.5 py-1 rounded-md bg-amber-500 text-slate-950 font-extrabold text-[11px] uppercase tracking-wider shadow-sm">
+                          <span className="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 font-extrabold text-[10px] uppercase tracking-wider shadow-sm">
                             Bestseller
                           </span>
                         )}
                       </div>
-                      <div className="absolute bottom-3 right-3 bg-slate-900/90 backdrop-blur-sm px-2.5 py-1 rounded-md text-amber-400 text-xs font-bold flex items-center gap-1">
-                        <Star className="w-3.5 h-3.5 fill-amber-400" />
+                      <div className="absolute bottom-2.5 right-2.5 bg-slate-900/90 backdrop-blur-sm px-2 py-0.5 rounded-md text-amber-400 text-[11px] font-bold flex items-center gap-1">
+                        <Star className="w-3 h-3 fill-amber-400" />
                         <span>{course.rating}</span>
-                        <span className="text-slate-400 text-[10px]">({course.ratingsCount})</span>
+                        <span className="text-slate-400 text-[9px]">({course.ratingsCount})</span>
                       </div>
                     </div>
 
-                    {/* Details */}
-                    <div className="p-6 flex-1 flex flex-col justify-between space-y-5">
-                      <div className="space-y-2">
-                        <h3 className="text-lg font-bold dark:text-white text-slate-900 line-clamp-2 leading-snug group-hover:text-blue-500 transition-colors">
+                    {/* Details - Compressed Padding */}
+                    <div className="p-4 flex-1 flex flex-col justify-between space-y-3.5">
+                      <div className="space-y-1.5">
+                        <h3 className="text-sm font-extrabold dark:text-white text-slate-900 line-clamp-2 leading-tight group-hover:text-blue-400 transition-colors">
                           {course.title}
                         </h3>
-                        <p className="dark:text-slate-400 text-slate-600 text-xs line-clamp-2 leading-relaxed">
+                        <p className="dark:text-slate-400 text-slate-600 text-[11px] line-clamp-2 leading-snug">
                           {course.tagline}
                         </p>
                       </div>
 
                       {/* Course Meta Pills */}
-                      <div className="grid grid-cols-2 gap-2 text-xs dark:text-slate-300 text-slate-700 pt-2 border-t dark:border-slate-800/80 border-slate-300/80">
-                        <div className="flex items-center gap-1.5">
-                          <Clock className={`w-4 h-4 ${theme.accentIconColor}`} />
-                          <span>{course.duration}</span>
+                      <div className="grid grid-cols-2 gap-1.5 text-[11px] dark:text-slate-300 text-slate-700 pt-2 border-t dark:border-slate-800/80 border-slate-300/80">
+                        <div className="flex items-center gap-1">
+                          <Clock className={`w-3.5 h-3.5 ${theme.accentIconColor}`} />
+                          <span className="truncate">{course.duration}</span>
                         </div>
-                        <div className="flex items-center gap-1.5">
-                          <Laptop className="w-4 h-4 text-purple-500" />
-                          <span>{course.mode}</span>
+                        <div className="flex items-center gap-1">
+                          <Laptop className="w-3.5 h-3.5 text-purple-500" />
+                          <span className="truncate">{course.mode}</span>
                         </div>
-                        <div className="flex items-center gap-1.5">
-                          <Layers className="w-4 h-4 text-emerald-500" />
-                          <span>{course.level}</span>
+                        <div className="flex items-center gap-1">
+                          <Layers className="w-3.5 h-3.5 text-emerald-500" />
+                          <span className="truncate">{course.level}</span>
                         </div>
-                        <div className="flex items-center gap-1.5">
-                          <Users className="w-4 h-4 text-amber-500" />
-                          <span>{course.enrolledStudents}+ Enrolled</span>
+                        <div className="flex items-center gap-1">
+                          <Users className="w-3.5 h-3.5 text-amber-500" />
+                          <span className="truncate">{course.enrolledStudents}+ Enrolled</span>
                         </div>
                       </div>
 
                       {/* Fees & CTA */}
-                      <div className="pt-4 border-t dark:border-slate-800/80 border-slate-300/80 flex items-center justify-between gap-3">
+                      <div className="pt-2.5 border-t dark:border-slate-800/80 border-slate-300/80 flex items-center justify-between gap-2">
                         <div>
-                          <div className="text-[10px] dark:text-slate-400 text-slate-600 uppercase tracking-wider font-semibold">Course Fee</div>
-                          <div className="flex items-baseline gap-2">
-                            <span className="text-lg font-black dark:text-white text-slate-900">₹{course.fees.toLocaleString()}</span>
-                            <span className="text-xs text-slate-500 line-through">₹{course.originalFees.toLocaleString()}</span>
+                          <div className="text-[9px] dark:text-slate-400 text-slate-600 uppercase tracking-wider font-semibold">Course Fee</div>
+                          <div className="flex items-baseline gap-1.5">
+                            <span className="text-base font-black dark:text-white text-slate-900">₹{course.fees.toLocaleString()}</span>
+                            <span className="text-[10px] text-slate-500 line-through">₹{course.originalFees.toLocaleString()}</span>
                           </div>
                         </div>
 
                         <Link
                           href={`/courses/${course.slug}`}
-                          className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-all shadow-md shadow-blue-600/20 flex items-center gap-1"
+                          className="px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px] transition-all shadow-md shadow-blue-600/20 flex items-center gap-1 shrink-0"
                         >
                           <span>View Details</span>
-                          <ChevronRight className="w-3.5 h-3.5" />
+                          <ChevronRight className="w-3 h-3" />
                         </Link>
                       </div>
                     </div>
@@ -406,82 +363,6 @@ export default async function HomePage() {
               </StaggerItem>
             );
           })}
-        </StaggerContainer>
-      </section>
-
-      {/* 4. UPCOMING BATCHES SECTION */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <FadeInUp>
-          <div className="text-center space-y-2 max-w-2xl mx-auto">
-            <div className="text-xs font-bold uppercase tracking-wider text-purple-400 flex items-center justify-center gap-1.5">
-              <Calendar className="w-4 h-4" />
-              <span>Live Class Timings</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-              Upcoming Classroom & Online <span className="gradient-text">Batches</span>
-            </h2>
-            <p className="text-slate-400 text-sm">
-              Flexible morning, evening, and weekend batches designed for college students and working professionals.
-            </p>
-          </div>
-        </FadeInUp>
-
-        {/* Batches Table / Grid */}
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {batches.map((batch) => (
-            <StaggerItem key={batch.id}>
-              <MotionCard>
-                <div className="glass-card rounded-2xl p-6 border border-slate-800 space-y-4 hover:border-purple-500/40 transition-all">
-                  <div className="flex items-start justify-between gap-2">
-                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-slate-800 text-blue-400 border border-slate-700">
-                      {batch.course.title.split(' ')[0]} {batch.course.title.split(' ')[1]}
-                    </span>
-                    <span className="text-[11px] font-extrabold px-2.5 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                      {batch.status}
-                    </span>
-                  </div>
-
-                  <h4 className="font-bold text-white text-base line-clamp-1">{batch.course.title}</h4>
-
-                  <div className="space-y-2 text-xs text-slate-300 pt-2 border-t border-slate-800">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-purple-400" />
-                      <span className="font-semibold text-white">Start Date:</span>
-                      <span>{batch.startDate}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-blue-400" />
-                      <span className="font-semibold text-white">Batch Timing:</span>
-                      <span>{batch.timing}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Laptop className="w-4 h-4 text-emerald-400" />
-                      <span className="font-semibold text-white">Mode:</span>
-                      <span>{batch.mode}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-amber-400" />
-                      <span className="font-semibold text-white">Location:</span>
-                      <span className="line-clamp-1">{batch.campusLocation}</span>
-                    </div>
-                  </div>
-
-                  <div className="pt-2 flex items-center justify-between gap-3">
-                    <div className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      <span>Only {batch.seatsAvailable} Seats Left</span>
-                    </div>
-
-                    <HomeClientSection
-                      mode="batch-btn"
-                      courseSlug={batch.course.slug}
-                      courseName={batch.course.title}
-                    />
-                  </div>
-                </div>
-              </MotionCard>
-            </StaggerItem>
-          ))}
         </StaggerContainer>
       </section>
 
@@ -633,6 +514,9 @@ export default async function HomePage() {
         </ZoomIn>
       </section>
 
+      {/* OFFICIAL INTERACTIVE NSDC CERTIFICATE PREVIEW */}
+      <InteractiveCertificate />
+
       {/* 7. REAL STUDENT TESTIMONIALS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <FadeInUp>
@@ -706,101 +590,222 @@ export default async function HomePage() {
         </ZoomIn>
       </section>
 
-      {/* 9. UPCOMING EVENTS & MASTERCLASSES PREVIEW */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      {/* 9. ACADEMY OUTCOMES & ECOSYSTEM (SUBSECTIONS: EVENTS, CAMPUSES, BLOGS) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+        
+        {/* Main Section Header */}
         <FadeInUp>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div className="space-y-2">
-              <div className="text-xs font-bold uppercase tracking-wider text-cyan-400">Free Tech Workshops</div>
-              <h2 className="text-3xl font-black text-white tracking-tight">
-                Upcoming Live Masterclasses
-              </h2>
+          <div className="text-center space-y-3 max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-wider">
+              <TrendingUp className="w-4 h-4 text-emerald-400" />
+              <span>Academy Outcomes & Ecosystem</span>
             </div>
+            <h2 className="text-3xl sm:text-5xl font-black dark:text-white text-slate-900 tracking-tight">
+              Real Impact & <span className="gradient-text">Tech Ecosystem</span>
+            </h2>
+            <p className="dark:text-slate-300 text-slate-600 text-sm sm:text-base leading-relaxed">
+              Explore our live technical workshops, state-of-the-art GPU lab campuses, and engineering research publications.
+            </p>
           </div>
         </FadeInUp>
 
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {events.map((ev) => (
-            <StaggerItem key={ev.id}>
-              <MotionCard className="h-full">
-                <div className="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col justify-between space-y-4 h-full">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-1 rounded-md bg-cyan-500/20 text-cyan-300 font-semibold text-xs">
-                        {ev.mode}
-                      </span>
-                      <span className="text-xs text-slate-400">{ev.category}</span>
-                    </div>
-                    <h3 className="text-xl font-bold text-white leading-snug">{ev.title}</h3>
-                    <div className="flex items-center gap-4 text-xs text-slate-300">
-                      <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5 text-blue-400" /> {ev.eventDate}</span>
-                      <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5 text-purple-400" /> {ev.eventTime}</span>
-                    </div>
-                  </div>
-
-                  <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
-                    <div>
-                      <span className="text-xs font-bold text-white block">{ev.speakerName}</span>
-                      <span className="text-[11px] text-slate-400">{ev.speakerRole}</span>
-                    </div>
-
-                    <HomeClientSection mode="event-btn" />
-                  </div>
-                </div>
-              </MotionCard>
-            </StaggerItem>
-          ))}
-        </StaggerContainer>
-      </section>
-
-      {/* 10. CAMPUS LOCATION PREVIEW & MAP */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="glass-card rounded-3xl p-8 sm:p-12 border border-slate-800 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-6 space-y-6">
-            <FadeInLeft>
-              <div className="text-xs font-bold uppercase tracking-wider text-blue-400 flex items-center gap-1.5">
-                <MapPin className="w-4 h-4" />
-                <span>State-of-the-Art Infrastructure</span>
+        {/* SUBSECTION 1: UPCOMING BATCHES (BATCHES) */}
+        <div className="space-y-6">
+          <div className="flex items-center justify-between border-b dark:border-slate-800 border-slate-200 pb-4">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-purple-500/10 text-purple-400">
+                <Clock className="w-5 h-5" />
               </div>
-              <h2 className="text-3xl font-black text-white tracking-tight mt-2">
-                Visit Our Tech Campuses
-              </h2>
-              <p className="text-slate-300 text-sm leading-relaxed mt-2">
-                Experience modern computer labs, GPU server rooms, high-speed Wi-Fi, collaborative project hubs, and cafeteria spaces designed for immersive learning.
-              </p>
-
-              <div className="space-y-4 pt-4">
-                <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
-                  <h4 className="font-bold text-white text-sm">Main Campus - Tech Park</h4>
-                  <p className="text-xs text-slate-400">Building 4B, Cybercity Tech Park, Hitec Phase 2, Hyderabad</p>
-                  <p className="text-xs text-blue-400 font-medium">Timings: Mon - Sun (8:00 AM - 9:00 PM)</p>
-                </div>
-
-                <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
-                  <h4 className="font-bold text-white text-sm">Branch Campus - Innovation Hub</h4>
-                  <p className="text-xs text-slate-400">Outer Ring Road, Marathahalli Tech Zone, Bengaluru</p>
-                  <p className="text-xs text-purple-400 font-medium">Timings: Mon - Sun (8:00 AM - 9:00 PM)</p>
-                </div>
+              <div>
+                <h3 className="text-xl font-bold dark:text-white text-slate-900">Subsection 1: Upcoming Cohort Batches</h3>
+                <p className="text-xs dark:text-slate-400 text-slate-500">Flexible morning, evening, and weekend live batches</p>
               </div>
-            </FadeInLeft>
+            </div>
+            <Link href="/batches" className="text-xs font-bold text-purple-400 hover:text-purple-300 flex items-center gap-1">
+              <span>View All Batches</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
 
-          <div className="lg:col-span-6 h-80 rounded-2xl overflow-hidden relative border border-slate-700 shadow-2xl bg-slate-900">
-            <FadeInRight>
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.311746764516!2d78.3758!3d17.4474!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb93dc8c5d69df%3A0x19688beb557ef0d9!2sHITEC%20City%2C%20Hyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
-                width="100%"
-                height="320"
-                style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg)' }}
-                allowFullScreen={false}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Campus Map Location"
-              />
-            </FadeInRight>
-          </div>
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {batches.map((batch) => (
+              <StaggerItem key={batch.id}>
+                <MotionCard className="h-full">
+                  <div className="glass-card rounded-2xl p-5 border dark:border-slate-800 border-slate-200 space-y-4 hover:border-purple-500/40 transition-all flex flex-col justify-between h-full">
+                    <div className="space-y-3">
+                      <div className="flex items-start justify-between gap-2">
+                        <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                          {batch.mode}
+                        </span>
+                        <span className="text-[10px] font-extrabold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                          {batch.status}
+                        </span>
+                      </div>
+
+                      <h4 className="font-bold dark:text-white text-slate-900 text-sm line-clamp-1">{batch.course?.title || 'Tech Specialization'}</h4>
+
+                      <div className="space-y-2 text-xs text-slate-300 pt-2 border-t dark:border-slate-800/80 border-slate-200">
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-3.5 h-3.5 text-purple-400" />
+                          <span className="font-semibold dark:text-white text-slate-800">Start Date:</span>
+                          <span className="dark:text-slate-300 text-slate-600">{batch.startDate}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Clock className="w-3.5 h-3.5 text-blue-400" />
+                          <span className="font-semibold dark:text-white text-slate-800">Timing:</span>
+                          <span className="dark:text-slate-300 text-slate-600">{batch.timing}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pt-3 border-t dark:border-slate-800 border-slate-200 flex items-center justify-between text-xs">
+                      <span className="text-emerald-400 font-bold">{batch.seatsAvailable} Seats Left</span>
+                      <HomeClientSection mode="event-btn" />
+                    </div>
+                  </div>
+                </MotionCard>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
         </div>
+
+        {/* SUBSECTION 2: LIVE WORKSHOPS & MASTERCLASSES (EVENTS) */}
+        <div className="space-y-6">
+          <div className="flex items-center justify-between border-b dark:border-slate-800 border-slate-200 pb-4">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-400">
+                <Calendar className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold dark:text-white text-slate-900">Subsection 2: Live Workshops & Masterclasses</h3>
+                <p className="text-xs dark:text-slate-400 text-slate-500">Interactive live coding, RAG pipelines, and cloud architecture sessions</p>
+              </div>
+            </div>
+            <Link href="/events" className="text-xs font-bold text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+              <span>View All Events</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {events.map((ev) => (
+              <StaggerItem key={ev.id}>
+                <MotionCard className="h-full">
+                  <div className="glass-card rounded-2xl overflow-hidden border dark:border-slate-800 border-slate-200 flex flex-col justify-between hover:border-cyan-500/40 transition-all h-full group">
+                    {/* Event Banner Image */}
+                    <div className="relative h-48 w-full bg-slate-800 overflow-hidden">
+                      <Image 
+                        src={ev.bannerImage || 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80'} 
+                        alt={ev.title} 
+                        fill 
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500" 
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+                      <div className="absolute top-3 left-3 flex items-center gap-2">
+                        <span className="px-2.5 py-1 rounded-md bg-cyan-600/90 text-white font-bold text-[11px] uppercase tracking-wide shadow-sm">
+                          {ev.category}
+                        </span>
+                        <span className="px-2.5 py-1 rounded-md bg-slate-900/90 text-amber-300 font-bold text-[11px] shadow-sm">
+                          {ev.mode}
+                        </span>
+                      </div>
+                      <div className="absolute bottom-3 right-3 bg-slate-900/90 px-2.5 py-1 rounded-md text-emerald-400 text-xs font-bold flex items-center gap-1 border border-slate-800 shadow-md">
+                        <Users className="w-3.5 h-3.5" />
+                        <span>{ev.registrationsCount}+ Registered</span>
+                      </div>
+                    </div>
+
+                    <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                      <div className="space-y-2">
+                        <h4 className="text-base font-bold dark:text-white text-slate-900 leading-snug line-clamp-2">{ev.title}</h4>
+                        <p className="text-xs dark:text-slate-400 text-slate-600 line-clamp-2">{ev.tagline}</p>
+                      </div>
+
+                      <div className="space-y-3 pt-3 border-t dark:border-slate-800/80 border-slate-200">
+                        <div className="flex flex-wrap items-center justify-between gap-2 text-xs dark:text-slate-300 text-slate-600">
+                          <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5 text-blue-400" /> {ev.eventDate}</span>
+                          <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5 text-purple-400" /> {ev.eventTime}</span>
+                        </div>
+
+                        <div className="flex items-center justify-between pt-1">
+                          <div className="flex items-center gap-2">
+                            <div className="relative w-8 h-8 rounded-full overflow-hidden border border-slate-700">
+                              <Image src={ev.speakerPhoto} alt={ev.speakerName} fill className="object-cover" />
+                            </div>
+                            <div>
+                              <span className="text-xs font-bold dark:text-white text-slate-900 block">{ev.speakerName}</span>
+                              <span className="text-[10px] dark:text-slate-400 text-slate-500 block line-clamp-1">{ev.speakerRole}</span>
+                            </div>
+                          </div>
+                          <HomeClientSection mode="event-btn" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </MotionCard>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </div>
+
+        {/* SUBSECTION 3: INNOVATION TECH CAMPUSES (CAMPUSES) */}
+        <div className="space-y-6">
+          <div className="flex items-center justify-between border-b dark:border-slate-800 border-slate-200 pb-4">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-blue-500/10 text-blue-400">
+                <Building2 className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold dark:text-white text-slate-900">Subsection 3: Innovation Tech Campuses</h3>
+                <p className="text-xs dark:text-slate-400 text-slate-500">NVIDIA GPU server rooms, high-speed Wi-Fi, and 24/7 collaborative labs</p>
+              </div>
+            </div>
+            <Link href="/campuses" className="text-xs font-bold text-blue-400 hover:text-blue-300 flex items-center gap-1">
+              <span>View All Campuses</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {campuses.map((campus) => (
+              <StaggerItem key={campus.id}>
+                <MotionCard className="h-full">
+                  <div className="glass-card rounded-2xl overflow-hidden border dark:border-slate-800 border-slate-200 space-y-4 hover:border-blue-500/40 transition-all h-full group">
+                    <div className="relative h-44 w-full bg-slate-800 overflow-hidden">
+                      <Image 
+                        src={campus.coverImage || 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80'} 
+                        alt={campus.name} 
+                        fill 
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500" 
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
+                      <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-blue-600/90 text-white font-bold text-xs shadow-sm">
+                        {campus.city}
+                      </span>
+                    </div>
+
+                    <div className="p-5 pt-0 space-y-3">
+                      <h4 className="font-bold dark:text-white text-slate-900 text-base">{campus.name}</h4>
+                      <p className="text-xs dark:text-slate-400 text-slate-600 flex items-start gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-blue-400 shrink-0 mt-0.5" />
+                        <span>{campus.address}</span>
+                      </p>
+                      <div className="pt-2 border-t dark:border-slate-800 border-slate-200 flex items-center justify-between text-xs">
+                        <span className="dark:text-slate-400 text-slate-500">Timings:</span>
+                        <span className="font-bold dark:text-white text-slate-900">{campus.workingHours}</span>
+                      </div>
+                    </div>
+                  </div>
+                </MotionCard>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </div>
+
       </section>
+
     </div>
   );
 }

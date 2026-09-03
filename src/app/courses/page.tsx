@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import CourseCatalogClient from '@/components/CourseCatalogClient';
-import { Sparkles, BookOpen } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 export const metadata = {
   title: 'Professional IT Courses & Certifications | NexGen Tech Academy',
@@ -16,7 +16,6 @@ interface PageProps {
 export default async function CoursesPage({ searchParams }: PageProps) {
   const resolvedParams = await searchParams;
   const initialCategory = resolvedParams?.category || '';
-
   const courses = await prisma.course.findMany({
     include: { category: true },
     orderBy: { enrolledStudents: 'desc' },
@@ -46,7 +45,7 @@ export default async function CoursesPage({ searchParams }: PageProps) {
       <CourseCatalogClient
         courses={courses}
         categories={categories}
-        initialCategory={initialCategory}
+        initialCategory={''}
       />
     </div>
   );
