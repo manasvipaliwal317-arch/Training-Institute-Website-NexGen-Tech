@@ -9,7 +9,6 @@ import {
   X,
   Phone,
   Sparkles,
-  Lock,
   ArrowRight,
   Brain,
   Code2,
@@ -22,9 +21,6 @@ import {
   Building2,
   Award,
   Clock,
-  Briefcase,
-  Star,
-  BookOpen,
 } from 'lucide-react';
 import InquiryModal from './InquiryModal';
 import ThemeToggle from './ThemeToggle';
@@ -107,30 +103,6 @@ const outcomesSubmenu = [
     tag: '3 Hubs',
     accent: 'emerald'
   },
-  { 
-    name: 'Placements & Hiring Drives', 
-    href: '/placements', 
-    icon: Briefcase, 
-    desc: '94% Placement Success, 450+ Hiring Partners & Salary Breakdowns',
-    tag: '94% Hired',
-    accent: 'blue'
-  },
-  { 
-    name: 'ISO Certificate Verification', 
-    href: '/certificate', 
-    icon: ShieldCheck, 
-    desc: 'Instant QR Code & Certificate ID Credential Authentication Portal',
-    tag: 'Instant Lookup',
-    accent: 'amber'
-  },
-  { 
-    name: 'Tech Blog & Research', 
-    href: '/blog', 
-    icon: BookOpen, 
-    desc: 'Engineering Guides, Interview Roadmaps & Technical Architecture Insights',
-    tag: 'Latest Articles',
-    accent: 'rose'
-  },
 ];
 
 export default function Header() {
@@ -149,7 +121,7 @@ export default function Header() {
 
   const isActive = (path: string) => pathname === path;
   const isCoursesActive = pathname.startsWith('/courses');
-  const isOutcomesActive = ['/batches', '/events', '/campuses', '/placements', '/certificate'].includes(pathname);
+  const isOutcomesActive = ['/batches', '/events', '/campuses'].includes(pathname);
 
   // Smooth hover handlers with grace timeout
   const handleCoursesMouseEnter = () => {
@@ -244,11 +216,6 @@ export default function Header() {
               <Sparkles className="w-3 h-3 text-slate-950 fill-slate-950" />
               <span>Claim Scholarship</span>
             </button>
-            <span className="hidden md:inline text-slate-400">|</span>
-            <Link href="/admin/login" className="hidden md:flex items-center gap-1 text-slate-300 hover:text-white transition-colors">
-              <Lock className="w-3 h-3 text-purple-300" />
-              <span>Admin</span>
-            </Link>
           </div>
         </div>
       </div>
@@ -445,7 +412,7 @@ export default function Header() {
                           </span>
                         </div>
                         <span className="text-[10px] font-semibold dark:text-slate-400 text-slate-500">
-                          6 Key Portals
+                          3 Key Portals
                         </span>
                       </div>
 
@@ -690,13 +657,6 @@ export default function Header() {
                 className="px-3 py-2 rounded-lg text-amber-300 font-semibold hover:bg-slate-800/60 flex items-center gap-2"
               >
                 <Award className="w-4 h-4 text-amber-400" /> Certificate Verification
-              </Link>
-              <Link
-                href="/admin/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg text-purple-400 hover:bg-slate-800/60 flex items-center gap-2"
-              >
-                <Lock className="w-4 h-4" /> Admin Portal
               </Link>
             </nav>
 

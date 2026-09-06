@@ -136,8 +136,7 @@ export default function Footer() {
               <li><Link href="/certificate" className="text-amber-300 font-semibold hover:text-amber-200 transition-colors flex items-center gap-1.5"><Award className="w-3.5 h-3.5 text-amber-400" /> Verify NSDC Certificate</Link></li>
               <li><Link href="/placements" className="hover:text-blue-400 transition-colors">Placement Records & Salary Reports</Link></li>
               <li><Link href="/campuses" className="hover:text-blue-400 transition-colors">Campus Infrastructure & GPU Labs</Link></li>
-              <li><Link href="/contact" className="hover:text-blue-400 transition-colors">Contact Academic Counselors</Link></li>
-              <li><Link href="/admin/login" className="text-purple-400 hover:text-purple-300 font-semibold">Admin Login Portal</Link></li>
+              <li><Link href="/events" className="hover:text-blue-400 transition-colors">Free Masterclasses & Events</Link></li>
             </ul>
           </div>
 

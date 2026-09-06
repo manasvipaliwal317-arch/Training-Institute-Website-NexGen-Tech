@@ -143,6 +143,7 @@ model Inquiry {
   preferredMode   String   @default("Hybrid")
   preferredCampus String   @default("Main Tech Park HQ")
   message         String?
+  notes           String?
   source          String   @default("Website Form")
   status          String   @default("NEW") // NEW, CONTACTED, ENROLLED, CLOSED
   createdAt       DateTime @default(now())
@@ -252,3 +253,29 @@ model GalleryImage {
   caption   String?
   createdAt DateTime @default(now())
 }
+
+model HiringDrive {
+  id                   String   @id @default(uuid())
+  slug                 String   @unique
+  companyName          String
+  companyLogo          String
+  role                 String
+  packageLpa           String   // e.g. "7.5 - 14.0 LPA"
+  jobType              String   @default("Full-Time") // Full-Time, Internship, Contract
+  eligibility          String   // e.g. "B.Tech/MCA/BCA (2024-2026 Batch), Min 60%"
+  location             String   // e.g. "Hyderabad / Bengaluru / Remote"
+  experience           String   @default("Fresher - 2 Yrs")
+  driveDate            String   // e.g. "2026-09-28"
+  registrationDeadline String   // e.g. "2026-09-24"
+  status               String   @default("ACTIVE") // ACTIVE, UPCOMING, COMPLETED, CLOSED
+  openPositions        Int      @default(10)
+  skillsRequiredJson   String   @default("[]")
+  description          String
+  applyUrl             String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([status])
+  @@index([slug])
+}
+

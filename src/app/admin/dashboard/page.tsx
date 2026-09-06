@@ -36,6 +36,15 @@ export default async function AdminDashboardPage() {
     orderBy: { isMain: 'desc' },
   });
 
+  const hiringDrives = await prisma.hiringDrive.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
+
+  const batches = await prisma.batch.findMany({
+    include: { course: true },
+    orderBy: { createdAt: 'desc' },
+  });
+
   return (
     <AdminPanel
       inquiries={inquiries.map((i) => ({
@@ -47,6 +56,8 @@ export default async function AdminDashboardPage() {
       events={events}
       blogs={blogs}
       campuses={campuses}
+      hiringDrives={hiringDrives}
+      batches={batches}
       userEmail={session.email}
     />
   );

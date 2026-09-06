@@ -570,25 +570,7 @@ export default async function HomePage() {
         </StaggerContainer>
       </section>
 
-      {/* 8. HIRING PARTNER LOGOS STRIP */}
-      <section className="border-y border-slate-800/80 bg-slate-950/60 py-10">
-        <ZoomIn>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
-              Top Hiring Partners Recruiting Our Graduates
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-8 md:gap-14 opacity-75 grayscale hover:grayscale-0 transition-all">
-              <span className="text-lg font-black tracking-tighter text-white">MICROSOFT</span>
-              <span className="text-lg font-black tracking-tighter text-blue-400">AMAZON</span>
-              <span className="text-lg font-black tracking-tighter text-emerald-400">ORACLE</span>
-              <span className="text-lg font-black tracking-tighter text-purple-400">ATLASSIAN</span>
-              <span className="text-lg font-black tracking-tighter text-amber-400">DELOITTE</span>
-              <span className="text-lg font-black tracking-tighter text-rose-400">SWIGGY</span>
-              <span className="text-lg font-black tracking-tighter text-cyan-400">FLIPKART</span>
-            </div>
-          </div>
-        </ZoomIn>
-      </section>
+
 
       {/* 9. ACADEMY OUTCOMES & ECOSYSTEM (SUBSECTIONS: EVENTS, CAMPUSES, BLOGS) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">

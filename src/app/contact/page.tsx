@@ -1,5 +1,6 @@
+import { prisma } from '@/lib/prisma';
 import ContactClientSection from '@/components/ContactClientSection';
-import { MapPin, Phone, Mail, Clock, Sparkles, MessageCircle, Globe } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Sparkles, MessageCircle, Globe, Building2 } from 'lucide-react';
 import {
   FadeInUp,
   StaggerContainer,
@@ -9,11 +10,19 @@ import {
 } from '@/components/AnimatedSection';
 
 export const metadata = {
-  title: 'Contact Academic Counselors & WhatsApp Chat | NexGen Tech Academy',
-  description: 'Connect with NexGen Tech Academy counselors via phone, email, contact form, or direct WhatsApp chat.',
+  title: 'Contact Academic Counselors & Campus Branches | NexGen Tech Academy',
+  description: 'Connect with NexGen Tech Academy counselors via phone, email, contact form, WhatsApp, or visit any of our regional tech campuses.',
 };
 
-export default function ContactPage() {
+export const revalidate = 0;
+
+export default async function ContactPage() {
+  const campuses = await prisma.campus.findMany({
+    orderBy: { isMain: 'desc' },
+  });
+
+  const mainCampus = campuses.find((c) => c.isMain) || campuses[0];
+
   return (
     <div className="space-y-16 py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Header */}
@@ -46,78 +55,85 @@ export default function ContactPage() {
       </FadeInUp>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        {/* Contact Info Cards */}
+        {/* Dynamic Campus Branches List */}
         <StaggerContainer staggerDelay={0.1} className="lg:col-span-5 space-y-6">
-          <StaggerItem>
-            <MotionCard className="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="p-3 rounded-xl bg-blue-600/20 text-blue-400">
-                  <MapPin className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-white text-base">Main Campus - Tech Park HQ</h3>
-                  <p className="text-xs text-slate-400">Building 4B, Cybercity Tech Park, Hitec Phase 2, Hyderabad - 500081</p>
-                </div>
-              </div>
-              <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-300">
-                <span className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-emerald-400" /> +91 800-999-8800</span>
-                <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5 text-blue-400" /> 8 AM - 9 PM</span>
-              </div>
-            </MotionCard>
-          </StaggerItem>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                <Building2 className="w-5 h-5 text-purple-400" /> Campus Branches ({campuses.length})
+              </h2>
+              <span className="text-xs text-slate-400">Open 7 Days a Week</span>
+            </div>
+
+            {campuses.map((camp) => (
+              <StaggerItem key={camp.id}>
+                <MotionCard className="glass-card rounded-2xl p-5 border border-slate-800 space-y-3 hover:border-purple-500/40 transition-all">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-2.5">
+                      <div className="p-2.5 rounded-xl bg-blue-600/20 text-blue-400 shrink-0">
+                        <MapPin className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-white text-base leading-tight">{camp.name}</h3>
+                        <p className="text-[11px] text-purple-300 font-semibold">{camp.type} • {camp.city}</p>
+                      </div>
+                    </div>
+                    {camp.isMain && (
+                      <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold text-[10px] border border-amber-500/30 shrink-0">
+                        HQ
+                      </span>
+                    )}
+                  </div>
+
+                  <p className="text-xs text-slate-300 leading-relaxed">{camp.address}</p>
+
+                  <div className="pt-2 border-t border-slate-800/80 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-300">
+                    <span className="flex items-center gap-1.5">
+                      <Phone className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> {camp.phone}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-amber-400 shrink-0" /> {camp.workingHours}
+                    </span>
+                  </div>
+                </MotionCard>
+              </StaggerItem>
+            ))}
+          </div>
 
           <StaggerItem>
-            <MotionCard className="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
+            <MotionCard className="glass-card rounded-2xl p-5 border border-slate-800 space-y-3">
               <div className="flex items-center gap-3">
-                <div className="p-3 rounded-xl bg-purple-600/20 text-purple-400">
-                  <Mail className="w-6 h-6" />
+                <div className="p-2.5 rounded-xl bg-purple-600/20 text-purple-400">
+                  <Mail className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-base">Admissions & Counseling Email</h3>
+                  <h3 className="font-bold text-white text-sm">Admissions & Counseling Support</h3>
                   <p className="text-xs text-slate-400">admissions@nexgentechacademy.com</p>
                 </div>
               </div>
-              <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-300">
-                <span className="flex items-center gap-1.5"><Globe className="w-3.5 h-3.5 text-purple-400" /> 24x7 Digital Desk</span>
-                <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5 text-amber-400" /> Response under 15 mins</span>
-              </div>
-            </MotionCard>
-          </StaggerItem>
-
-          <StaggerItem>
-            <MotionCard className="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="p-3 rounded-xl bg-emerald-600/20 text-emerald-400">
-                  <Globe className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-white text-base">Connect on Social Media</h3>
-                  <p className="text-xs text-slate-400">Follow us for weekly tech roadmaps & free webinars.</p>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-2 pt-2 text-xs">
-                <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:text-blue-400 text-slate-300 font-semibold">LinkedIn</a>
-                <a href="https://youtube.com" target="_blank" rel="noreferrer" className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:text-rose-400 text-slate-300 font-semibold">YouTube</a>
-                <a href="https://twitter.com" target="_blank" rel="noreferrer" className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:text-cyan-400 text-slate-300 font-semibold">Twitter (X)</a>
-                <a href="https://github.com" target="_blank" rel="noreferrer" className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:text-purple-400 text-slate-300 font-semibold">GitHub</a>
+              <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                <span className="flex items-center gap-1.5"><Globe className="w-3.5 h-3.5 text-purple-400" /> Digital Desk Online</span>
+                <span className="text-amber-400 font-semibold">Response &lt; 15 mins</span>
               </div>
             </MotionCard>
           </StaggerItem>
 
           {/* Embedded Map */}
-          <StaggerItem>
-            <div className="h-64 rounded-2xl overflow-hidden border border-slate-800 relative bg-slate-900 shadow-xl">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.311746764516!2d78.3758!3d17.4474!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb93dc8c5d69df%3A0x19688beb557ef0d9!2sHITEC%20City%2C%20Hyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
-                width="100%"
-                height="100%"
-                style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg)' }}
-                allowFullScreen={false}
-                loading="lazy"
-                title="Campus Location Map"
-              />
-            </div>
-          </StaggerItem>
+          {mainCampus && (
+            <StaggerItem>
+              <div className="h-60 rounded-2xl overflow-hidden border border-slate-800 relative bg-slate-900 shadow-xl">
+                <iframe
+                  src={mainCampus.mapEmbedUrl || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.311746764516!2d78.3758!3d17.4474!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb93dc8c5d69df%3A0x19688beb557ef0d9!2sHITEC%20City%2C%20Hyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg)' }}
+                  allowFullScreen={false}
+                  loading="lazy"
+                  title="Campus Location Map"
+                />
+              </div>
+            </StaggerItem>
+          )}
         </StaggerContainer>
 
         {/* Contact Form Client Section */}
@@ -130,3 +146,4 @@ export default function ContactPage() {
     </div>
   );
 }
+

@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import AIChatbot from '@/components/AIChatbot';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import JsonLd, { getOrganizationSchema } from '@/components/JsonLd';
 
@@ -79,6 +80,7 @@ export default function RootLayout({
           </div>
           <main className="flex-1">{children}</main>
           <Footer />
+          <AIChatbot />
         </ThemeProvider>
       </body>
     </html>

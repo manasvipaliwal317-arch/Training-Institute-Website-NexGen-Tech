@@ -5,13 +5,14 @@ const SECRET_KEY = new TextEncoder().encode(
   process.env.JWT_SECRET || 'tech-academy-super-secret-jwt-key-2026-production'
 );
 
-const COOKIE_NAME = 'admin_session_token';
+const COOKIE_NAME = 'admin_auth_session_v2';
+const LEGACY_COOKIE_NAME = 'admin_session_token';
 
 export async function createSession(email: string, role: string = 'ADMIN') {
   const token = await new SignJWT({ email, role })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setExpirationTime('24h')
+    .setExpirationTime('2h')
     .sign(SECRET_KEY);
 
   const cookieStore = await cookies();
@@ -19,7 +20,7 @@ export async function createSession(email: string, role: string = 'ADMIN') {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
-    maxAge: 60 * 60 * 24, // 24 hours
+    maxAge: 60 * 60 * 2, // 2 hours strict session
     path: '/',
   });
 
@@ -41,5 +42,34 @@ export async function getSession() {
 
 export async function removeSession() {
   const cookieStore = await cookies();
-  cookieStore.delete(COOKIE_NAME);
+  
+  // Clear new cookie
+  cookieStore.set(COOKIE_NAME, '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 0,
+    expires: new Date(0),
+    path: '/',
+  });
+  try {
+    cookieStore.delete(COOKIE_NAME);
+  } catch {
+    // fallback ignore
+  }
+
+  // Clear legacy cookie
+  cookieStore.set(LEGACY_COOKIE_NAME, '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 0,
+    expires: new Date(0),
+    path: '/',
+  });
+  try {
+    cookieStore.delete(LEGACY_COOKIE_NAME);
+  } catch {
+    // fallback ignore
+  }
 }

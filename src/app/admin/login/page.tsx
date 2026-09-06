@@ -20,7 +20,7 @@ export default function AdminLoginPage() {
     setLoading(false);
 
     if (res.success) {
-      router.push('/admin/dashboard');
+      window.location.href = '/admin/dashboard';
     } else {
       setErrorMsg(res.error || 'Login failed.');
     }
@@ -46,7 +46,7 @@ export default function AdminLoginPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} autoComplete="off" className="space-y-4">
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1.5">Admin Email Address</label>
             <div className="relative">
@@ -55,8 +55,8 @@ export default function AdminLoginPage() {
                 type="email"
                 name="email"
                 required
-                defaultValue="admin@techacademy.com"
-                placeholder="admin@techacademy.com"
+                autoComplete="off"
+                placeholder="Enter admin email address"
                 className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white placeholder:text-slate-500 text-sm focus:outline-none focus:border-purple-500"
               />
             </div>
@@ -70,8 +70,8 @@ export default function AdminLoginPage() {
                 type="password"
                 name="password"
                 required
-                defaultValue="Admin@123456"
-                placeholder="••••••••"
+                autoComplete="new-password"
+                placeholder="Enter password"
                 className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white placeholder:text-slate-500 text-sm focus:outline-none focus:border-purple-500"
               />
             </div>
@@ -81,15 +81,15 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold text-sm shadow-xl shadow-purple-600/30 transition-all disabled:opacity-50"
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold text-sm shadow-xl shadow-purple-600/30 transition-all disabled:opacity-50 cursor-pointer"
             >
               {loading ? <span>Authenticating...</span> : <span>Sign In to Portal</span>}
             </button>
           </div>
 
-          <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-[11px] text-slate-400 text-center space-y-0.5">
-            <span className="font-bold text-white block">Default Seeded Admin Credentials:</span>
-            <span>Email: admin@techacademy.com | Password: Admin@123456</span>
+          <div className="pt-2 flex items-center justify-center gap-1.5 text-[11px] text-slate-500">
+            <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
+            <span>Restricted Area • Authorized Personnel Only</span>
           </div>
         </form>
       </div>

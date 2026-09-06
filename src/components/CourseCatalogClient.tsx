@@ -224,64 +224,63 @@ export default function CourseCatalogClient({
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCourses.map((course, idx) => {
             const theme = getCourseTheme(idx);
             return (
               <div
                 key={course.id}
-                className={`glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col border ${theme.borderColor} ${theme.bgGradient} ${theme.lightCardBg} shadow-xl ${theme.glowColor} transition-all duration-300 hover:scale-[1.045] hover:-translate-y-2 hover:shadow-2xl hover:border-blue-500/50 group h-full`}
+                className={`glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col border ${theme.borderColor} ${theme.bgGradient} ${theme.lightCardBg} shadow-xl ${theme.glowColor} transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1.5 hover:shadow-2xl hover:border-blue-500/50 group h-full`}
               >
                 {/* Hero Image */}
-                <div className="relative h-36 sm:h-40 w-full bg-slate-800 overflow-hidden">
-                  <Image src={course.heroImage} alt={course.title} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
+                <div className="relative h-44 sm:h-48 w-full bg-slate-800 overflow-hidden">
+                  <Image src={course.heroImage} alt={course.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
-                  <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
-                    <span className={`px-2 py-0.5 rounded-md ${theme.badgeBg} ${theme.badgeText} font-semibold text-[10px] shadow-sm`}>
+                  <div className="absolute top-3 left-3 flex items-center gap-1.5">
+                    <span className={`px-2.5 py-1 rounded-md ${theme.badgeBg} ${theme.badgeText} font-semibold text-[11px] shadow-sm`}>
                       {course.category.name}
                     </span>
                     {course.bestseller && (
-                      <span className="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 font-extrabold text-[10px] uppercase tracking-wider shadow-sm">
+                      <span className="px-2.5 py-1 rounded-md bg-amber-500 text-slate-950 font-extrabold text-[10px] uppercase tracking-wider shadow-sm">
                         Bestseller
                       </span>
                     )}
                   </div>
-                  <div className="absolute bottom-2.5 right-2.5 bg-slate-900/90 backdrop-blur-sm px-2 py-0.5 rounded-md text-amber-400 text-[11px] font-bold flex items-center gap-1">
-                    <Star className="w-3 h-3 fill-amber-400" />
-
+                  <div className="absolute bottom-3 right-3 bg-slate-900/90 backdrop-blur-sm px-2.5 py-1 rounded-md text-amber-400 text-xs font-bold flex items-center gap-1 shadow-md">
+                    <Star className="w-3.5 h-3.5 fill-amber-400" />
                     <span>{course.rating}</span>
                     <span className="text-slate-400 text-[10px]">({course.ratingsCount})</span>
                   </div>
                 </div>
 
                 {/* Body */}
-                <div className="p-6 flex-1 flex flex-col justify-between space-y-5">
+                <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
                   <div className="space-y-2">
                     <h3 className="text-lg font-bold dark:text-white text-slate-900 line-clamp-2 leading-snug group-hover:text-blue-500 transition-colors">{course.title}</h3>
                     <p className="dark:text-slate-400 text-slate-600 text-xs line-clamp-2 leading-relaxed">{course.tagline}</p>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-xs dark:text-slate-300 text-slate-700 pt-2 border-t dark:border-slate-800/80 border-slate-300/80">
+                  <div className="grid grid-cols-2 gap-2 text-xs dark:text-slate-300 text-slate-700 pt-3 border-t dark:border-slate-800/80 border-slate-300/80">
                     <div className="flex items-center gap-1.5">
-                      <Clock className={`w-4 h-4 ${theme.accentIconColor}`} />
-                      <span>{course.duration}</span>
+                      <Clock className={`w-4 h-4 ${theme.accentIconColor} shrink-0`} />
+                      <span className="truncate">{course.duration}</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <Laptop className="w-4 h-4 text-purple-500" />
-                      <span>{course.mode}</span>
+                      <Laptop className="w-4 h-4 text-purple-500 shrink-0" />
+                      <span className="truncate">{course.mode}</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <Layers className="w-4 h-4 text-emerald-500" />
-                      <span>{course.level}</span>
+                      <Layers className="w-4 h-4 text-emerald-500 shrink-0" />
+                      <span className="truncate">{course.level}</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <Users className="w-4 h-4 text-amber-500" />
-                      <span>{course.enrolledStudents}+ Enrolled</span>
+                      <Users className="w-4 h-4 text-amber-500 shrink-0" />
+                      <span className="truncate">{course.enrolledStudents}+ Enrolled</span>
                     </div>
                   </div>
 
                   <div className="pt-4 border-t dark:border-slate-800/80 border-slate-300/80 flex items-center justify-between gap-3">
-                    <div>
+                    <div className="min-w-0">
                       <div className="text-[10px] dark:text-slate-400 text-slate-600 uppercase tracking-wider font-semibold">Course Fee</div>
                       <div className="flex items-baseline gap-2">
                         <span className="text-lg font-black dark:text-white text-slate-900">₹{course.fees.toLocaleString()}</span>
@@ -289,23 +288,23 @@ export default function CourseCatalogClient({
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 shrink-0">
                       <button
                         onClick={() => {
                           setActiveCourseModal({ slug: course.slug, name: course.title });
                           setModalOpen(true);
                         }}
-                        className="px-3 py-2 rounded-xl dark:bg-slate-800 bg-slate-200 hover:bg-slate-300 dark:hover:bg-slate-700 dark:text-slate-200 text-slate-800 text-xs font-semibold transition-colors"
+                        className="px-3.5 py-2 rounded-xl dark:bg-slate-800 bg-slate-200 hover:bg-slate-300 dark:hover:bg-slate-700 dark:text-slate-200 text-slate-800 text-xs font-semibold transition-colors shrink-0 cursor-pointer"
                         title="Book Demo"
                       >
                         Demo
                       </button>
                       <Link
                         href={`/courses/${course.slug}`}
-                        className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-all shadow-md shadow-blue-600/20 flex items-center gap-1"
+                        className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-all shadow-md shadow-blue-600/20 flex items-center gap-1.5 whitespace-nowrap shrink-0"
                       >
                         <span>Syllabus</span>
-                        <ChevronRight className="w-3.5 h-3.5" />
+                        <ChevronRight className="w-4 h-4 shrink-0" />
                       </Link>
                     </div>
                   </div>

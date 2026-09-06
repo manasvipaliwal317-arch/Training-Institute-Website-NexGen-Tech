@@ -31,10 +31,14 @@ export const metadata = {
   description: 'Explore placement statistics, hiring company partners, salary packages, mock interview preparation, upcoming campus recruitment drives, and alumni success stories.',
 };
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export default async function PlacementsPage() {
   const placements = await prisma.placement.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
+
+  const hiringDrives = await prisma.hiringDrive.findMany({
     orderBy: { createdAt: 'desc' },
   });
 
@@ -149,7 +153,7 @@ export default async function PlacementsPage() {
       {/* 4. UPCOMING & ACTIVE CAMPUS HIRING DRIVES */}
       <FadeInUp duration={0.4}>
         <section>
-          <UpcomingHiringDrives />
+          <UpcomingHiringDrives drives={hiringDrives} />
         </section>
       </FadeInUp>
 

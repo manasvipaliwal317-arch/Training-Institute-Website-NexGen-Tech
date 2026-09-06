@@ -79,7 +79,50 @@ export const CampusSchema = z.object({
   email: z.string().email('Valid email required'),
   workingHours: z.string().default('Mon - Sun: 8:00 AM - 9:00 PM'),
   landmarks: z.string().min(3, 'Landmarks are required'),
-  mapEmbedUrl: z.string().url('Valid Google Maps URL required'),
-  coverImage: z.string().url('Valid image URL required'),
+  mapEmbedUrl: z.string().min(5, 'Valid Google Maps URL required'),
+  coverImage: z.string().min(5, 'Valid image URL required'),
   isMain: z.boolean().default(false),
 });
+
+export const HiringDriveSchema = z.object({
+  companyName: z.string().min(2, 'Company name is required'),
+  slug: z.string().min(3, 'Slug is required'),
+  companyLogo: z.string().min(5, 'Valid company logo URL required'),
+  role: z.string().min(3, 'Job role is required'),
+  packageLpa: z.string().min(2, 'Package LPA is required'),
+  jobType: z.string().default('Full-Time'),
+  eligibility: z.string().min(3, 'Eligibility criteria required'),
+  location: z.string().min(2, 'Location is required'),
+  experience: z.string().default('Fresher - 2 Yrs'),
+  driveDate: z.string().min(3, 'Drive date is required'),
+  registrationDeadline: z.string().min(3, 'Registration deadline is required'),
+  status: z.string().default('ACTIVE'), // ACTIVE, UPCOMING, COMPLETED, CLOSED
+  openPositions: z.number().int().positive().default(10),
+  description: z.string().min(10, 'Job description is required'),
+  applyUrl: z.string().optional().nullable(),
+});
+
+export const UpdateInquirySchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Please enter a valid email address'),
+  phone: z.string().min(8, 'Phone number must be at least 8 digits'),
+  courseName: z.string().optional().nullable(),
+  preferredMode: z.string().default('Hybrid'),
+  preferredCampus: z.string().default('Main Tech Park HQ'),
+  status: z.string().default('NEW'),
+  notes: z.string().optional().nullable(),
+  message: z.string().optional().nullable(),
+});
+
+export const BatchSchema = z.object({
+  courseId: z.string().min(1, 'Course selection is required'),
+  startDate: z.string().min(3, 'Start date is required'),
+  timing: z.string().min(3, 'Batch timing is required'),
+  mode: z.string().default('Hybrid'),
+  seatsTotal: z.number().int().positive().default(20),
+  seatsAvailable: z.number().int().min(0).default(5),
+  status: z.string().default('Filling Fast'),
+  campusLocation: z.string().default('Main Campus - Tech Park HQ'),
+});
+
+

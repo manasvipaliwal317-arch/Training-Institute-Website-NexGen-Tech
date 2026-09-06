@@ -13,7 +13,7 @@ export const metadata = {
   description: 'View upcoming classroom and live online batches for AI, Full Stack Development, Cyber Security, UI/UX, Cloud DevOps, and Data Analytics.',
 };
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export default async function BatchesPage() {
   const batches = await prisma.batch.findMany({
