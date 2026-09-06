@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: nexgen-tech-academy
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        value: file:./prisma/dev.db
+      - key: JWT_SECRET
+        generateValue: true
+      - key: GEMINI_MODEL
+        value: gemini-3.6-flash
+      - key: RAG_TOP_K
+        value: "5"
+      - key: RAG_SIMILARITY_THRESHOLD
+        value: "0.55"
+      - key: RAG_COLLECTION_NAME
+        value: nexgentech_institute_knowledge
+      - key: GEMINI_EMBEDDING_MODEL
+        value: models/gemini-embedding-001
+      - key: CHROMA_URL
+        value: http://localhost:8000
