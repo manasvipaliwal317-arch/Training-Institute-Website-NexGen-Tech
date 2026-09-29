@@ -39,14 +39,20 @@ export default function EventRegisterModal({
     formData.append('eventId', eventId);
     formData.append('eventTitle', eventTitle);
 
-    const res = await registerEventAction(formData);
-    setLoading(false);
+    try {
+      const res = await registerEventAction(formData);
+      setLoading(false);
 
-    if (res.success) {
-      setSubmitted(true);
-      setFeedbackMsg(res.message || 'Registration successful!');
-    } else {
-      setErrorMsg(res.error || 'Failed to register. Please try again.');
+      if (res.success) {
+        setSubmitted(true);
+        setFeedbackMsg(res.message || 'Registration successful!');
+      } else {
+        setErrorMsg(res.error || 'Failed to register. Please try again.');
+      }
+    } catch (err: any) {
+      console.error('Event registration error:', err);
+      setLoading(false);
+      setErrorMsg('Connection error. Please refresh the page and try again.');
     }
   }
 

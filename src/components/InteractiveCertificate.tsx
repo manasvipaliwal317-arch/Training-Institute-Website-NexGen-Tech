@@ -305,8 +305,8 @@ export default function InteractiveCertificate() {
                 </div>
 
                 {/* BOTTOM RIGHT: EMBOSSED AUTHORIZED GOLD SEAL */}
-                <div className="relative shrink-0 flex flex-col items-center">
-                  <div className="relative w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-gradient-to-tr from-amber-600 via-yellow-400 to-amber-500 p-0.5 shadow-xl flex items-center justify-center border border-amber-700">
+                <div className="relative shrink-0 flex flex-col items-center group/seal">
+                  <div className="hologram-seal relative w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-gradient-to-tr from-amber-600 via-yellow-400 to-amber-500 p-0.5 shadow-xl flex items-center justify-center border border-amber-700 transition-transform duration-300 group-hover/seal:scale-110 cursor-pointer">
                     <div className="w-full h-full rounded-full border border-dashed border-amber-950 bg-gradient-to-b from-amber-300 via-yellow-400 to-amber-500 flex flex-col items-center justify-center text-slate-950 text-center p-0.5">
                       <ShieldCheck className="w-4 h-4 text-[#081c3b]" />
                       <span className="text-[5.5px] font-black uppercase tracking-tight text-[#081c3b] font-sans leading-tight mt-0.5">

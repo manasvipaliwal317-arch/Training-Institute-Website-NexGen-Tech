@@ -45,6 +45,15 @@ export default async function AdminDashboardPage() {
     orderBy: { createdAt: 'desc' },
   });
 
+  const facultyMembers = await prisma.trainer.findMany({
+    include: { courses: true },
+    orderBy: { name: 'asc' },
+  });
+
+  const studentsList = await prisma.student.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
+
   return (
     <AdminPanel
       inquiries={inquiries.map((i) => ({
@@ -58,6 +67,8 @@ export default async function AdminDashboardPage() {
       campuses={campuses}
       hiringDrives={hiringDrives}
       batches={batches}
+      facultyMembers={facultyMembers}
+      studentsList={studentsList}
       userEmail={session.email}
     />
   );

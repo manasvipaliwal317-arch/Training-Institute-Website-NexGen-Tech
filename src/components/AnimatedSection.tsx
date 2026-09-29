@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 
 interface AnimationProps {
@@ -237,6 +237,74 @@ export function MotionCard({
       className={className}
     >
       {children}
+    </motion.div>
+  );
+}
+
+// 3D Perspective Tilt Card with Glare Parallax
+export function TiltCard({
+  children,
+  className = '',
+  maxTilt = 5,
+}: {
+  children: ReactNode;
+  className?: string;
+  maxTilt?: number;
+}) {
+  const shouldReduceMotion = useReducedMotion();
+  const [rotateX, setRotateX] = useState(0);
+  const [rotateY, setRotateY] = useState(0);
+  const [glare, setGlare] = useState({ x: 50, y: 50, opacity: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (shouldReduceMotion) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rX = -((y - centerY) / centerY) * maxTilt;
+    const rY = ((x - centerX) / centerX) * maxTilt;
+
+    setRotateX(rX);
+    setRotateY(rY);
+    setGlare({
+      x: (x / rect.width) * 100,
+      y: (y / rect.height) * 100,
+      opacity: 0.14,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setRotateX(0);
+    setRotateY(0);
+    setGlare((prev) => ({ ...prev, opacity: 0 }));
+  };
+
+  return (
+    <motion.div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      animate={{
+        rotateX,
+        rotateY,
+        transformPerspective: 1000,
+      }}
+      transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+      whileHover={{ y: -6, scale: 1.025 }}
+      className={`relative group/tilt ${className}`}
+      style={{ transformStyle: 'preserve-3d' }}
+    >
+      {children}
+      {/* Dynamic specular glare overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none rounded-2xl transition-opacity duration-300 z-30"
+        style={{
+          background: `radial-gradient(circle at ${glare.x}% ${glare.y}%, rgba(255,255,255,0.45) 0%, transparent 60%)`,
+          opacity: glare.opacity,
+        }}
+      />
     </motion.div>
   );
 }

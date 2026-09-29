@@ -140,7 +140,7 @@ function EqualizerBars() {
 
 export default function HiringPartnersMarquee() {
   return (
-    <div className="glass-card rounded-3xl p-6 sm:p-10 border border-blue-500/20 bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-950 shadow-2xl relative overflow-hidden space-y-8">
+    <div className="glass-card rounded-3xl p-6 sm:p-10 border border-blue-200/80 dark:border-blue-500/20 bg-gradient-to-br from-blue-50/80 via-indigo-50/50 to-slate-50/90 dark:from-slate-900 dark:via-indigo-950/40 dark:to-slate-950 shadow-xl relative overflow-hidden space-y-8">
       {/* Background Animated Random Equalizer Bars */}
       <EqualizerBars />
 
@@ -219,7 +219,7 @@ export default function HiringPartnersMarquee() {
       </div>
 
       {/* Bottom Cycle Indicator Bar */}
-      <div className="relative z-10 pt-2 border-t dark:border-slate-800/80 border-slate-300/80 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-400">
+      <div className="relative z-10 pt-2 border-t dark:border-slate-800/80 border-slate-200 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-600 dark:text-slate-400">
         <div className="flex items-center gap-2">
           <CheckCircle2 className="w-4 h-4 text-emerald-500" />
           <span className="dark:text-slate-300 text-slate-700 font-medium">Average package: ₹8.5 LPA</span>

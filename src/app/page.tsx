@@ -2,11 +2,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { prisma } from '@/lib/prisma';
 import HomeClientSection from '@/components/HomeClientSection';
+import EventClientSection from '@/components/EventClientSection';
 import ThemeToggle from '@/components/ThemeToggle';
 import HiringPartnersMarquee from '@/components/HiringPartnersMarquee';
 import FacultyMovingChain from '@/components/FacultyMovingChain';
 import InteractiveCertificate from '@/components/InteractiveCertificate';
 import InstituteCollageWheel from '@/components/InstituteCollageWheel';
+import SimpleStatsBar from '@/components/SimpleStatsBar';
+import MovingPlacementsRow from '@/components/MovingPlacementsRow';
+import HeroDynamicHeadline from '@/components/HeroDynamicHeadline';
 import { getCourseTheme } from '@/lib/courseThemes';
 import {
   FadeInUp,
@@ -17,6 +21,7 @@ import {
   StaggerContainer,
   StaggerItem,
   MotionCard,
+  TiltCard,
 } from '@/components/AnimatedSection';
 import {
   Sparkles,
@@ -65,7 +70,7 @@ export default async function HomePage() {
   });
 
   const placements = await prisma.placement.findMany({
-    take: 4,
+    orderBy: { packageLpa: 'desc' },
   });
 
   const events = await prisma.event.findMany({
@@ -83,155 +88,86 @@ export default async function HomePage() {
   return (
     <div className="space-y-24 pb-20 overflow-hidden">
       {/* 1. HERO SECTION */}
-      <section className="relative min-h-[85vh] flex items-center pt-6 pb-16">
-        {/* Background Image with Overlay — high clarity & contrast */}
+      <section className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center pt-10 pb-20 overflow-hidden">
+        {/* Real Students Lab Background Image - fully visible */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <Image
-            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=2000&q=80"
-            alt="Students learning in modern computer lab"
+            src="/hero-real-students-bg.jpg"
+            alt="Real Students Learning in Modern IT Computer Lab"
             fill
             priority
             sizes="100vw"
-            className="object-cover object-center opacity-40 dark:opacity-30 filter contrast-125 saturate-110 scale-105 transition-all duration-700"
+            className="object-cover object-[75%_center] lg:object-right scale-100"
           />
-          {/* Dark mode overlays */}
-          <div className="dark:block hidden absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-[#0b0f19]/80 to-[#0b0f19]/30" />
-          <div className="dark:block hidden absolute inset-0 bg-gradient-to-r from-[#0b0f19] via-[#0b0f19]/70 to-transparent" />
-          {/* Light mode overlays */}
-          <div className="light:block dark:hidden absolute inset-0 bg-gradient-to-t from-white via-white/80 to-white/30" />
-          <div className="light:block dark:hidden absolute inset-0 bg-gradient-to-r from-white via-white/70 to-transparent" />
+          {/* Directional gradient on the left text area only — right side has ZERO overlay for 100% clear photographic visibility */}
+          <div className="dark:block hidden w-full md:w-3/4 lg:w-3/5 absolute inset-y-0 left-0 bg-gradient-to-r from-slate-950 via-slate-950/85 to-transparent z-[1]" />
+          <div className="dark:hidden w-full md:w-3/4 lg:w-3/5 absolute inset-y-0 left-0 bg-gradient-to-r from-white via-white/85 to-transparent z-[1]" />
+          
+          {/* Subtle bottom edge transition */}
+          <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-white dark:from-slate-950 to-transparent z-[1] pointer-events-none" />
         </div>
 
         {/* Hero Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
-            {/* Left Content Column */}
-            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              <FadeInLeft delay={0.1}>
-                {/* Badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/15 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs font-semibold uppercase tracking-wider pulse-badge shadow-sm backdrop-blur-md">
-                  <Sparkles className="w-4 h-4 text-amber-500 dark:text-amber-300" />
-                  <span>#1 Rated IT Training Academy in India</span>
+          <div className="max-w-2xl lg:max-w-3xl space-y-6 text-left">
+            <FadeInLeft delay={0.1}>
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/15 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs font-semibold uppercase tracking-wider pulse-badge shadow-sm backdrop-blur-md">
+                <Sparkles className="w-4 h-4 text-amber-500 dark:text-amber-300" />
+                <span>#1 Rated IT Training Academy in India</span>
+              </div>
+            </FadeInLeft>
+
+            <FadeInLeft delay={0.2}>
+              <HeroDynamicHeadline />
+            </FadeInLeft>
+
+            <FadeInLeft delay={0.3}>
+              {/* Subheadline */}
+              <p className="text-base sm:text-lg dark:text-slate-300 text-slate-700 max-w-2xl leading-relaxed font-normal">
+                Master high-demand tech roles with 100% hands-on project labs, expert mentorship from Microsoft & Amazon leads, and guaranteed job placement support.
+              </p>
+            </FadeInLeft>
+
+            <FadeInLeft delay={0.4}>
+              {/* CTAs */}
+              <div className="flex flex-col sm:flex-row items-center justify-start gap-4 pt-2">
+                <HomeClientSection mode="demo-btn" buttonText="Book Free Demo Class" />
+
+                <Link
+                  href="/courses"
+                  className="w-full sm:w-auto px-7 py-3.5 rounded-xl dark:bg-slate-800/80 bg-white border dark:border-slate-700 border-slate-300 dark:text-white text-slate-800 font-semibold text-sm flex items-center justify-center gap-2 hover:border-blue-500/60 transition-all shadow-lg hover:-translate-y-0.5"
+                >
+                  <BookOpen className="w-4 h-4 text-blue-500" />
+                  <span>Explore All Courses</span>
+                </Link>
+              </div>
+            </FadeInLeft>
+
+            <FadeInUp delay={0.5}>
+              {/* Trust Badges */}
+              <div className="pt-6 border-t dark:border-slate-700/80 border-slate-300/80 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
+                  <span className="text-xs font-semibold dark:text-slate-300 text-slate-700">100% Hands-on Labs</span>
                 </div>
-              </FadeInLeft>
-
-              <FadeInLeft delay={0.2}>
-                {/* Main Headline */}
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black dark:text-white text-slate-900 tracking-tight leading-[1.1]">
-                  Build Your Career in <br className="hidden sm:inline" />
-                  <span className="gradient-text">AI, Software</span> & Digital Technologies
-                </h1>
-              </FadeInLeft>
-
-              <FadeInLeft delay={0.3}>
-                {/* Subheadline */}
-                <p className="text-base sm:text-lg dark:text-slate-300 text-slate-700 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
-                  Master high-demand tech roles with 100% hands-on project labs, expert mentorship from Microsoft & Amazon leads, and guaranteed job placement support.
-                </p>
-              </FadeInLeft>
-
-              <FadeInLeft delay={0.4}>
-                {/* CTAs */}
-                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
-                  <HomeClientSection mode="demo-btn" buttonText="Book Free Demo Class" />
-
-                  <Link
-                    href="/courses"
-                    className="w-full sm:w-auto px-7 py-3.5 rounded-xl dark:bg-slate-800/80 bg-white border dark:border-slate-700 border-slate-300 dark:text-white text-slate-800 font-semibold text-sm flex items-center justify-center gap-2 hover:border-blue-500/60 transition-all shadow-lg hover:-translate-y-0.5"
-                  >
-                    <BookOpen className="w-4 h-4 text-blue-500" />
-                    <span>Explore All Courses</span>
-                  </Link>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
+                  <span className="text-xs font-semibold dark:text-slate-300 text-slate-700">94% Placement Rate</span>
                 </div>
-              </FadeInLeft>
-
-              <FadeInUp delay={0.5}>
-                {/* Trust Badges */}
-                <div className="pt-6 border-t dark:border-slate-700/80 border-slate-300/80 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
-                  <div className="flex items-center gap-2.5">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
-                    <span className="text-xs font-semibold dark:text-slate-300 text-slate-700">100% Hands-on Labs</span>
-                  </div>
-                  <div className="flex items-center gap-2.5">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
-                    <span className="text-xs font-semibold dark:text-slate-300 text-slate-700">94% Placement Rate</span>
-                  </div>
-                  <div className="flex items-center gap-2.5">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
-                    <span className="text-xs font-semibold dark:text-slate-300 text-slate-700">Live 1-on-1 Mentorship</span>
-                  </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
+                  <span className="text-xs font-semibold dark:text-slate-300 text-slate-700">Live 1-on-1 Mentorship</span>
                 </div>
-              </FadeInUp>
-            </div>
-
-            {/* Right Graphic Column: 3D Transparent Illustration Showcase */}
-            <div className="lg:col-span-5 relative flex items-center justify-center w-full">
-              <FadeInRight delay={0.3} className="w-full flex justify-center">
-                <div className="relative w-full max-w-lg aspect-square rounded-3xl overflow-hidden glass-card border border-blue-500/30 p-2 shadow-2xl group hover:border-blue-500/60 transition-all duration-500 min-h-[320px]">
-                  <div className="relative w-full h-full rounded-2xl overflow-hidden bg-gradient-to-br from-slate-900/90 via-indigo-950/80 to-slate-950 flex items-center justify-center">
-                    <Image
-                      src="/hero-realistic-students.png"
-                      alt="NexGen Tech Academy Real Student Coding Session"
-                      fill
-                      priority
-                      unoptimized
-                      sizes="(max-width: 768px) 100vw, 500px"
-                      className="object-cover object-center group-hover:scale-105 transition-transform duration-700 filter drop-shadow-2xl"
-                    />
-                    {/* Subtle Gradient Glow Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
-                    
-                    {/* Floating Trust Badges */}
-                    <div className="absolute top-4 left-4 bg-slate-900/90 backdrop-blur-md border border-blue-500/40 text-blue-300 text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 animate-bounce-slow">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                      <span>Live ISO Certified Tech Lab</span>
-                    </div>
-
-                    <div className="absolute bottom-4 right-4 bg-slate-900/90 backdrop-blur-md border border-amber-500/40 text-amber-300 text-xs font-bold px-3.5 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                      <span>Mentorship by Industry Leads</span>
-                    </div>
-                  </div>
-                </div>
-              </FadeInRight>
-            </div>
-
+              </div>
+            </FadeInUp>
           </div>
         </div>
       </section>
 
-      {/* 2. STATS SECTION */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <FadeInUp>
-          <div className="glass-card rounded-3xl p-8 sm:p-10 border border-blue-500/20 bg-gradient-to-r from-slate-900 via-blue-950/30 to-slate-900 shadow-2xl">
-            <StaggerContainer className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-y md:divide-y-0 md:divide-x divide-slate-800">
-              <StaggerItem className="text-center space-y-1">
-                <div className="text-3xl sm:text-4xl font-extrabold gradient-text">25,000+</div>
-                <div className="text-xs sm:text-sm font-medium text-slate-300">Students Trained</div>
-                <div className="text-[11px] text-slate-500">Across 18 Tech Domains</div>
-              </StaggerItem>
-
-              <StaggerItem className="text-center space-y-1 pt-6 md:pt-0">
-                <div className="text-3xl sm:text-4xl font-extrabold gradient-text-cyan">450+</div>
-                <div className="text-xs sm:text-sm font-medium text-slate-300">Hiring Partners</div>
-                <div className="text-[11px] text-slate-500">MNCs & Fast-growing Startups</div>
-              </StaggerItem>
-
-              <StaggerItem className="text-center space-y-1 pt-6 md:pt-0">
-                <div className="text-3xl sm:text-4xl font-extrabold text-amber-400">32 LPA</div>
-                <div className="text-xs sm:text-sm font-medium text-slate-300">Highest Salary Package</div>
-                <div className="text-[11px] text-slate-500">Average 8.5 LPA Package</div>
-              </StaggerItem>
-
-              <StaggerItem className="text-center space-y-1 pt-6 md:pt-0">
-                <div className="text-3xl sm:text-4xl font-extrabold text-purple-400">12+ Yrs</div>
-                <div className="text-xs sm:text-sm font-medium text-slate-300">Academic Excellence</div>
-                <div className="text-[11px] text-slate-500">ISO 9001:2015 Certified</div>
-              </StaggerItem>
-            </StaggerContainer>
-          </div>
-        </FadeInUp>
+      {/* 2. SIMPLE STATS SECTION */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+        <SimpleStatsBar />
       </section>
 
       {/* TOP HIRING COMPANY PARTNERS SECTION */}
@@ -278,7 +214,7 @@ export default async function HomePage() {
             const theme = getCourseTheme(idx);
             return (
               <StaggerItem key={course.id}>
-                <MotionCard hoverScale={1.05} hoverY={-8} className="h-full">
+                <TiltCard className="h-full">
                   <div
                     className={`glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col border ${theme.borderColor} ${theme.bgGradient} ${theme.lightCardBg} shadow-xl ${theme.glowColor} transition-all duration-300 group h-full hover:shadow-2xl hover:border-blue-500/50`}
                   >
@@ -359,81 +295,16 @@ export default async function HomePage() {
                       </div>
                     </div>
                   </div>
-                </MotionCard>
+                </TiltCard>
               </StaggerItem>
             );
           })}
         </StaggerContainer>
       </section>
 
-      {/* 5. PLACEMENT HIGHLIGHTS & SALARY RECORDS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-        <ZoomIn>
-          <div className="glass-card rounded-3xl p-8 sm:p-12 border border-emerald-500/20 bg-gradient-to-br from-slate-900 via-emerald-950/20 to-slate-900">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-              <div className="lg:col-span-5 space-y-5 text-center lg:text-left">
-                <div className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center justify-center lg:justify-start gap-1.5">
-                  <TrendingUp className="w-4 h-4" />
-                  <span>360° Placement Support</span>
-                </div>
-                <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-                  Our Alumni Work at <br className="hidden sm:inline" />
-                  <span className="gradient-text-cyan">Top Global Companies</span>
-                </h2>
-                <p className="text-slate-300 text-sm leading-relaxed">
-                  From resume building to technical mock interviews and exclusive recruitment drives, our dedicated career cell ensures zero-friction transitions into top tech MNCs.
-                </p>
-
-                <div className="pt-2 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                  <Link
-                    href="/placements"
-                    className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm transition-all shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2"
-                  >
-                    <span>View Full Placement Gallery</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </div>
-
-              {/* Placements Cards Grid */}
-              <StaggerContainer className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {placements.map((p) => (
-                  <StaggerItem key={p.id}>
-                    <MotionCard>
-                      <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
-                        <div className="flex items-center gap-3">
-                          <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-emerald-400/40 shrink-0">
-                            <Image src={p.studentPhoto} alt={p.studentName} fill className="object-cover" />
-                          </div>
-                          <div>
-                            <h4 className="font-bold text-white text-sm">{p.studentName}</h4>
-                            <p className="text-slate-400 text-xs line-clamp-1">{p.courseTaken}</p>
-                          </div>
-                        </div>
-
-                        <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-xs">
-                          <div>
-                            <span className="text-slate-400 block text-[10px]">Hired Role</span>
-                            <span className="font-bold text-slate-200">{p.roleAssigned}</span>
-                          </div>
-                          <div className="text-right">
-                            <span className="text-slate-400 block text-[10px]">Package</span>
-                            <span className="font-extrabold text-emerald-400 text-sm">{p.packageLpa}</span>
-                          </div>
-                        </div>
-
-                        <div className="p-2 rounded-lg bg-slate-950 flex items-center justify-between text-xs text-slate-300">
-                          <span className="font-semibold text-slate-400">Company:</span>
-                          <span className="font-bold text-white">{p.companyName}</span>
-                        </div>
-                      </div>
-                    </MotionCard>
-                  </StaggerItem>
-                ))}
-              </StaggerContainer>
-            </div>
-          </div>
-        </ZoomIn>
+      {/* 5. PLACEMENT HIGHLIGHTS (SINGLE ROW MOVING IN-LINE EFFECT) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <MovingPlacementsRow placements={placements} />
       </section>
 
       {/* 6. WHY CHOOSE US / METHODOLOGY */}
@@ -641,8 +512,17 @@ export default async function HomePage() {
                     </div>
 
                     <div className="pt-3 border-t dark:border-slate-800 border-slate-200 flex items-center justify-between text-xs">
-                      <span className="text-emerald-400 font-bold">{batch.seatsAvailable} Seats Left</span>
-                      <HomeClientSection mode="event-btn" />
+                      <span className="text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        {batch.seatsAvailable} Seats Left
+                      </span>
+                      <Link
+                        href={`/enroll?course=${batch.course?.slug || ''}`}
+                        className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs shadow-md shadow-purple-600/20 inline-flex items-center gap-1 transition-all"
+                      >
+                        <span>Book My Seat</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </Link>
                     </div>
                   </div>
                 </MotionCard>
@@ -720,7 +600,14 @@ export default async function HomePage() {
                               <span className="text-[10px] dark:text-slate-400 text-slate-500 block line-clamp-1">{ev.speakerRole}</span>
                             </div>
                           </div>
-                          <HomeClientSection mode="event-btn" />
+                          <EventClientSection
+                            eventId={ev.id}
+                            eventTitle={ev.title}
+                            eventDate={ev.eventDate}
+                            eventTime={ev.eventTime}
+                            venue={ev.venue}
+                            slug={ev.slug}
+                          />
                         </div>
                       </div>
                     </div>

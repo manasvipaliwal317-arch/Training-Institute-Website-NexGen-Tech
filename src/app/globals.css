@@ -139,22 +139,163 @@ body.light,
   color: #ffffff !important;
 }
 
+/* ============================================================
+   LIGHT MODE TEXT & CONTRAST COMPLETE NORMALIZATION
+   ============================================================ */
+
+/* 1. All text-white on light cards, tables, sections, and admin panel MUST BE HIGH-CONTRAST DARK TEXT */
 .light .text-white {
-  color: #1e1b18 !important;
+  color: #0f172a !important; /* Deep Navy Charcoal */
 }
 
+/* 2. Slate text classes in Light Mode */
 .light .text-slate-100,
 .light .text-slate-200 {
-  color: #292524 !important;
+  color: #1e293b !important;
 }
 
 .light .text-slate-300,
 .light .text-slate-400 {
-  color: #57534e !important;
+  color: #475569 !important;
 }
 
 .light .text-slate-500 {
-  color: #78716c !important;
+  color: #64748b !important;
+}
+
+/* 3. Pastel accent texts in Light Mode become rich, vibrant, readable colors */
+.light .text-purple-300,
+.light .text-purple-400 {
+  color: #7e22ce !important; /* Deep Purple */
+}
+
+.light .text-blue-300,
+.light .text-blue-400 {
+  color: #1d4ed8 !important; /* Deep Blue */
+}
+
+.light .text-cyan-300,
+.light .text-cyan-400 {
+  color: #0369a1 !important; /* Deep Cyan */
+}
+
+.light .text-emerald-300,
+.light .text-emerald-400 {
+  color: #047857 !important; /* Deep Emerald */
+}
+
+.light .text-amber-300,
+.light .text-amber-400 {
+  color: #b45309 !important; /* Deep Amber */
+}
+
+.light .text-rose-300,
+.light .text-rose-400 {
+  color: #be123c !important; /* Deep Rose */
+}
+
+/* 4. PRESERVE PURE WHITE TEXT ON SOLID COLORED BUTTONS & BADGES IN LIGHT MODE */
+.light button[class*="bg-blue-600"]:not(.chatbot-chip),
+.light button[class*="bg-blue-700"]:not(.chatbot-chip),
+.light button[class*="bg-blue-500"]:not(.chatbot-chip),
+.light button[class*="bg-indigo-600"]:not(.chatbot-chip),
+.light button[class*="bg-indigo-700"]:not(.chatbot-chip),
+.light button[class*="bg-purple-600"]:not(.chatbot-chip),
+.light button[class*="bg-purple-700"]:not(.chatbot-chip),
+.light button[class*="bg-emerald-600"]:not(.chatbot-chip),
+.light button[class*="bg-emerald-700"]:not(.chatbot-chip),
+.light button[class*="bg-cyan-600"]:not(.chatbot-chip),
+.light button[class*="bg-red-600"]:not(.chatbot-chip),
+.light button[class*="bg-red-700"]:not(.chatbot-chip),
+.light button.btn-primary:not(.chatbot-chip),
+.light button[class*="bg-blue-600"]:not(.chatbot-chip) *,
+.light button[class*="bg-blue-700"]:not(.chatbot-chip) *,
+.light button[class*="bg-blue-500"]:not(.chatbot-chip) *,
+.light button[class*="bg-indigo-600"]:not(.chatbot-chip) *,
+.light button[class*="bg-indigo-700"]:not(.chatbot-chip) *,
+.light button[class*="bg-purple-600"]:not(.chatbot-chip) *,
+.light button[class*="bg-purple-700"]:not(.chatbot-chip) *,
+.light button[class*="bg-emerald-600"]:not(.chatbot-chip) *,
+.light button[class*="bg-emerald-700"]:not(.chatbot-chip) *,
+.light button[class*="bg-cyan-600"]:not(.chatbot-chip) *,
+.light button[class*="bg-red-600"]:not(.chatbot-chip) *,
+.light button[class*="bg-red-700"]:not(.chatbot-chip) *,
+.light button.btn-primary:not(.chatbot-chip) *,
+.light a[class*="bg-blue-600"]:not(.chatbot-chip),
+.light a[class*="bg-blue-700"]:not(.chatbot-chip),
+.light a[class*="bg-blue-500"]:not(.chatbot-chip),
+.light a[class*="bg-indigo-600"]:not(.chatbot-chip),
+.light a[class*="bg-indigo-700"]:not(.chatbot-chip),
+.light a[class*="bg-purple-600"]:not(.chatbot-chip),
+.light a[class*="bg-purple-700"]:not(.chatbot-chip),
+.light a[class*="bg-emerald-600"]:not(.chatbot-chip),
+.light a[class*="bg-emerald-700"]:not(.chatbot-chip),
+.light a[class*="bg-cyan-600"]:not(.chatbot-chip),
+.light a[class*="bg-red-600"]:not(.chatbot-chip),
+.light a[class*="bg-red-700"]:not(.chatbot-chip),
+.light a.btn-primary:not(.chatbot-chip),
+.light a[class*="bg-blue-600"]:not(.chatbot-chip) *,
+.light a[class*="bg-blue-700"]:not(.chatbot-chip) *,
+.light a[class*="bg-blue-500"]:not(.chatbot-chip) *,
+.light a[class*="bg-indigo-600"]:not(.chatbot-chip) *,
+.light a[class*="bg-indigo-700"]:not(.chatbot-chip) *,
+.light a[class*="bg-purple-600"]:not(.chatbot-chip) *,
+.light a[class*="bg-purple-700"]:not(.chatbot-chip) *,
+.light a[class*="bg-emerald-600"]:not(.chatbot-chip) *,
+.light a[class*="bg-emerald-700"]:not(.chatbot-chip) *,
+.light a[class*="bg-cyan-600"]:not(.chatbot-chip) *,
+.light a[class*="bg-red-600"]:not(.chatbot-chip) *,
+.light a[class*="bg-red-700"]:not(.chatbot-chip) *,
+.light a.btn-primary:not(.chatbot-chip) *,
+.light span.bg-blue-500.text-white,
+.light span.bg-blue-600.text-white,
+.light span.bg-purple-600.text-white,
+.light span.bg-emerald-600.text-white,
+.light span.bg-cyan-600.text-white,
+.light span.bg-red-600.text-white,
+.light .header-topbar,
+.light .header-topbar *,
+.light .header-topbar a,
+.light .header-topbar span,
+.light .header-topbar a *,
+.light .header-topbar span * {
+  color: #ffffff !important;
+}
+
+/* Light tint buttons (bg-emerald-50, bg-blue-50, etc.) must NEVER have white text in light mode */
+.light button[class*="bg-emerald-50"] *,
+.light button[class*="bg-blue-50"] *,
+.light button[class*="bg-purple-50"] *,
+.light button[class*="bg-indigo-50"] * {
+  color: inherit !important;
+}
+
+/* 4b. Dark photo overlay content: ensure text stays high contrast white on photos */
+.light .dark-overlay-content,
+.light .dark-overlay-content *,
+.light .dark-overlay-content h1,
+.light .dark-overlay-content h2,
+.light .dark-overlay-content h3,
+.light .dark-overlay-content h4,
+.light .dark-overlay-content h5,
+.light .dark-overlay-content h6,
+.light .dark-overlay-content span,
+.light .dark-overlay-content p,
+.light [class*="from-slate-950"] ~ div.dark-overlay-content,
+.light [class*="from-slate-950"] ~ div.dark-overlay-content * {
+  color: #ffffff !important;
+}
+
+.light .dark-overlay-content p,
+.light .dark-overlay-content span.text-slate-300,
+.light .dark-overlay-content span.text-slate-400 {
+  color: #e2e8f0 !important;
+}
+
+.light span.bg-amber-500.text-slate-950,
+.light button.bg-amber-400.text-slate-950,
+.light button.bg-amber-400.text-slate-950 * {
+  color: #020617 !important;
 }
 
 /* Section Blocks & Container Backgrounds in Light Mode → White Apricot Theme */
@@ -164,6 +305,204 @@ body.light,
 .light .bg-slate-900\/90,
 .light .bg-slate-900\/50 {
   background-color: #fff5ee !important; /* White Apricot Block Fill */
+}
+
+/* ============================================================
+   AI CHATBOT WIDGET — Light & Dark Mode High-Aesthetics Theming
+   ============================================================ */
+.light .ai-chatbot-widget {
+  color-scheme: light;
+}
+.dark .ai-chatbot-widget {
+  color-scheme: dark;
+}
+
+/* Light Mode Chatbot Specific Overrides */
+.light .ai-chatbot-widget .chatbot-window {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.15), 0 0 25px rgba(37, 99, 235, 0.1) !important;
+}
+
+.light .ai-chatbot-widget .chatbot-header {
+  background: linear-gradient(135deg, #1d4ed8 0%, #4338ca 50%, #6d28d9 100%) !important;
+  color: #ffffff !important;
+  border-bottom-color: rgba(255, 255, 255, 0.15) !important;
+}
+.light .ai-chatbot-widget .chatbot-header * {
+  color: #ffffff !important;
+}
+.light .ai-chatbot-widget .chatbot-header span.bg-gradient-to-r {
+  color: #0f172a !important;
+}
+
+.light .ai-chatbot-widget .chatbot-messages-area {
+  background-color: #f8fafc !important;
+}
+
+.light .ai-chatbot-widget .chatbot-bot-bubble {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+}
+.light .ai-chatbot-widget .chatbot-bot-bubble * {
+  color: #1e293b;
+}
+.light .ai-chatbot-widget .chatbot-bot-bubble strong {
+  color: #1d4ed8 !important;
+}
+.light .ai-chatbot-widget .chatbot-bot-bubble a {
+  color: #2563eb !important;
+}
+.light .ai-chatbot-widget .chatbot-bot-bubble .bullet-dot {
+  color: #2563eb !important;
+}
+.light .ai-chatbot-widget .chatbot-bot-bubble .source-badge {
+  color: #047857 !important;
+}
+
+.light .ai-chatbot-widget .chatbot-user-bubble {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3) !important;
+}
+.light .ai-chatbot-widget .chatbot-user-bubble * {
+  color: #ffffff !important;
+}
+
+.light .ai-chatbot-widget .chatbot-chips-area {
+  background-color: #f8fafc !important;
+  border-top: 1px solid #e2e8f0 !important;
+}
+.light .ai-chatbot-widget .chatbot-chip {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+}
+.light .ai-chatbot-widget .chatbot-chip,
+.light .ai-chatbot-widget .chatbot-chip * {
+  color: #0f172a !important;
+}
+.light .ai-chatbot-widget .chatbot-chip svg {
+  color: #2563eb !important;
+  stroke: #2563eb !important;
+}
+.light .ai-chatbot-widget .chatbot-chip:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%) !important;
+  border-color: #2563eb !important;
+}
+.light .ai-chatbot-widget .chatbot-chip:hover,
+.light .ai-chatbot-widget .chatbot-chip:hover *,
+.light .ai-chatbot-widget .chatbot-chip:hover svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+.light .ai-chatbot-widget .chatbot-cta-bar {
+  background-color: #fffbeb !important;
+  border-top-color: #fde68a !important;
+}
+.light .ai-chatbot-widget .chatbot-cta-demo {
+  color: #b45309 !important;
+}
+.light .ai-chatbot-widget .chatbot-cta-phone {
+  color: #1d4ed8 !important;
+}
+
+.light .ai-chatbot-widget .chatbot-input-area {
+  background-color: #ffffff !important;
+  border-top-color: #e2e8f0 !important;
+}
+.light .ai-chatbot-widget input.chatbot-input {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+.light .ai-chatbot-widget input.chatbot-input::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Dark Mode Chatbot Specific */
+.dark .ai-chatbot-widget .chatbot-window {
+  background-color: #030712 !important;
+  border-color: rgba(6, 182, 212, 0.4) !important;
+  box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(6, 182, 212, 0.2) !important;
+}
+.dark .ai-chatbot-widget .chatbot-header {
+  background: linear-gradient(135deg, #030712 0%, #1e1b4b 50%, #0f172a 100%) !important;
+  border-bottom-color: rgba(6, 182, 212, 0.3) !important;
+}
+.dark .ai-chatbot-widget .chatbot-messages-area {
+  background: linear-gradient(to bottom, #080d1a, #090f20, #060a14) !important;
+}
+.dark .ai-chatbot-widget .chatbot-bot-bubble {
+  background-color: #0f172a !important;
+  color: #f1f5f9 !important;
+  border-color: rgba(6, 182, 212, 0.3) !important;
+}
+.dark .ai-chatbot-widget .chatbot-bot-bubble strong {
+  color: #67e8f9 !important;
+}
+.dark .ai-chatbot-widget .chatbot-bot-bubble a {
+  color: #fcd34d !important;
+}
+.dark .ai-chatbot-widget .chatbot-bot-bubble .bullet-dot {
+  color: #22d3ee !important;
+}
+.dark .ai-chatbot-widget .chatbot-bot-bubble .source-badge {
+  color: #6ee7b7 !important;
+}
+.dark .ai-chatbot-widget .chatbot-chips-area {
+  background-color: #0b0f19 !important;
+  border-top: 1px solid #1e293b !important;
+}
+.dark .ai-chatbot-widget .chatbot-chip {
+  background-color: #111827 !important;
+  color: #f1f5f9 !important;
+  border: 1px solid #334155 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+.dark .ai-chatbot-widget .chatbot-chip,
+.dark .ai-chatbot-widget .chatbot-chip * {
+  color: #f1f5f9 !important;
+}
+.dark .ai-chatbot-widget .chatbot-chip svg {
+  color: #38bdf8 !important;
+  stroke: #38bdf8 !important;
+}
+.dark .ai-chatbot-widget .chatbot-chip:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%) !important;
+  border-color: #38bdf8 !important;
+}
+.dark .ai-chatbot-widget .chatbot-chip:hover,
+.dark .ai-chatbot-widget .chatbot-chip:hover *,
+.dark .ai-chatbot-widget .chatbot-chip:hover svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+.dark .ai-chatbot-widget .chatbot-cta-bar {
+  background: linear-gradient(135deg, rgba(30, 27, 75, 0.8), rgba(15, 23, 42, 0.9)) !important;
+  border-top-color: rgba(6, 182, 212, 0.2) !important;
+}
+.dark .ai-chatbot-widget .chatbot-cta-demo {
+  color: #fcd34d !important;
+}
+.dark .ai-chatbot-widget .chatbot-cta-phone {
+  color: #67e8f9 !important;
+}
+.dark .ai-chatbot-widget .chatbot-input-area {
+  background-color: #030712 !important;
+  border-top-color: #1e293b !important;
+}
+.dark .ai-chatbot-widget input.chatbot-input {
+  background-color: #0e1424 !important;
+  color: #ffffff !important;
+  border-color: #334155 !important;
+}
+.dark .ai-chatbot-widget input.chatbot-input::placeholder {
+  color: #94a3b8 !important;
 }
 
 .light .bg-slate-800,
@@ -200,6 +539,12 @@ body.light,
 
 .light .gradient-text-cyan {
   background: linear-gradient(135deg, #0284c7 0%, #059669 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.light .gradient-text-amber {
+  background: linear-gradient(135deg, #b45309 0%, #dc2626 100%) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
 }
@@ -487,12 +832,13 @@ html.light .nav-shimmer-beam,
   }
 }
 
-.animate-light-sweep {
+/* Specular Shimmer Sweep on Primary Action Buttons */
+.btn-shimmer {
   position: relative;
   overflow: hidden;
 }
 
-.animate-light-sweep::after {
+.btn-shimmer::before {
   content: '';
   position: absolute;
   top: -50%;
@@ -500,16 +846,209 @@ html.light .nav-shimmer-beam,
   width: 200%;
   height: 200%;
   background: linear-gradient(
-    105deg,
-    transparent 35%,
-    rgba(255, 255, 255, 0.6) 48%,
-    rgba(245, 158, 11, 0.4) 52%,
-    transparent 65%
+    60deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 80%
   );
-  animation: light-sweep 4.5s infinite ease-in-out;
+  transform: rotate(25deg) translateX(-130%);
+  animation: btnShimmerSweep 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   pointer-events: none;
-  z-index: 30;
+  z-index: 10;
 }
 
+.btn-shimmer:hover::before {
+  animation: btnShimmerSweepHover 0.75s ease-out forwards;
+}
+
+@keyframes btnShimmerSweep {
+  0%, 65% {
+    transform: rotate(25deg) translateX(-130%);
+  }
+  85%, 100% {
+    transform: rotate(25deg) translateX(130%);
+  }
+}
+
+@keyframes btnShimmerSweepHover {
+  0% {
+    transform: rotate(25deg) translateX(-130%);
+  }
+  100% {
+    transform: rotate(25deg) translateX(130%);
+  }
+}
+
+/* Holographic Security Sheen on Certificate Seal */
+.hologram-seal {
+  position: relative;
+  overflow: hidden;
+}
+
+.hologram-seal::after {
+  content: '';
+  position: absolute;
+  inset: -100%;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.45) 45%,
+    rgba(147, 197, 253, 0.5) 50%,
+    rgba(253, 224, 71, 0.5) 55%,
+    rgba(244, 114, 182, 0.45) 60%,
+    transparent 75%
+  );
+  transform: rotate(20deg) translateX(-100%);
+  animation: hologramSweep 6s ease-in-out infinite;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  z-index: 20;
+}
+
+@keyframes hologramSweep {
+  0%, 70% {
+    transform: rotate(20deg) translateX(-120%);
+    opacity: 0;
+  }
+  75% {
+    opacity: 1;
+  }
+  90% {
+    transform: rotate(20deg) translateX(120%);
+    opacity: 1;
+  }
+  95%, 100% {
+    transform: rotate(20deg) translateX(120%);
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   TOP HEADER MATCHING COLOR THEME FOR FOOTER (Full Rose-Magenta Gradient)
+   ============================================================ */
+footer.site-footer,
+.light footer.site-footer,
+.dark footer.site-footer {
+  background: linear-gradient(135deg, #9d174d 0%, #be185d 30%, #db2777 65%, #e11d48 100%) !important;
+  border-top: 2px solid rgba(255, 255, 255, 0.4) !important;
+  color: #ffffff !important;
+}
+
+/* Ensure ALL text elements in the footer stay crystal-clear pure white */
+footer.site-footer,
+footer.site-footer *,
+.light footer.site-footer,
+.light footer.site-footer *,
+.dark footer.site-footer,
+.dark footer.site-footer * {
+  color-scheme: dark;
+}
+
+footer.site-footer h4,
+.light footer.site-footer h4,
+footer.site-footer h3,
+.light footer.site-footer h3 {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+footer.site-footer p,
+.light footer.site-footer p,
+footer.site-footer span,
+.light footer.site-footer span {
+  color: #ffffff !important;
+}
+
+footer.site-footer a,
+.light footer.site-footer a {
+  color: #ffffff !important;
+  transition: color 0.2s ease;
+}
+
+footer.site-footer a:hover,
+.light footer.site-footer a:hover {
+  color: #fef08a !important; /* Bright golden yellow on hover */
+}
+
+/* Specific amber and gold accents */
+footer.site-footer .text-amber-300,
+.light footer.site-footer .text-amber-300,
+footer.site-footer .text-amber-200,
+.light footer.site-footer .text-amber-200 {
+  color: #fde047 !important;
+}
+
+footer.site-footer .text-emerald-300,
+.light footer.site-footer .text-emerald-300 {
+  color: #86efac !important;
+}
+
+/* Badges and pills */
+footer.site-footer .footer-badge,
+.light footer.site-footer .footer-badge,
+footer.site-footer .footer-pill,
+.light footer.site-footer .footer-pill {
+  background-color: rgba(0, 0, 0, 0.35) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  color: #ffffff !important;
+}
+
+footer.site-footer .footer-badge span,
+.light footer.site-footer .footer-badge span,
+footer.site-footer .footer-pill span,
+.light footer.site-footer .footer-pill span {
+  color: #ffffff !important;
+}
+
+/* Newsletter CTA Card */
+footer.site-footer .footer-newsletter-banner,
+.light footer.site-footer .footer-newsletter-banner {
+  background: rgba(0, 0, 0, 0.35) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3) !important;
+}
+
+footer.site-footer input[type="email"],
+.light footer.site-footer input[type="email"] {
+  background-color: rgba(0, 0, 0, 0.45) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+}
+
+footer.site-footer input[type="email"]::placeholder,
+.light footer.site-footer input[type="email"]::placeholder {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+footer.site-footer button[type="submit"],
+.light footer.site-footer button[type="submit"] {
+  background-color: #facc15 !important;
+  color: #020617 !important;
+}
+
+footer.site-footer button[type="submit"]:hover,
+.light footer.site-footer button[type="submit"]:hover {
+  background-color: #fde047 !important;
+  color: #020617 !important;
+}
+
+/* Bottom Copyright Bar */
+footer.site-footer .footer-bottom-bar,
+.light footer.site-footer .footer-bottom-bar {
+  border-top: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+footer.site-footer .footer-bottom-bar a,
+.light footer.site-footer .footer-bottom-bar a {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+footer.site-footer .footer-bottom-bar a:hover,
+.light footer.site-footer .footer-bottom-bar a:hover {
+  color: #fef08a !important;
+}
 
 

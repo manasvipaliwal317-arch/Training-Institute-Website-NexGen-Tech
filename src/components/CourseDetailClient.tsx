@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import {
   ChevronDown,
   CheckCircle2,
@@ -112,46 +113,46 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
                 <div className="text-xs font-bold uppercase text-blue-400">Curriculum</div>
                 <h2 className="text-2xl font-extrabold text-white">Syllabus & Modules Breakdown</h2>
               </div>
-              <button
-                onClick={() => {
-                  setModalSource('Download Syllabus PDF');
-                  setModalOpen(true);
-                }}
-                className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs flex items-center gap-2 border border-slate-700 transition-colors shrink-0"
+              <a
+                href={`/api/courses/${course.slug}/syllabus`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs flex items-center gap-2 border border-blue-500 transition-colors shadow-sm shrink-0 cursor-pointer"
+                title="Open and Download Detailed Syllabus PDF"
               >
-                <Download className="w-4 h-4 text-blue-400" />
+                <Download className="w-4 h-4 text-white" />
                 <span>Download Detailed Syllabus PDF</span>
-              </button>
+              </a>
             </div>
 
             <div className="space-y-3">
               {course.syllabus.map((mod, idx) => (
                 <div
                   key={idx}
-                  className="rounded-xl bg-slate-900/90 border border-slate-800 overflow-hidden transition-colors"
+                  className="rounded-xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm transition-colors"
                 >
                   <button
                     onClick={() => setOpenModuleIndex(openModuleIndex === idx ? null : idx)}
-                    className="w-full px-6 py-4 flex items-center justify-between text-left text-sm font-bold text-white hover:bg-slate-800/60"
+                    className="w-full px-6 py-4 flex items-center justify-between text-left text-sm font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="px-2.5 py-1 rounded bg-blue-600/20 text-blue-400 text-xs font-semibold">
+                      <span className="px-2.5 py-1 rounded bg-blue-100 dark:bg-blue-600/20 text-blue-700 dark:text-blue-400 text-xs font-semibold">
                         {mod.module}
                       </span>
-                      <span>{mod.title}</span>
+                      <span className="text-slate-900 dark:text-white">{mod.title}</span>
                     </div>
                     <ChevronDown
-                      className={`w-4 h-4 text-slate-400 transition-transform ${
-                        openModuleIndex === idx ? 'rotate-180 text-blue-400' : ''
+                      className={`w-4 h-4 text-slate-500 dark:text-slate-400 transition-transform ${
+                        openModuleIndex === idx ? 'rotate-180 text-blue-600 dark:text-blue-400' : ''
                       }`}
                     />
                   </button>
 
                   {openModuleIndex === idx && (
-                    <div className="px-6 pb-4 pt-1 border-t border-slate-800/80 space-y-2">
+                    <div className="px-6 pb-4 pt-2 border-t border-slate-100 dark:border-slate-800/80 space-y-2 bg-slate-50/50 dark:bg-slate-950/30">
                       {mod.details.map((detail, dIdx) => (
-                        <div key={dIdx} className="flex items-center gap-2.5 text-xs text-slate-300">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <div key={dIdx} className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-300">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                           <span>{detail}</span>
                         </div>
                       ))}
@@ -174,9 +175,9 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
               {course.tools.map((t, idx) => (
                 <span
                   key={idx}
-                  className="px-4 py-2 rounded-xl bg-slate-900 border border-slate-700/80 text-white font-semibold text-xs flex items-center gap-1.5 shadow-sm"
+                  className="px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 text-slate-800 dark:text-white font-semibold text-xs flex items-center gap-1.5 shadow-sm"
                 >
-                  <Sparkles className="w-3 h-3 text-purple-400" />
+                  <Sparkles className="w-3 h-3 text-purple-600 dark:text-purple-400" />
                   {t}
                 </span>
               ))}
@@ -192,10 +193,10 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {course.projects.map((proj, idx) => (
-                <div key={idx} className="p-5 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
-                  <div className="text-xs font-semibold text-emerald-400">Project 0{idx + 1}</div>
-                  <h4 className="font-bold text-white text-base">{proj.name}</h4>
-                  <p className="text-xs text-slate-400 leading-relaxed">{proj.description}</p>
+                <div key={idx} className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2 shadow-sm">
+                  <div className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">Project 0{idx + 1}</div>
+                  <h4 className="font-bold text-slate-900 dark:text-white text-base">{proj.name}</h4>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{proj.description}</p>
                 </div>
               ))}
             </div>
@@ -210,11 +211,11 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {course.careerRoles.map((role, idx) => (
-                <div key={idx} className="p-5 rounded-xl bg-slate-900 border border-slate-800 text-center space-y-1">
-                  <Briefcase className="w-6 h-6 text-amber-400 mx-auto mb-2" />
-                  <h4 className="font-bold text-white text-sm">{role.title}</h4>
-                  <p className="text-xs text-slate-400">Avg. Salary</p>
-                  <p className="text-sm font-extrabold text-emerald-400">{role.salary}</p>
+                <div key={idx} className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-1 shadow-sm">
+                  <Briefcase className="w-6 h-6 text-amber-500 dark:text-amber-400 mx-auto mb-2" />
+                  <h4 className="font-bold text-slate-900 dark:text-white text-sm">{role.title}</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Avg. Salary</p>
+                  <p className="text-sm font-extrabold text-emerald-600 dark:text-emerald-400">{role.salary}</p>
                 </div>
               ))}
             </div>
@@ -229,20 +230,20 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
 
             <div className="space-y-3">
               {course.faqs.map((faq, idx) => (
-                <div key={idx} className="rounded-xl bg-slate-900 border border-slate-800 overflow-hidden">
+                <div key={idx} className="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm transition-colors">
                   <button
                     onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
-                    className="w-full px-6 py-4 flex items-center justify-between text-left text-sm font-bold text-white hover:bg-slate-800/60"
+                    className="w-full px-6 py-4 flex items-center justify-between text-left text-sm font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors"
                   >
-                    <span>{faq.q}</span>
+                    <span className="text-slate-900 dark:text-white">{faq.q}</span>
                     <ChevronDown
-                      className={`w-4 h-4 text-slate-400 transition-transform ${
-                        openFaqIndex === idx ? 'rotate-180 text-blue-400' : ''
+                      className={`w-4 h-4 text-slate-500 dark:text-slate-400 transition-transform ${
+                        openFaqIndex === idx ? 'rotate-180 text-blue-600 dark:text-blue-400' : ''
                       }`}
                     />
                   </button>
                   {openFaqIndex === idx && (
-                    <div className="px-6 pb-4 pt-1 text-xs text-slate-300 leading-relaxed border-t border-slate-800/80">
+                    <div className="px-6 pb-4 pt-2 text-xs text-slate-700 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-950/30">
                       {faq.a}
                     </div>
                   )}
@@ -270,16 +271,13 @@ export default function CourseDetailClient({ course }: CourseDetailClientProps) 
 
             {/* Main Action CTAs */}
             <div className="space-y-3">
-              <button
-                onClick={() => {
-                  setModalSource('Course Enrollment Request');
-                  setModalOpen(true);
-                }}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold text-sm shadow-xl shadow-blue-500/30 flex items-center justify-center gap-2 transition-all"
+              <Link
+                href={`/enroll?course=${course.slug}`}
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold text-sm shadow-xl shadow-blue-500/30 flex items-center justify-center gap-2 transition-all cursor-pointer"
               >
                 <Sparkles className="w-4 h-4 text-amber-300" />
                 <span>Enroll in Course</span>
-              </button>
+              </Link>
 
               <button
                 onClick={() => {

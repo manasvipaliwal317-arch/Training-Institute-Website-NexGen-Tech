@@ -15,17 +15,23 @@ export default function ContactClientSection() {
     setLoading(true);
     setErrorMsg('');
 
-    const formData = new FormData(e.currentTarget);
-    formData.append('source', 'Contact Us Page Form');
+    try {
+      const formData = new FormData(e.currentTarget);
+      formData.append('source', 'Contact Us Page Form');
 
-    const res = await submitInquiryAction(formData);
-    setLoading(false);
+      const res = await submitInquiryAction(formData);
+      setLoading(false);
 
-    if (res.success) {
-      setSubmitted(true);
-      setMessage(res.message || 'Thank you! We will get back to you shortly.');
-    } else {
-      setErrorMsg(res.error || 'Failed to send message.');
+      if (res?.success) {
+        setSubmitted(true);
+        setMessage(res.message || 'Thank you! We will get back to you shortly.');
+      } else {
+        setErrorMsg(res?.error || 'Failed to send message. Please check your details.');
+      }
+    } catch (err: any) {
+      console.error('Contact form submission error:', err);
+      setLoading(false);
+      setErrorMsg('Network error. Please try again or reach us at contact@nexgentech.edu.');
     }
   }
 

@@ -39,25 +39,25 @@ export default async function AboutPage() {
     <div className="space-y-24 py-12">
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="glass-card rounded-3xl p-8 sm:p-12 border border-blue-500/20 bg-gradient-to-br from-slate-900 via-blue-950/40 to-slate-900 shadow-2xl relative overflow-hidden">
+        <div className="glass-card rounded-3xl p-8 sm:p-12 border border-blue-200/80 dark:border-blue-500/20 bg-gradient-to-br from-blue-50/80 via-sky-50/50 to-slate-50/90 dark:from-slate-900 dark:via-blue-950/40 dark:to-slate-900 shadow-xl relative overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
             <div className="lg:col-span-7 space-y-6">
               <FadeInLeft>
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold uppercase tracking-wider">
-                  <Sparkles className="w-4 h-4 text-amber-300" />
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs font-semibold uppercase tracking-wider">
+                  <Sparkles className="w-4 h-4 text-amber-500 dark:text-amber-300" />
                   <span>Empowering Tech Careers Since 2014</span>
                 </div>
-                <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-tight mt-3">
+                <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-tight mt-3">
                   Shaping the Next Generation of <span className="gradient-text">Global Tech Leaders</span>
                 </h1>
-                <p className="text-slate-300 text-base sm:text-lg leading-relaxed mt-3">
+                <p className="text-slate-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed mt-3">
                   NexGen Tech Academy is a premier IT training and research institute. Founded by software architects and AI researchers, our goal is to bridge the gap between academic education and modern industry demands through immersive project-based learning.
                 </p>
                 <div className="pt-4 flex flex-wrap items-center gap-4">
                   <HomeClientSection mode="demo-btn" buttonText="Book Campus Visit & Demo" />
                   <Link
                     href="/courses"
-                    className="px-6 py-3.5 rounded-xl border border-slate-700 hover:border-blue-500/40 text-white font-semibold text-sm transition-all"
+                    className="px-6 py-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800/80 text-slate-800 dark:text-white hover:border-blue-500 font-semibold text-sm transition-all shadow-sm"
                   >
                     Explore Academic Programs
                   </Link>
@@ -179,10 +179,10 @@ export default async function AboutPage() {
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
-            <div className="absolute bottom-4 left-4 right-4">
-              <h4 className="font-bold text-white text-base">AI & Supercomputing Lab</h4>
-              <p className="text-xs text-slate-300">NVIDIA A100 Tensor GPU clusters for Deep Learning labs.</p>
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+            <div className="dark-overlay-content absolute bottom-4 left-4 right-4 z-10" style={{ color: '#ffffff' }}>
+              <h4 className="font-bold text-white text-base" style={{ color: '#ffffff' }}>AI & Supercomputing Lab</h4>
+              <p className="text-xs text-slate-200" style={{ color: '#e2e8f0' }}>NVIDIA A100 Tensor GPU clusters for Deep Learning labs.</p>
             </div>
           </div>
 
@@ -193,10 +193,10 @@ export default async function AboutPage() {
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
-            <div className="absolute bottom-4 left-4 right-4">
-              <h4 className="font-bold text-white text-base">Cisco Hardware & Cyber Security Lab</h4>
-              <p className="text-xs text-slate-300">Real enterprise router stacks, firewalls, and SOC monitoring screens.</p>
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+            <div className="dark-overlay-content absolute bottom-4 left-4 right-4 z-10" style={{ color: '#ffffff' }}>
+              <h4 className="font-bold text-white text-base" style={{ color: '#ffffff' }}>Cisco Hardware & Cyber Security Lab</h4>
+              <p className="text-xs text-slate-200" style={{ color: '#e2e8f0' }}>Real enterprise router stacks, firewalls, and SOC monitoring screens.</p>
             </div>
           </div>
 
@@ -207,10 +207,10 @@ export default async function AboutPage() {
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
-            <div className="absolute bottom-4 left-4 right-4">
-              <h4 className="font-bold text-white text-base">UI/UX Mac Studio & Design Hub</h4>
-              <p className="text-xs text-slate-300">Apple Studio Displays with licensed Figma Enterprise & Adobe Suite.</p>
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+            <div className="dark-overlay-content absolute bottom-4 left-4 right-4 z-10" style={{ color: '#ffffff' }}>
+              <h4 className="font-bold text-white text-base" style={{ color: '#ffffff' }}>UI/UX Mac Studio & Design Hub</h4>
+              <p className="text-xs text-slate-200" style={{ color: '#e2e8f0' }}>Apple Studio Displays with licensed Figma Enterprise & Adobe Suite.</p>
             </div>
           </div>
         </div>

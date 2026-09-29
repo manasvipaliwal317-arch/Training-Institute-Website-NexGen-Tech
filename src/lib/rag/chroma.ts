@@ -9,22 +9,14 @@ const CHROMA_COLLECTION =
   process.env.RAG_COLLECTION_NAME ||
   'nexgentech_institute_knowledge';
 
-const CHROMA_HOST = process.env.CHROMA_HOST || 'localhost';
-const CHROMA_PORT = process.env.CHROMA_PORT || '8000';
-const CHROMA_URL =
-  process.env.CHROMA_URL || `http://${CHROMA_HOST}:${CHROMA_PORT}`;
-
-const DEFAULT_TOP_K = parseInt(process.env.RAG_TOP_K || '5', 10);
-const DEFAULT_SIMILARITY_THRESHOLD = parseFloat(
-  process.env.RAG_SIMILARITY_THRESHOLD || '0.55'
-);
-
-// File-backed persistent storage path for offline and edge deployment
 const PERSISTENT_DATA_DIR = path.join(process.cwd(), 'data');
 const PERSISTENT_STORE_FILE = path.join(
   PERSISTENT_DATA_DIR,
   `chroma_${CHROMA_COLLECTION}.json`
 );
+
+const DEFAULT_TOP_K = parseInt(process.env.RAG_TOP_K || '6', 10);
+const DEFAULT_SIMILARITY_THRESHOLD = 0.35;
 
 let memoryStore: RagDocumentChunk[] | null = null;
 let initPromise: Promise<RagDocumentChunk[]> | null = null;
@@ -32,7 +24,7 @@ let initPromise: Promise<RagDocumentChunk[]> | null = null;
 /**
  * Loads existing cached vectors from disk if available.
  */
-function readPersistentStore(): Map<string, RagDocumentChunk> {
+export function readPersistentStore(): Map<string, RagDocumentChunk> {
   const storeMap = new Map<string, RagDocumentChunk>();
   if (fs.existsSync(PERSISTENT_STORE_FILE)) {
     try {
@@ -54,7 +46,7 @@ function readPersistentStore(): Map<string, RagDocumentChunk> {
 
 /**
  * Parses documents, computes diffs against cached content hashes,
- * embeds only new/modified chunks (duplicate prevention), and saves vectors.
+ * embeds only new/modified chunks, and saves vectors.
  */
 export async function ingestKnowledgeDocument(options?: {
   forceRebuild?: boolean;
@@ -73,7 +65,6 @@ export async function ingestKnowledgeDocument(options?: {
     const chunk = latestChunks[i];
     const existing = existingMap.get(chunk.id);
 
-    // Duplicate prevention: If chunk text hash is identical to cached embedding, reuse it
     if (
       existing &&
       existing.contentHash === chunk.contentHash &&
@@ -89,21 +80,23 @@ export async function ingestKnowledgeDocument(options?: {
     }
   }
 
-  // Generate embeddings only for new or modified chunks
   if (chunksToEmbed.length > 0) {
-    const textsToEmbed = chunksToEmbed.map(
-      (item) => `${item.chunk.metadata.section}\n${item.chunk.text}`
-    );
-    const newEmbeddings = await batchGenerateEmbeddings(textsToEmbed);
+    try {
+      const textsToEmbed = chunksToEmbed.map(
+        (item) => `${item.chunk.metadata.section}\n${item.chunk.text}`
+      );
+      const newEmbeddings = await batchGenerateEmbeddings(textsToEmbed);
 
-    for (let i = 0; i < chunksToEmbed.length; i++) {
-      chunksToEmbed[i].chunk.embedding = newEmbeddings[i];
+      for (let i = 0; i < chunksToEmbed.length; i++) {
+        chunksToEmbed[i].chunk.embedding = newEmbeddings[i];
+      }
+    } catch (embedErr) {
+      console.warn('[RAG] Batch embedding creation failed during ingest:', embedErr);
     }
   }
 
   memoryStore = latestChunks;
 
-  // Persist updated collection to disk
   try {
     if (!fs.existsSync(PERSISTENT_DATA_DIR)) {
       fs.mkdirSync(PERSISTENT_DATA_DIR, { recursive: true });
@@ -158,7 +151,36 @@ export async function getVectorCollection(): Promise<RagDocumentChunk[]> {
 }
 
 /**
- * Performs semantic similarity vector search over the ChromaDB collection.
+ * Calculates keyword relevance score between a query and chunk text.
+ */
+function computeKeywordScore(query: string, text: string): number {
+  const stopWords = new Set([
+    'what', 'when', 'where', 'which', 'who', 'whom', 'whose', 'why', 'how',
+    'is', 'are', 'was', 'were', 'the', 'a', 'an', 'and', 'or', 'but', 'in',
+    'on', 'at', 'to', 'for', 'of', 'with', 'about', 'can', 'you', 'tell',
+    'me', 'i', 'my', 'please', 'give', 'details', 'know'
+  ]);
+  const tokens = query
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter((w) => w.length > 2 && !stopWords.has(w));
+
+  if (tokens.length === 0) return 0;
+
+  const textLower = text.toLowerCase();
+  let matches = 0;
+  for (const token of tokens) {
+    if (textLower.includes(token)) {
+      matches++;
+    }
+  }
+  return matches / tokens.length;
+}
+
+/**
+ * Performs semantic similarity vector search over the ChromaDB collection
+ * with hybrid keyword boosting and resilient keyword fallback.
  */
 export async function searchInstituteKnowledge(
   query: string,
@@ -174,19 +196,39 @@ export async function searchInstituteKnowledge(
     return [];
   }
 
-  const collection = await getVectorCollection();
-  if (!collection || collection.length === 0) {
-    return [];
+  let collection: RagDocumentChunk[] = [];
+  try {
+    collection = await getVectorCollection();
+  } catch (colErr) {
+    console.warn('[RAG] Error reading vector collection, falling back to parsed chunks:', colErr);
+    collection = extractSemanticChunks();
   }
 
-  // Generate embedding for incoming user question
-  const queryEmbedding = await generateEmbedding(query);
+  if (!collection || collection.length === 0) {
+    collection = extractSemanticChunks();
+  }
 
-  // Compute cosine similarity against all chunks
+  let queryEmbedding: number[] | null = null;
+  try {
+    queryEmbedding = await generateEmbedding(query);
+  } catch (embedErr) {
+    console.warn('[RAG] Vector embedding generation skipped/failed:', embedErr);
+  }
+
   const scoredResults: RagSearchResult[] = collection.map((chunk) => {
-    const similarity = chunk.embedding
-      ? cosineSimilarity(queryEmbedding, chunk.embedding)
-      : 0;
+    const fullChunkText = `${chunk.metadata.section} ${chunk.metadata.question || ''} ${chunk.text}`;
+    const kwScore = computeKeywordScore(query, fullChunkText);
+
+    let similarity = 0;
+    if (queryEmbedding && chunk.embedding && chunk.embedding.length > 0) {
+      const vecSim = cosineSimilarity(queryEmbedding, chunk.embedding);
+      // Hybrid scoring: 65% semantic vector + 35% exact term matching
+      similarity = vecSim * 0.65 + kwScore * 0.35;
+    } else {
+      // Fallback purely to keyword match
+      similarity = kwScore;
+    }
+
     return {
       chunk,
       similarity,
@@ -198,7 +240,12 @@ export async function searchInstituteKnowledge(
   scoredResults.sort((a, b) => b.similarity - a.similarity);
 
   // Filter by threshold
-  const filtered = scoredResults.filter((item) => item.similarity >= threshold);
+  let filtered = scoredResults.filter((item) => item.similarity >= threshold);
 
-  return filtered.slice(0, topK);
+  // Guarantee at least the top matching chunks
+  if (filtered.length === 0 && scoredResults.length > 0) {
+    filtered = scoredResults.slice(0, 3);
+  }
+
+  return (filtered.length > 0 ? filtered : scoredResults).slice(0, topK);
 }

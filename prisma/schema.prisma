@@ -85,6 +85,9 @@ model Batch {
 
 model Trainer {
   id             String   @id @default(uuid())
+  facultyNo      String?  @unique
+  email          String?  @unique
+  phone          String   @default("+91 98765 43210")
   name           String
   role           String
   bio            String
@@ -93,8 +96,15 @@ model Trainer {
   formerCompany  String
   specialization String
   rating         Float    @default(4.9)
+  officeLocation String   @default("Faculty Cabin 402, Main Tech Park HQ")
+  joiningDate    String   @default("2024-03-15")
+  status         String   @default("ACTIVE")
+  timetableJson  String   @default("[]")
   courses        Course[]
   createdAt      DateTime @default(now())
+
+  @@index([facultyNo])
+  @@index([email])
 }
 
 model Testimonial {
@@ -278,5 +288,45 @@ model HiringDrive {
 
   @@index([status])
   @@index([slug])
+}
+
+model Student {
+  id                  String   @id @default(uuid())
+  studentId           String   @unique // e.g. NXG-2026-1042
+  name                String
+  email               String   @unique
+  mobile              String
+  guardianName        String
+  guardianMobile      String
+  streetAddress       String
+  city                String
+  state               String
+  pincode             String
+  passportPhoto       String?  // Base64 data or photo URL
+  govtIdPhoto         String?  // Base64 data or photo URL
+  courseSlug          String
+  courseName          String
+  courseMode          String   @default("Hybrid (Classroom + Online)")
+  campus              String   @default("Tech Park Main Campus - Hyderabad")
+  totalFees           Int      @default(35000)
+  registrationFee     Int      @default(1000)
+  paidFees            Int      @default(1000)
+  remainingFees       Int      @default(34000)
+  paymentStatus       String   @default("SEAT_RESERVED") // SEAT_RESERVED, PARTIAL, COMPLETED
+  paymentTxnId        String?
+  batchName           String   @default("Morning Cohort (10:00 AM - 1:00 PM)")
+  attendancePct       Int      @default(96)
+  assignmentsDone     Int      @default(8)
+  assignmentsTot      Int      @default(12)
+  labScore            Int      @default(92)
+  mockInterviewDate   String   @default("Upcoming: Oct 15, 2026")
+  mockInterviewStatus String   @default("Scheduled with Amazon Tech Lead")
+  mockFeedback        String   @default("Resume approved. System Design & Technical coding round scheduled.")
+  status              String   @default("ACTIVE")
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([studentId])
+  @@index([email])
 }
 

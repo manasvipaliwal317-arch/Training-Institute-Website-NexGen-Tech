@@ -31,7 +31,7 @@ export default function FacultyMovingChain({ trainers }: FacultyMovingChainProps
           {chainList.map((t, idx) => (
             <div key={`${t.id}-${idx}`} className="flex items-center gap-6 shrink-0">
               {/* Faculty Card Link in the Chain */}
-              <div className="w-80 glass-card glass-card-hover rounded-2xl p-6 border border-blue-500/30 bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-950 shadow-xl space-y-4 hover:border-blue-400 transition-all duration-300 whitespace-normal group">
+              <div className="w-80 glass-card glass-card-hover rounded-2xl p-6 border border-slate-200/80 dark:border-blue-500/30 bg-gradient-to-br from-white via-sky-50/50 to-indigo-50/40 dark:from-slate-900 dark:via-indigo-950/40 dark:to-slate-900 shadow-md hover:shadow-xl space-y-4 hover:border-blue-400 transition-all duration-300 whitespace-normal group">
                 <div className="flex items-center gap-4">
                   <div className="relative w-16 h-16 rounded-2xl overflow-hidden border-2 border-blue-500/40 shrink-0 shadow-md group-hover:scale-105 transition-transform duration-500">
                     <Image src={t.photo} alt={t.name} fill className="object-cover" />

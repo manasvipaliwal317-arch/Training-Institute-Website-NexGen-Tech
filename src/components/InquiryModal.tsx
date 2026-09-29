@@ -12,6 +12,8 @@ interface InquiryModalProps {
   courseSlug?: string;
   courseName?: string;
   source?: string;
+  submitButtonText?: string;
+  tagText?: string;
 }
 
 export default function InquiryModal({
@@ -22,6 +24,8 @@ export default function InquiryModal({
   courseSlug = '',
   courseName = '',
   source = 'Free Demo Booking',
+  submitButtonText = 'Reserve My Free Demo Class',
+  tagText = 'Free Demo Class & Career Consultation',
 }: InquiryModalProps) {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -40,14 +44,20 @@ export default function InquiryModal({
     if (courseName) formData.append('courseName', courseName);
     formData.append('source', source);
 
-    const res = await submitInquiryAction(formData);
-    setLoading(false);
+    try {
+      const res = await submitInquiryAction(formData);
+      setLoading(false);
 
-    if (res.success) {
-      setSubmitted(true);
-      setFeedbackMsg(res.message || 'Submitted successfully!');
-    } else {
-      setErrorMsg(res.error || 'Failed to submit. Please check your inputs.');
+      if (res.success) {
+        setSubmitted(true);
+        setFeedbackMsg(res.message || 'Submitted successfully!');
+      } else {
+        setErrorMsg(res.error || 'Failed to submit. Please check your inputs.');
+      }
+    } catch (err: any) {
+      console.error('Inquiry submission error:', err);
+      setLoading(false);
+      setErrorMsg('Network or connection issue. Please refresh the page and try again.');
     }
   }
 
@@ -90,7 +100,7 @@ export default function InquiryModal({
           <div>
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-blue-400 mb-2">
               <Sparkles className="w-4 h-4 text-blue-400" />
-              <span>Instant Seat Reservation</span>
+              <span>{tagText}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">{title}</h2>
             <p className="text-slate-400 text-xs sm:text-sm mt-1.5 leading-relaxed">{subtitle}</p>
@@ -188,7 +198,7 @@ export default function InquiryModal({
                     <span>Submitting Request...</span>
                   ) : (
                     <>
-                      <span>Reserve My Free Demo Class</span>
+                      <span>{submitButtonText}</span>
                       <Send className="w-4 h-4" />
                     </>
                   )}

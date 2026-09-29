@@ -21,6 +21,8 @@ import {
   Building2,
   Award,
   Clock,
+  GraduationCap,
+  Briefcase,
 } from 'lucide-react';
 import InquiryModal from './InquiryModal';
 import ThemeToggle from './ThemeToggle';
@@ -113,6 +115,18 @@ export default function Header() {
   const [mobileCoursesOpen, setMobileCoursesOpen] = useState(false);
   const [mobileOutcomesOpen, setMobileOutcomesOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalScroll > 0) {
+        setScrollProgress((window.scrollY / totalScroll) * 100);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const coursesRef = useRef<HTMLDivElement>(null);
   const outcomesRef = useRef<HTMLDivElement>(null);
@@ -211,7 +225,7 @@ export default function Header() {
             </a>
             <button
               onClick={() => setModalOpen(true)}
-              className="hidden sm:flex bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-2.5 py-1 rounded-full text-[11px] transition-all transform hover:scale-105 shadow-md items-center gap-1 cursor-pointer"
+              className="btn-shimmer hidden sm:flex bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-2.5 py-1 rounded-full text-[11px] transition-all transform hover:scale-105 shadow-md items-center gap-1 cursor-pointer"
             >
               <Sparkles className="w-3 h-3 text-slate-950 fill-slate-950" />
               <span>Claim Scholarship</span>
@@ -228,13 +242,21 @@ export default function Header() {
           <div className="nav-shimmer-bottom-line" />
         </div>
 
+        {/* Interactive Scroll-Progress Neon Bar */}
+        <div
+          className="absolute bottom-0 left-0 h-[2.5px] bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400 dark:from-cyan-400 dark:via-blue-500 dark:to-indigo-500 shadow-[0_0_10px_rgba(59,130,246,0.8)] z-50 pointer-events-none transition-[width] duration-75 ease-out"
+          style={{ width: `${scrollProgress}%` }}
+        />
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <Logo />
+            <div className="shrink-0 mr-4 xl:mr-8">
+              <Logo />
+            </div>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
+            <nav className="hidden lg:flex items-center gap-4 xl:gap-6 text-sm font-semibold">
               <Link
                 href="/"
                 className={`transition-colors hover:text-pink-600 dark:hover:text-blue-400 py-2 ${
@@ -495,19 +517,31 @@ export default function Header() {
             </nav>
 
             {/* Right Action CTA & Mobile Trigger */}
-            <div className="flex items-center gap-3">
-              <ThemeToggle />
-              <button
-                onClick={() => setModalOpen(true)}
-                className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all cursor-pointer"
+            <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+              <Link
+                href="/student/login"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 border-violet-600 bg-violet-100/80 hover:bg-violet-200 text-violet-950 dark:bg-violet-950/60 dark:border-violet-500 dark:text-violet-200 hover:text-violet-950 dark:hover:text-white text-xs font-black transition-all shadow-xs"
+                title="Student Portal Login"
               >
-                <Sparkles className="w-4 h-4 text-amber-300" />
-                <span>Book Free Demo</span>
-              </button>
+                <GraduationCap className="w-4 h-4 text-violet-800 dark:text-violet-400 stroke-[2.5]" />
+                <span className="text-violet-950 dark:text-violet-200 font-black">Student</span>
+              </Link>
+
+              <Link
+                href="/faculty/login"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 border-emerald-600 bg-emerald-100/80 hover:bg-emerald-200 text-emerald-950 dark:bg-emerald-950/60 dark:border-emerald-500 dark:text-emerald-200 hover:text-emerald-950 dark:hover:text-white text-xs font-black transition-all shadow-xs"
+                title="Faculty & Mentor Portal Login"
+              >
+                <Briefcase className="w-4 h-4 text-emerald-800 dark:text-emerald-400 stroke-[2.5]" />
+                <span className="text-emerald-950 dark:text-emerald-200 font-black">Faculty</span>
+              </Link>
+
+              {/* Mode Icon placed at the RIGHT-MOST position */}
+              <ThemeToggle />
 
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors cursor-pointer"
+                className="lg:hidden p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
                 aria-label="Toggle menu"
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -660,7 +694,25 @@ export default function Header() {
               </Link>
             </nav>
 
-            <div className="pt-2">
+            <div className="pt-2 space-y-2">
+              <div className="grid grid-cols-2 gap-2">
+                <Link
+                  href="/student/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2.5 rounded-xl border-2 border-violet-600 bg-violet-100 dark:bg-violet-950/60 text-violet-950 dark:text-violet-200 font-extrabold text-xs flex items-center justify-center gap-1.5 shadow-xs"
+                >
+                  <GraduationCap className="w-4 h-4 text-violet-800 dark:text-violet-400 stroke-[2.5]" />
+                  <span>Student Portal</span>
+                </Link>
+                <Link
+                  href="/faculty/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-2.5 rounded-xl border-2 border-emerald-600 bg-emerald-100 dark:bg-emerald-950/60 text-emerald-950 dark:text-emerald-200 font-extrabold text-xs flex items-center justify-center gap-1.5 shadow-xs"
+                >
+                  <Briefcase className="w-4 h-4 text-emerald-800 dark:text-emerald-400 stroke-[2.5]" />
+                  <span>Faculty Portal</span>
+                </Link>
+              </div>
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);

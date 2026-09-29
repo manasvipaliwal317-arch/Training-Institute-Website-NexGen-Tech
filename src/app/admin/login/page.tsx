@@ -15,14 +15,20 @@ export default function AdminLoginPage() {
     setLoading(true);
     setErrorMsg('');
 
-    const formData = new FormData(e.currentTarget);
-    const res = await adminLoginAction(formData);
-    setLoading(false);
+    try {
+      const formData = new FormData(e.currentTarget);
+      const res = await adminLoginAction(formData);
+      setLoading(false);
 
-    if (res.success) {
-      window.location.href = '/admin/dashboard';
-    } else {
-      setErrorMsg(res.error || 'Login failed.');
+      if (res?.success) {
+        window.location.href = '/admin/dashboard';
+      } else {
+        setErrorMsg(res?.error || 'Login failed.');
+      }
+    } catch (err: any) {
+      console.error('Admin login error:', err);
+      setLoading(false);
+      setErrorMsg('Authentication request failed. Please check connection and try again.');
     }
   }
 

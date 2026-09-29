@@ -42,3 +42,7 @@ next-env.d.ts
 
 # Local Netlify folder
 .netlify
+
+# Temporary scratch & test scripts
+/scratch
+test_rsvp_direct.js

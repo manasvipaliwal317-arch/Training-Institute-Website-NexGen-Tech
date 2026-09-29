@@ -27,10 +27,10 @@ export default function Logo({ size = 'md', showText = true }: LogoProps) {
 
       {showText && (
         <div className="flex flex-col">
-          <span className={`font-black tracking-tight text-white dark:text-white light:text-slate-900 group-hover:text-blue-400 transition-colors ${dimensions.textClass}`}>
+          <span className={`font-black tracking-tight text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors ${dimensions.textClass}`}>
             NEXGEN<span className="gradient-text ml-1">TECH</span>
           </span>
-          <span className="text-[10px] uppercase font-bold tracking-widest text-blue-400 light:text-blue-600 -mt-1">
+          <span className="text-[10px] uppercase font-bold tracking-widest text-blue-600 dark:text-blue-400 -mt-1">
             Academy & Research
           </span>
         </div>

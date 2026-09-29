@@ -11,15 +11,15 @@ export default function CampusPage() {
   return (
     <div className="space-y-16 py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Hero Header */}
-      <div className="glass-card rounded-3xl p-8 sm:p-14 border border-blue-500/20 bg-gradient-to-br from-slate-900 via-blue-950/40 to-slate-900 text-center space-y-4">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold uppercase tracking-wider mx-auto">
-          <Sparkles className="w-4 h-4 text-amber-300" />
+      <div className="glass-card rounded-3xl p-8 sm:p-14 border border-blue-200/80 dark:border-blue-500/20 bg-gradient-to-br from-blue-50/80 via-sky-50/50 to-slate-50/90 dark:from-slate-900 dark:via-blue-950/40 dark:to-slate-900 text-center space-y-4 shadow-sm">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs font-semibold uppercase tracking-wider mx-auto">
+          <Sparkles className="w-4 h-4 text-amber-500 dark:text-amber-300" />
           <span>Next-Generation Infrastructure</span>
         </div>
-        <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tight">
+        <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
           World-Class <span className="gradient-text">Lab Infrastructure</span>
         </h1>
-        <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+        <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
           Designed to replicate high-tech corporate R&D environments. Experience hands-on computing with enterprise hardware.
         </p>
       </div>

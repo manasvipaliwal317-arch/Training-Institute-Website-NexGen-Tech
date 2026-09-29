@@ -72,18 +72,26 @@ export default function AdminDashboardClient({
 
   async function handleStatusChange(id: string, newStatus: string) {
     setUpdatingId(id);
-    const res = await updateInquiryStatusAction(id, newStatus);
-    setUpdatingId(null);
-
-    if (res.success) {
-      setInquiries((prev) =>
-        prev.map((item) => (item.id === id ? { ...item, status: newStatus } : item))
-      );
+    try {
+      const res = await updateInquiryStatusAction(id, newStatus);
+      if (res?.success) {
+        setInquiries((prev) =>
+          prev.map((item) => (item.id === id ? { ...item, status: newStatus } : item))
+        );
+      }
+    } catch (err) {
+      console.error('Failed to update status:', err);
+    } finally {
+      setUpdatingId(null);
     }
   }
 
   async function handleLogout() {
-    await adminLogoutAction();
+    try {
+      await adminLogoutAction();
+    } catch (err) {
+      console.error('Admin logout error:', err);
+    }
     router.push('/admin/login');
   }
 
@@ -98,20 +106,20 @@ export default function AdminDashboardClient({
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-        className="glass-card rounded-2xl p-6 sm:p-8 border border-purple-500/20 bg-gradient-to-r from-slate-900 via-purple-950/30 to-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4"
+        className="glass-card rounded-2xl p-6 sm:p-8 border border-purple-200/80 dark:border-purple-500/20 bg-gradient-to-r from-purple-50/80 via-indigo-50/60 to-sky-50/70 dark:from-slate-900 dark:via-purple-950/30 dark:to-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm"
       >
         <div className="space-y-1 text-center sm:text-left">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase text-purple-400">
+          <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase text-purple-600 dark:text-purple-400">
             <Sparkles className="w-4 h-4" />
             <span>Admin Management Portal</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-white">Academy Lead Center</h1>
-          <p className="text-xs text-slate-400">Logged in as: <strong className="text-purple-300">{userEmail}</strong></p>
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">Academy Lead Center</h1>
+          <p className="text-xs text-slate-600 dark:text-slate-400">Logged in as: <strong className="text-purple-700 dark:text-purple-300">{userEmail}</strong></p>
         </div>
 
         <button
           onClick={handleLogout}
-          className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-rose-400 font-semibold text-xs border border-rose-500/30 flex items-center gap-2 transition-all hover:scale-105 active:scale-95"
+          className="px-4 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 dark:bg-slate-900 dark:hover:bg-slate-800 text-rose-600 dark:text-rose-400 font-semibold text-xs border border-rose-200 dark:border-rose-500/30 flex items-center gap-2 transition-all hover:scale-105 active:scale-95 shadow-xs"
         >
           <LogOut className="w-4 h-4" />
           <span>Sign Out Admin</span>
@@ -124,10 +132,10 @@ export default function AdminDashboardClient({
           initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3, delay: 0.05 }}
-          className="glass-card rounded-2xl p-5 border border-slate-800 space-y-1 hover:border-purple-500/40 transition-colors"
+          className="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/60 space-y-1 hover:border-purple-500/40 transition-colors shadow-xs"
         >
-          <span className="text-xs text-slate-400 font-medium block">Total Inquiries</span>
-          <span className="text-3xl font-extrabold text-white">{inquiries.length}</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium block">Total Inquiries</span>
+          <span className="text-3xl font-extrabold text-slate-900 dark:text-white">{inquiries.length}</span>
           <span className="text-[11px] text-slate-500 block">All time captured leads</span>
         </motion.div>
 
@@ -135,43 +143,43 @@ export default function AdminDashboardClient({
           initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3, delay: 0.1 }}
-          className="glass-card rounded-2xl p-5 border border-slate-800 space-y-1 hover:border-blue-500/40 transition-colors"
+          className="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/60 space-y-1 hover:border-blue-500/40 transition-colors shadow-xs"
         >
-          <span className="text-xs text-slate-400 font-medium block">New Leads</span>
-          <span className="text-3xl font-extrabold text-blue-400">{newLeadsCount}</span>
-          <span className="text-[11px] text-blue-400/80 block">Requires counselor call</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium block">New Leads</span>
+          <span className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">{newLeadsCount}</span>
+          <span className="text-[11px] text-blue-600/80 dark:text-blue-400/80 block">Requires counselor call</span>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3, delay: 0.15 }}
-          className="glass-card rounded-2xl p-5 border border-slate-800 space-y-1 hover:border-amber-500/40 transition-colors"
+          className="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/60 space-y-1 hover:border-amber-500/40 transition-colors shadow-xs"
         >
-          <span className="text-xs text-slate-400 font-medium block">In Counseling</span>
-          <span className="text-3xl font-extrabold text-amber-400">{contactedCount}</span>
-          <span className="text-[11px] text-amber-400/80 block">Follow-up in progress</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium block">In Counseling</span>
+          <span className="text-3xl font-extrabold text-amber-600 dark:text-amber-400">{contactedCount}</span>
+          <span className="text-[11px] text-amber-600/80 dark:text-amber-400/80 block">Follow-up in progress</span>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3, delay: 0.2 }}
-          className="glass-card rounded-2xl p-5 border border-slate-800 space-y-1 hover:border-emerald-500/40 transition-colors"
+          className="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/60 space-y-1 hover:border-emerald-500/40 transition-colors shadow-xs"
         >
-          <span className="text-xs text-slate-400 font-medium block">Confirmed Enrolled</span>
-          <span className="text-3xl font-extrabold text-emerald-400">{enrolledCount}</span>
-          <span className="text-[11px] text-emerald-400/80 block">Converted students</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium block">Confirmed Enrolled</span>
+          <span className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">{enrolledCount}</span>
+          <span className="text-[11px] text-emerald-600/80 dark:text-emerald-400/80 block">Converted students</span>
         </motion.div>
       </div>
 
 
       {/* Leads Table Section */}
-      <div className="glass-card rounded-2xl p-6 sm:p-8 border border-slate-800 space-y-6">
+      <div className="glass-card rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/60 space-y-6 shadow-xs">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl font-bold text-white">Student Inquiries & Demo Leads</h2>
-            <p className="text-xs text-slate-400">Click on lead status dropdown to update student pipeline state.</p>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Student Inquiries & Demo Leads</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Click on lead status dropdown to update student pipeline state.</p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
@@ -183,7 +191,7 @@ export default function AdminDashboardClient({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search name, phone, course..."
-                className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-purple-500"
+                className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-xs placeholder:text-slate-400 focus:outline-none focus:border-purple-500"
               />
             </div>
 
@@ -191,7 +199,7 @@ export default function AdminDashboardClient({
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-purple-500"
+              className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-xs focus:outline-none focus:border-purple-500"
             >
               <option value="ALL">All Pipeline States</option>
               <option value="NEW">NEW</option>
@@ -203,9 +211,9 @@ export default function AdminDashboardClient({
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto border border-slate-800 rounded-xl">
-          <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-slate-900/90 text-slate-400 uppercase font-semibold text-[11px] border-b border-slate-800">
+        <div className="overflow-x-auto border border-slate-200 dark:border-slate-800 rounded-xl">
+          <table className="w-full text-left text-xs text-slate-600 dark:text-slate-300">
+            <thead className="bg-slate-100 dark:bg-slate-900/90 text-slate-600 dark:text-slate-400 uppercase font-semibold text-[11px] border-b border-slate-200 dark:border-slate-800">
               <tr>
                 <th className="p-4">Student Details</th>
                 <th className="p-4">Course Interest</th>
@@ -214,7 +222,7 @@ export default function AdminDashboardClient({
                 <th className="p-4">Status & Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800">
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
               {filteredInquiries.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="p-8 text-center text-slate-500">
@@ -223,28 +231,28 @@ export default function AdminDashboardClient({
                 </tr>
               ) : (
                 filteredInquiries.map((inq) => (
-                  <tr key={inq.id} className="hover:bg-slate-900/50 transition-colors">
+                  <tr key={inq.id} className="hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors">
                     <td className="p-4 space-y-1">
-                      <div className="font-bold text-white text-sm">{inq.name}</div>
-                      <div className="flex items-center gap-3 text-slate-400">
-                        <span className="flex items-center gap-1"><Mail className="w-3 h-3 text-blue-400" /> {inq.email}</span>
-                        <span className="flex items-center gap-1"><PhoneCall className="w-3 h-3 text-emerald-400" /> {inq.phone}</span>
+                      <div className="font-bold text-slate-900 dark:text-white text-sm">{inq.name}</div>
+                      <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400">
+                        <span className="flex items-center gap-1"><Mail className="w-3 h-3 text-blue-500" /> {inq.email}</span>
+                        <span className="flex items-center gap-1"><PhoneCall className="w-3 h-3 text-emerald-500" /> {inq.phone}</span>
                       </div>
                       {inq.message && (
-                        <div className="text-[11px] text-slate-400 bg-slate-950 p-2 rounded border border-slate-800 mt-1 max-w-sm italic">
+                        <div className="text-[11px] text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-950 p-2 rounded border border-slate-200 dark:border-slate-800 mt-1 max-w-sm italic">
                           &ldquo;{inq.message}&rdquo;
                         </div>
                       )}
                     </td>
-                    <td className="p-4 font-semibold text-purple-300">
+                    <td className="p-4 font-semibold text-purple-700 dark:text-purple-300">
                       {inq.courseName || 'General Inquiry'}
                     </td>
                     <td className="p-4 space-y-0.5">
-                      <div className="text-slate-200 font-medium">{inq.preferredMode}</div>
+                      <div className="text-slate-800 dark:text-slate-200 font-medium">{inq.preferredMode}</div>
                       <div className="text-slate-500 text-[11px]">{inq.preferredCampus}</div>
                     </td>
                     <td className="p-4">
-                      <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-400 text-[11px]">
+                      <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[11px] border border-slate-200 dark:border-slate-700">
                         {inq.source}
                       </span>
                     </td>
@@ -255,12 +263,12 @@ export default function AdminDashboardClient({
                         onChange={(e) => handleStatusChange(inq.id, e.target.value)}
                         className={`px-3 py-1.5 rounded-lg text-xs font-bold focus:outline-none transition-all cursor-pointer ${
                           inq.status === 'NEW'
-                            ? 'bg-blue-600/20 text-blue-400 border border-blue-500/40'
+                            ? 'bg-blue-100 text-blue-800 dark:bg-blue-600/20 dark:text-blue-400 border border-blue-300 dark:border-blue-500/40'
                             : inq.status === 'CONTACTED'
-                            ? 'bg-amber-600/20 text-amber-300 border border-amber-500/40'
+                            ? 'bg-amber-100 text-amber-800 dark:bg-amber-600/20 dark:text-amber-300 border border-amber-300 dark:border-amber-500/40'
                             : inq.status === 'ENROLLED'
-                            ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-500/40'
-                            : 'bg-slate-800 text-slate-400 border border-slate-700'
+                            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-600/20 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-500/40'
+                            : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400 border border-slate-300 dark:border-slate-700'
                         }`}
                       >
                         <option value="NEW">NEW</option>
@@ -278,16 +286,16 @@ export default function AdminDashboardClient({
       </div>
 
       {/* Courses Quick Catalog Manager */}
-      <div className="glass-card rounded-2xl p-6 sm:p-8 border border-slate-800 space-y-4">
-        <h2 className="text-xl font-bold text-white">Active Course Offerings</h2>
+      <div className="glass-card rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/60 space-y-4 shadow-xs">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white">Active Course Offerings</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {courses.map((c) => (
-            <div key={c.id} className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
-              <span className="text-[10px] font-bold text-blue-400 uppercase">{c.categoryName}</span>
-              <h4 className="font-bold text-white text-sm line-clamp-1">{c.title}</h4>
-              <div className="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-800">
+            <div key={c.id} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+              <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase">{c.categoryName}</span>
+              <h4 className="font-bold text-slate-900 dark:text-white text-sm line-clamp-1">{c.title}</h4>
+              <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-200 dark:border-slate-800">
                 <span>Fee: ₹{c.fees.toLocaleString()}</span>
-                <span className="text-emerald-400 font-semibold">{c.enrolledStudents}+ Enrolled</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{c.enrolledStudents}+ Enrolled</span>
               </div>
             </div>
           ))}

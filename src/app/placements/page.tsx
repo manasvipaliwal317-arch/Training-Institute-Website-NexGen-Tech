@@ -47,44 +47,44 @@ export default async function PlacementsPage() {
       
       {/* 1. HERO HEADER: WHERE OUR GRADUATES GET HIRED */}
       <FadeInUp duration={0.4}>
-        <div className="glass-card rounded-3xl p-8 sm:p-14 border border-emerald-500/20 bg-gradient-to-br from-slate-900 via-emerald-950/30 to-slate-900 text-center space-y-6 shadow-2xl">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold uppercase tracking-wider mx-auto">
+        <div className="glass-card rounded-3xl p-8 sm:p-14 border border-emerald-200/80 dark:border-emerald-500/20 bg-gradient-to-br from-emerald-50/70 via-teal-50/50 to-slate-50/80 dark:from-slate-900 dark:via-emerald-950/30 dark:to-slate-900 text-center space-y-6 shadow-md">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-semibold uppercase tracking-wider mx-auto">
             <TrendingUp className="w-4 h-4" />
             <span>360° Placement Acceleration Ecosystem</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tight">
+          <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
             Where Our Graduates <span className="gradient-text-cyan">Get Hired</span>
           </h1>
 
-          <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+          <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
             Our dedicated placement cell has empowered over 25,000 students to secure software engineering, AI, cyber security, and design roles at top global MNCs and unicorns.
           </p>
 
           {/* Stats Grid */}
-          <StaggerContainer staggerDelay={0.08} className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-slate-800">
+          <StaggerContainer staggerDelay={0.08} className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-slate-200 dark:border-slate-800">
             <StaggerItem>
-              <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-emerald-500/40 transition-colors">
-                <span className="text-2xl sm:text-3xl font-extrabold text-emerald-400">32 LPA</span>
-                <span className="text-xs text-slate-400 block font-medium">Highest Package</span>
+              <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/40 transition-colors shadow-xs">
+                <span className="text-2xl sm:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">32 LPA</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 block font-medium">Highest Package</span>
               </div>
             </StaggerItem>
             <StaggerItem>
-              <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-blue-500/40 transition-colors">
-                <span className="text-2xl sm:text-3xl font-extrabold text-blue-400">8.5 LPA</span>
-                <span className="text-xs text-slate-400 block font-medium">Average Package</span>
+              <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:border-blue-500/40 transition-colors shadow-xs">
+                <span className="text-2xl sm:text-3xl font-extrabold text-blue-600 dark:text-blue-400">8.5 LPA</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 block font-medium">Average Package</span>
               </div>
             </StaggerItem>
             <StaggerItem>
-              <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-purple-500/40 transition-colors">
-                <span className="text-2xl sm:text-3xl font-extrabold text-purple-400">94%</span>
-                <span className="text-xs text-slate-400 block font-medium">Placement Success</span>
+              <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:border-purple-500/40 transition-colors shadow-xs">
+                <span className="text-2xl sm:text-3xl font-extrabold text-purple-600 dark:text-purple-400">94%</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 block font-medium">Placement Success</span>
               </div>
             </StaggerItem>
             <StaggerItem>
-              <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-amber-500/40 transition-colors">
-                <span className="text-2xl sm:text-3xl font-extrabold text-amber-400">450+</span>
-                <span className="text-xs text-slate-400 block font-medium">Hiring Partners</span>
+              <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:border-amber-500/40 transition-colors shadow-xs">
+                <span className="text-2xl sm:text-3xl font-extrabold text-amber-600 dark:text-amber-400">450+</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 block font-medium">Hiring Partners</span>
               </div>
             </StaggerItem>
           </StaggerContainer>

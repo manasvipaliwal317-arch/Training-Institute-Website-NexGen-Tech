@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Building2, Calendar, MapPin, Briefcase, CheckCircle2, Sparkles, ExternalLink } from 'lucide-react';
-import HomeClientSection from './HomeClientSection';
+import InquiryModal from './InquiryModal';
 
 interface UpcomingHiringDrivesProps {
   drives?: any[];
@@ -11,6 +11,7 @@ interface UpcomingHiringDrivesProps {
 
 export default function UpcomingHiringDrives({ drives: initialDrives }: UpcomingHiringDrivesProps) {
   const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
+  const [selectedDrive, setSelectedDrive] = useState<any | null>(null);
 
   const drivesList = initialDrives && initialDrives.length > 0 ? initialDrives : [];
 
@@ -180,13 +181,32 @@ export default function UpcomingHiringDrives({ drives: initialDrives }: Upcoming
                       <ExternalLink className="w-3 h-3" />
                     </a>
                   ) : (
-                    <HomeClientSection mode="demo-btn" buttonText="Register for Drive" />
+                    <button
+                      type="button"
+                      onClick={() => setSelectedDrive(drive)}
+                      className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs shadow-sm flex items-center gap-1.5 transition-all cursor-pointer"
+                    >
+                      <Sparkles className="w-3 h-3 text-amber-300" />
+                      <span>Reserve My Seat</span>
+                    </button>
                   )}
                 </div>
               </div>
             );
           })}
         </div>
+      )}
+
+      {selectedDrive && (
+        <InquiryModal
+          isOpen={!!selectedDrive}
+          onClose={() => setSelectedDrive(null)}
+          tagText="Campus Placement Drive Registration"
+          title={`Register for ${selectedDrive.companyName} Campus Drive`}
+          subtitle={`Applying for ${selectedDrive.role} (${selectedDrive.packageLpa}) • ${selectedDrive.location}`}
+          source={`Campus Placement Drive - ${selectedDrive.companyName} (${selectedDrive.role})`}
+          submitButtonText={`Reserve My Seat for ${selectedDrive.companyName}`}
+        />
       )}
     </div>
   );

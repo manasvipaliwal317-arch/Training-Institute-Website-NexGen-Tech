@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 import {
   Search,
   Filter,
@@ -55,13 +56,21 @@ export default function CourseCatalogClient({
   categories,
   initialCategory = '',
 }: CourseCatalogClientProps) {
+  const searchParams = useSearchParams();
+  const categoryFromQuery = searchParams.get('category');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+  const [selectedCategory, setSelectedCategory] = useState(categoryFromQuery || initialCategory);
   const [selectedMode, setSelectedMode] = useState('ALL');
   const [selectedLevel, setSelectedLevel] = useState('ALL');
   const [sortBy, setSortBy] = useState('popular');
   const [modalOpen, setModalOpen] = useState(false);
   const [activeCourseModal, setActiveCourseModal] = useState<{ slug: string; name: string } | null>(null);
+
+  useEffect(() => {
+    if (categoryFromQuery !== null) {
+      setSelectedCategory(categoryFromQuery);
+    }
+  }, [categoryFromQuery]);
 
   const filteredCourses = useMemo(() => {
     return courses

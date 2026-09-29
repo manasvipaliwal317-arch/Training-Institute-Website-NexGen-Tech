@@ -1,7 +1,17 @@
 'use server';
 
 import { prisma } from '@/lib/prisma';
-import { createSession, removeSession, getSession } from '@/lib/auth';
+import {
+  createSession,
+  removeSession,
+  getSession,
+  createStudentSession,
+  removeStudentSession,
+  getStudentSession,
+  createFacultySession,
+  removeFacultySession,
+  getFacultySession,
+} from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 import {
   InquirySchema,
@@ -37,7 +47,11 @@ export async function submitInquiryAction(formData: FormData) {
       },
     });
 
-    revalidatePath('/admin/dashboard');
+    try {
+      revalidatePath('/admin/dashboard');
+    } catch {
+      // non-blocking revalidation
+    }
 
     return {
       success: true,
@@ -66,12 +80,21 @@ export async function registerEventAction(formData: FormData) {
       data: validated,
     });
 
-    await prisma.event.update({
-      where: { id: validated.eventId },
-      data: { registrationsCount: { increment: 1 } },
-    });
+    try {
+      await prisma.event.update({
+        where: { id: validated.eventId },
+        data: { registrationsCount: { increment: 1 } },
+      });
+    } catch (countErr) {
+      console.warn('Could not increment registrations count:', countErr);
+    }
 
-    revalidatePath('/events');
+    try {
+      revalidatePath('/events');
+    } catch {
+      // non-blocking revalidation
+    }
+
     return {
       success: true,
       message: 'Registration successful! Check your email for calendar invite, venue details, and repository access links.',
@@ -743,5 +766,367 @@ export async function deleteBatchAction(id: string) {
     return { success: false, error: 'Failed to delete batch.' };
   }
 }
+
+// ---------------- STUDENT REGISTRATION & PORTAL ACTIONS ----------------
+
+export async function registerStudentAction(formData: FormData) {
+  try {
+    const name = formData.get('name')?.toString().trim();
+    const email = formData.get('email')?.toString().trim().toLowerCase();
+    const mobile = formData.get('mobile')?.toString().trim();
+    const guardianName = formData.get('guardianName')?.toString().trim();
+    const guardianMobile = formData.get('guardianMobile')?.toString().trim();
+    const streetAddress = formData.get('streetAddress')?.toString().trim();
+    const city = formData.get('city')?.toString().trim();
+    const state = formData.get('state')?.toString().trim();
+    const pincode = formData.get('pincode')?.toString().trim();
+    const courseSlug = formData.get('courseSlug')?.toString().trim() || 'custom-course';
+    const courseName = formData.get('courseName')?.toString().trim();
+    const courseMode = formData.get('courseMode')?.toString().trim() || 'Hybrid (Classroom + Online)';
+    const campus = formData.get('campus')?.toString().trim() || 'Tech Park Main Campus - Hyderabad';
+    const passportPhoto = formData.get('passportPhoto')?.toString().trim() || '';
+    const govtIdPhoto = formData.get('govtIdPhoto')?.toString().trim() || '';
+    const totalFees = parseInt(formData.get('totalFees')?.toString() || '35000', 10);
+    const registrationFee = 1000;
+    const paidFees = 1000;
+    const remainingFees = Math.max(0, totalFees - 1000);
+    const paymentTxnId = 'TXN-' + Date.now().toString(36).toUpperCase() + '-' + Math.floor(1000 + Math.random() * 9000);
+
+    if (!name || !email || !mobile || !guardianName || !guardianMobile || !streetAddress || !city || !state || !pincode || !courseName) {
+      return { success: false, error: 'Please fill in all mandatory fields.' };
+    }
+
+    // Check if student with email already registered
+    const existing = await prisma.student.findUnique({
+      where: { email },
+    });
+
+    if (existing) {
+      return {
+        success: false,
+        error: `An enrollment with email ${email} already exists with Student ID ${existing.studentId}. Please login via Student Portal.`,
+        studentId: existing.studentId,
+      };
+    }
+
+    // Generate unique student ID: e.g. NXG-2026-XXXX
+    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+    const studentId = `NXG-2026-${randomSuffix}`;
+
+    await prisma.student.create({
+      data: {
+        studentId,
+        name,
+        email,
+        mobile,
+        guardianName,
+        guardianMobile,
+        streetAddress,
+        city,
+        state,
+        pincode,
+        passportPhoto: passportPhoto || null,
+        govtIdPhoto: govtIdPhoto || 'Govt ID Document Verified',
+        courseSlug,
+        courseName,
+        courseMode,
+        campus,
+        totalFees,
+        registrationFee,
+        paidFees,
+        remainingFees,
+        paymentStatus: 'SEAT_RESERVED',
+        paymentTxnId,
+        batchName: 'Upcoming Morning Cohort (10:00 AM - 1:00 PM IST)',
+        attendancePct: 100,
+        assignmentsDone: 0,
+        assignmentsTot: 10,
+        labScore: 100,
+        mockInterviewDate: 'Scheduled after Module 3 completion',
+        mockInterviewStatus: 'Eligible after Capstone Project',
+        mockFeedback: 'Seat Reserved. Orientation and Tech Lab Access begins this Monday.',
+        status: 'ACTIVE',
+      },
+    });
+
+    // Also auto-record in Inquiry table for unified admin visibility
+    try {
+      await prisma.inquiry.create({
+        data: {
+          name,
+          email,
+          phone: mobile,
+          courseSlug,
+          courseName,
+          preferredMode: courseMode,
+          preferredCampus: campus,
+          message: `Official Course Enrollment with ₹1,000 Seat Reservation Fee paid. Txn ID: ${paymentTxnId}. Student ID: ${studentId}`,
+          source: 'Official Student Enrollment Page (Paid ₹1000)',
+          status: 'ENROLLED',
+        },
+      });
+    } catch {
+      // non-critical
+    }
+
+    // Create session cookie
+    await createStudentSession(studentId, email);
+
+    revalidatePath('/student/dashboard');
+    revalidatePath('/admin/dashboard');
+
+    return {
+      success: true,
+      studentId,
+      email,
+      name,
+      courseName,
+      remainingFees,
+      paymentTxnId,
+      message: `Registration successful! Your official Student ID is ${studentId}. ₹1,000 seat reservation fee received.`,
+    };
+  } catch (error: any) {
+    console.error('Error registering student:', error);
+    return { success: false, error: error.message || 'Registration failed. Please try again.' };
+  }
+}
+
+export async function studentLoginAction(formData: FormData) {
+  try {
+    const studentId = formData.get('studentId')?.toString().trim().toUpperCase();
+    const email = formData.get('email')?.toString().trim().toLowerCase();
+
+    if (!studentId || !email) {
+      return { success: false, error: 'Student ID and Registered Email are required.' };
+    }
+
+    const student = await prisma.student.findFirst({
+      where: {
+        studentId,
+        email,
+      },
+    });
+
+    if (!student) {
+      return {
+        success: false,
+        error: 'No student record found matching this Student ID and Email. Please check your credentials or register first.',
+      };
+    }
+
+    await createStudentSession(student.studentId, student.email);
+    revalidatePath('/student/dashboard');
+
+    return {
+      success: true,
+      studentId: student.studentId,
+      name: student.name,
+    };
+  } catch (error: any) {
+    console.error('Student login error:', error);
+    return { success: false, error: 'Login failed. Please try again.' };
+  }
+}
+
+export async function studentLogoutAction() {
+  await removeStudentSession();
+  revalidatePath('/');
+  return { success: true };
+}
+
+export async function facultyLoginAction(formData: FormData) {
+  try {
+    const facultyNo = formData.get('facultyNo')?.toString().trim().toUpperCase();
+    const email = formData.get('email')?.toString().trim().toLowerCase();
+
+    if (!facultyNo || !email) {
+      return { success: false, error: 'Faculty Number (Employee ID) and Official Email are required.' };
+    }
+
+    const faculty = await prisma.trainer.findFirst({
+      where: {
+        facultyNo,
+        email,
+      },
+    });
+
+    if (!faculty) {
+      return {
+        success: false,
+        error: 'No faculty record found matching this Faculty No. and Email. Please check credentials or contact institute administration.',
+      };
+    }
+
+    await createFacultySession(faculty.facultyNo!, faculty.email!);
+    revalidatePath('/faculty/dashboard');
+
+    return {
+      success: true,
+      facultyNo: faculty.facultyNo,
+      name: faculty.name,
+      role: faculty.role,
+    };
+  } catch (error: any) {
+    console.error('Faculty login error:', error);
+    return { success: false, error: 'Authentication failed. Please try again.' };
+  }
+}
+
+export async function facultyLogoutAction() {
+  await removeFacultySession();
+  revalidatePath('/');
+  return { success: true };
+}
+
+export async function updateStudentAttendanceByFacultyAction(studentId: string, newPct: number) {
+  try {
+    const facultySession = await getFacultySession();
+    if (!facultySession) {
+      return { success: false, error: 'Unauthorized faculty session.' };
+    }
+
+    await prisma.student.update({
+      where: { studentId },
+      data: { attendancePct: Math.min(100, Math.max(0, newPct)) },
+    });
+
+    revalidatePath('/faculty/dashboard');
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message || 'Failed to update attendance.' };
+  }
+}
+
+export async function submitMockInterviewFeedbackAction(
+  studentId: string,
+  feedback: string,
+  status: string
+) {
+  try {
+    const facultySession = await getFacultySession();
+    if (!facultySession) {
+      return { success: false, error: 'Unauthorized faculty session.' };
+    }
+
+    await prisma.student.update({
+      where: { studentId },
+      data: {
+        mockFeedback: feedback,
+        mockInterviewStatus: status,
+      },
+    });
+
+    revalidatePath('/faculty/dashboard');
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message || 'Failed to submit evaluation.' };
+  }
+}
+
+export async function updateFacultyByAdminAction(id: string, formData: FormData) {
+  try {
+    const session = await getSession();
+    if (!session) return { success: false, error: 'Unauthorized.' };
+
+    const name = formData.get('name')?.toString().trim();
+    const role = formData.get('role')?.toString().trim();
+    const facultyNo = formData.get('facultyNo')?.toString().trim().toUpperCase();
+    const email = formData.get('email')?.toString().trim().toLowerCase();
+    const phone = formData.get('phone')?.toString().trim();
+    const specialization = formData.get('specialization')?.toString().trim();
+    const officeLocation = formData.get('officeLocation')?.toString().trim();
+    const status = formData.get('status')?.toString().trim() || 'ACTIVE';
+    const timetableJson = formData.get('timetableJson')?.toString() || '[]';
+
+    if (!name || !role || !facultyNo || !email) {
+      return { success: false, error: 'Name, Role, Faculty No., and Email are required.' };
+    }
+
+    // Validate that timetable is valid JSON if provided
+    try {
+      JSON.parse(timetableJson);
+    } catch {
+      return { success: false, error: 'Invalid timetable format.' };
+    }
+
+    await prisma.trainer.update({
+      where: { id },
+      data: {
+        name,
+        role,
+        facultyNo,
+        email,
+        phone,
+        specialization,
+        officeLocation,
+        status,
+        timetableJson,
+      },
+    });
+
+    revalidatePath('/faculty/dashboard');
+    revalidatePath('/admin/dashboard');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Update faculty error:', error);
+    return { success: false, error: error.message || 'Failed to update faculty profile and timetable.' };
+  }
+}
+
+export async function updateStudentByAdminAction(id: string, formData: FormData) {
+  try {
+    const session = await getSession();
+    if (!session) return { success: false, error: 'Unauthorized.' };
+
+    const name = formData.get('name')?.toString().trim();
+    const email = formData.get('email')?.toString().trim().toLowerCase();
+    const mobile = formData.get('mobile')?.toString().trim();
+    const courseName = formData.get('courseName')?.toString().trim();
+    const batchName = formData.get('batchName')?.toString().trim();
+    const courseMode = formData.get('courseMode')?.toString().trim() || 'Hybrid (Classroom + Online)';
+    const attendancePct = parseInt(formData.get('attendancePct')?.toString() || '95', 10);
+    const labScore = parseInt(formData.get('labScore')?.toString() || '90', 10);
+    const mockInterviewDate = formData.get('mockInterviewDate')?.toString().trim() || 'Scheduled';
+    const mockInterviewStatus = formData.get('mockInterviewStatus')?.toString().trim() || 'Pending';
+    const mockFeedback = formData.get('mockFeedback')?.toString().trim() || '';
+    const paymentStatus = formData.get('paymentStatus')?.toString().trim() || 'SEAT_RESERVED';
+    const paidFees = parseInt(formData.get('paidFees')?.toString() || '1000', 10);
+    const remainingFees = parseInt(formData.get('remainingFees')?.toString() || '0', 10);
+
+    if (!name || !email || !courseName || !batchName) {
+      return { success: false, error: 'Name, Email, Course, and Batch are required.' };
+    }
+
+    await prisma.student.update({
+      where: { id },
+      data: {
+        name,
+        email,
+        mobile,
+        courseName,
+        batchName,
+        courseMode,
+        attendancePct: Math.min(100, Math.max(0, attendancePct)),
+        labScore: Math.min(100, Math.max(0, labScore)),
+        mockInterviewDate,
+        mockInterviewStatus,
+        mockFeedback,
+        paymentStatus,
+        paidFees,
+        remainingFees,
+      },
+    });
+
+    revalidatePath('/student/dashboard');
+    revalidatePath('/faculty/dashboard');
+    revalidatePath('/admin/dashboard');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Update student error:', error);
+    return { success: false, error: error.message || 'Failed to update student academic and mock data.' };
+  }
+}
+
+
 
 

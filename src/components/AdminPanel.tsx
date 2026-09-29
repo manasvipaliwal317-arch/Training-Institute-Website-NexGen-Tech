@@ -31,6 +31,10 @@ import {
   DollarSign,
   GraduationCap,
   Laptop,
+  Award,
+  ChevronLeft,
+  ChevronRight,
+  Filter,
 } from 'lucide-react';
 import {
   updateInquiryStatusAction,
@@ -55,7 +59,97 @@ import {
   createBatchAction,
   updateBatchAction,
   deleteBatchAction,
+  updateFacultyByAdminAction,
+  updateStudentByAdminAction,
 } from '@/app/actions';
+
+interface AdminPaginationProps {
+  currentPage: number;
+  totalItems: number;
+  pageSize?: number;
+  onPageChange: (page: number) => void;
+  itemName?: string;
+}
+
+function AdminPagination({
+  currentPage,
+  totalItems,
+  pageSize = 10,
+  onPageChange,
+  itemName = 'items',
+}: AdminPaginationProps) {
+  const totalPages = Math.ceil(totalItems / pageSize) || 1;
+  const startItem = totalItems === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+  const endItem = Math.min(currentPage * pageSize, totalItems);
+
+  if (totalItems <= pageSize && currentPage === 1) {
+    if (totalItems === 0) return null;
+    return (
+      <div className="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400 font-medium">
+        <span>Showing all {totalItems} {itemName}</span>
+        <span className="text-[11px] text-slate-400">Page 1 of 1 (10 per page)</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-4 border-t border-slate-200 dark:border-slate-800 text-xs">
+      <div className="text-slate-500 dark:text-slate-400 font-medium">
+        Showing <span className="font-bold text-slate-900 dark:text-white">{startItem}</span> to{' '}
+        <span className="font-bold text-slate-900 dark:text-white">{endItem}</span> of{' '}
+        <span className="font-bold text-slate-900 dark:text-white">{totalItems}</span> {itemName}
+      </div>
+
+      <div className="flex items-center gap-1.5 self-center sm:self-auto flex-wrap">
+        <button
+          type="button"
+          onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+          disabled={currentPage <= 1}
+          className="px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold transition-all flex items-center gap-1 cursor-pointer"
+        >
+          <ChevronLeft className="w-3.5 h-3.5" />
+          <span>Prev</span>
+        </button>
+
+        <div className="flex items-center gap-1">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => {
+            if (totalPages > 7) {
+              if (pg !== 1 && pg !== totalPages && Math.abs(pg - currentPage) > 2) {
+                if (pg === 2 && currentPage > 4) return <span key={pg} className="px-1 text-slate-400">...</span>;
+                if (pg === totalPages - 1 && currentPage < totalPages - 3) return <span key={pg} className="px-1 text-slate-400">...</span>;
+                return null;
+              }
+            }
+            return (
+              <button
+                key={pg}
+                type="button"
+                onClick={() => onPageChange(pg)}
+                className={`w-7 h-7 rounded-lg font-bold text-xs transition-all cursor-pointer ${
+                  currentPage === pg
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                {pg}
+              </button>
+            );
+          })}
+        </div>
+
+        <button
+          type="button"
+          onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+          disabled={currentPage >= totalPages}
+          className="px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold transition-all flex items-center gap-1 cursor-pointer"
+        >
+          <span>Next</span>
+          <ChevronRight className="w-3.5 h-3.5" />
+        </button>
+      </div>
+    </div>
+  );
+}
 
 interface AdminPanelProps {
   inquiries: any[];
@@ -66,6 +160,8 @@ interface AdminPanelProps {
   campuses: any[];
   hiringDrives?: any[];
   batches?: any[];
+  facultyMembers?: any[];
+  studentsList?: any[];
   userEmail: string;
 }
 
@@ -78,11 +174,13 @@ export default function AdminPanel({
   campuses: initialCampuses,
   hiringDrives: initialDrives = [],
   batches: initialBatches = [],
+  facultyMembers: initialFaculty = [],
+  studentsList: initialStudents = [],
   userEmail,
 }: AdminPanelProps) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<
-    'analytics' | 'inquiries' | 'courses' | 'events' | 'blogs' | 'campuses' | 'drives' | 'batches'
+    'analytics' | 'inquiries' | 'courses' | 'events' | 'blogs' | 'campuses' | 'drives' | 'batches' | 'faculty' | 'students'
   >('analytics');
 
   const [inquiries, setInquiries] = useState(initialInquiries);
@@ -92,10 +190,40 @@ export default function AdminPanel({
   const [campuses, setCampuses] = useState(initialCampuses);
   const [drives, setDrives] = useState(initialDrives);
   const [batches, setBatches] = useState(initialBatches);
+  const [facultyMembers, setFacultyMembers] = useState(initialFaculty);
+  const [studentsList, setStudentsList] = useState(initialStudents);
 
   // Search & Filters
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
+
+  // Dedicated Section Search, Filters & Pagination (10 items per page)
+  const PAGE_SIZE = 10;
+
+  // 1. Manage Inquiries
+  const [inquirySearch, setInquirySearch] = useState('');
+  const [inquiryStatus, setInquiryStatus] = useState('ALL');
+  const [inquiryPage, setInquiryPage] = useState(1);
+
+  // 2. Manage Events
+  const [eventSearch, setEventSearch] = useState('');
+  const [eventFilter, setEventFilter] = useState('ALL');
+  const [eventPage, setEventPage] = useState(1);
+
+  // 3. Manage Blogs ("Manage Blocks")
+  const [blogSearch, setBlogSearch] = useState('');
+  const [blogFilter, setBlogFilter] = useState('ALL');
+  const [blogPage, setBlogPage] = useState(1);
+
+  // 4. Faculty & Timetable
+  const [facultySearch, setFacultySearch] = useState('');
+  const [facultyFilter, setFacultyFilter] = useState('ALL');
+  const [facultyPage, setFacultyPage] = useState(1);
+
+  // 5. Students & Mocks
+  const [studentSearch, setStudentSearch] = useState('');
+  const [studentFilter, setStudentFilter] = useState('ALL');
+  const [studentPage, setStudentPage] = useState(1);
 
   // Add Modals
   const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
@@ -113,6 +241,9 @@ export default function AdminPanel({
   const [editingCampus, setEditingCampus] = useState<any | null>(null);
   const [editingDrive, setEditingDrive] = useState<any | null>(null);
   const [editingBatch, setEditingBatch] = useState<any | null>(null);
+  const [editingFaculty, setEditingFaculty] = useState<any | null>(null);
+  const [editingStudent, setEditingStudent] = useState<any | null>(null);
+  const [facultyTimetableSlots, setFacultyTimetableSlots] = useState<any[]>([]);
 
   const [loading, setLoading] = useState(false);
   const [actionError, setActionError] = useState('');
@@ -414,19 +545,148 @@ export default function AdminPanel({
     }
   }
 
+  // --- FACULTY HANDLERS ---
+  function openEditFaculty(fac: any) {
+    setEditingFaculty(fac);
+    try {
+      const parsed = JSON.parse(fac.timetableJson || '[]');
+      setFacultyTimetableSlots(Array.isArray(parsed) ? parsed : []);
+    } catch {
+      setFacultyTimetableSlots([]);
+    }
+    resetFeedback();
+  }
+
+  function handleAddTimetableSlot() {
+    setFacultyTimetableSlots((prev) => [
+      ...prev,
+      {
+        day: 'Monday',
+        time: '09:00 AM - 11:00 AM',
+        course: editingFaculty?.courses?.[0]?.title || 'Generative AI & LLM Systems',
+        batch: 'AI-2026-B1',
+        type: 'Live Lab',
+        location: editingFaculty?.officeLocation?.split(',')[0] || 'Room 402 - Main Campus',
+        topic: 'New Lecture / Hands-on Lab',
+        meetLink: 'https://meet.google.com/nex-gen-ai',
+      },
+    ]);
+  }
+
+  function handleRemoveTimetableSlot(index: number) {
+    setFacultyTimetableSlots((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function handleUpdateTimetableSlot(index: number, field: string, value: string) {
+    setFacultyTimetableSlots((prev) =>
+      prev.map((slot, i) => (i === index ? { ...slot, [field]: value } : slot))
+    );
+  }
+
+  async function handleUpdateFacultySubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!editingFaculty) return;
+    setLoading(true);
+    resetFeedback();
+    const formData = new FormData(e.currentTarget);
+    formData.set('timetableJson', JSON.stringify(facultyTimetableSlots));
+    const res = await updateFacultyByAdminAction(editingFaculty.id, formData);
+    setLoading(false);
+    if (res.success) {
+      setFacultyMembers((prev) =>
+        prev.map((f) =>
+          f.id === editingFaculty.id
+            ? {
+                ...f,
+                name: formData.get('name')?.toString() || f.name,
+                role: formData.get('role')?.toString() || f.role,
+                facultyNo: formData.get('facultyNo')?.toString() || f.facultyNo,
+                email: formData.get('email')?.toString() || f.email,
+                phone: formData.get('phone')?.toString() || f.phone,
+                specialization: formData.get('specialization')?.toString() || f.specialization,
+                officeLocation: formData.get('officeLocation')?.toString() || f.officeLocation,
+                status: formData.get('status')?.toString() || f.status,
+                timetableJson: JSON.stringify(facultyTimetableSlots),
+              }
+            : f
+        )
+      );
+      setEditingFaculty(null);
+      setActionSuccess('Faculty profile and lecture timetable updated successfully.');
+      router.refresh();
+    } else {
+      setActionError(res.error || 'Failed to update faculty profile.');
+    }
+  }
+
+  // --- STUDENT HANDLERS ---
+  function openEditStudent(st: any) {
+    setEditingStudent(st);
+    resetFeedback();
+  }
+
+  async function handleUpdateStudentSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!editingStudent) return;
+    setLoading(true);
+    resetFeedback();
+    const formData = new FormData(e.currentTarget);
+    const res = await updateStudentByAdminAction(editingStudent.id, formData);
+    setLoading(false);
+    if (res.success) {
+      setStudentsList((prev) =>
+        prev.map((s) =>
+          s.id === editingStudent.id
+            ? {
+                ...s,
+                name: formData.get('name')?.toString() || s.name,
+                email: formData.get('email')?.toString() || s.email,
+                mobile: formData.get('mobile')?.toString() || s.mobile,
+                courseName: formData.get('courseName')?.toString() || s.courseName,
+                batchName: formData.get('batchName')?.toString() || s.batchName,
+                courseMode: formData.get('courseMode')?.toString() || s.courseMode,
+                attendancePct: Number(formData.get('attendancePct')) || s.attendancePct,
+                labScore: Number(formData.get('labScore')) || s.labScore,
+                mockInterviewDate: formData.get('mockInterviewDate')?.toString() || s.mockInterviewDate,
+                mockInterviewStatus: formData.get('mockInterviewStatus')?.toString() || s.mockInterviewStatus,
+                mockFeedback: formData.get('mockFeedback')?.toString() || s.mockFeedback,
+                paymentStatus: formData.get('paymentStatus')?.toString() || s.paymentStatus,
+                paidFees: Number(formData.get('paidFees')) || s.paidFees,
+                remainingFees: Number(formData.get('remainingFees')) || s.remainingFees,
+              }
+            : s
+        )
+      );
+      setEditingStudent(null);
+      setActionSuccess('Student academic details and mock evaluation updated successfully.');
+      router.refresh();
+    } else {
+      setActionError(res.error || 'Failed to update student.');
+    }
+  }
+
   const newLeadsCount = inquiries.filter((i) => i.status === 'NEW').length;
   const activeDrivesCount = drives.filter((d) => d.status === 'ACTIVE').length;
   const upcomingDrivesCount = drives.filter((d) => d.status === 'UPCOMING').length;
 
+  // 1. Manage Inquiries (Pagination: 10/page)
   const filteredInquiries = inquiries.filter((inq) => {
+    const s = inquirySearch.toLowerCase().trim();
     const matchesSearch =
-      inq.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      inq.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      inq.phone?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      inq.courseName?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = statusFilter === 'ALL' || inq.status === statusFilter;
+      !s ||
+      inq.name?.toLowerCase().includes(s) ||
+      inq.email?.toLowerCase().includes(s) ||
+      inq.phone?.toLowerCase().includes(s) ||
+      inq.courseName?.toLowerCase().includes(s) ||
+      inq.preferredCampus?.toLowerCase().includes(s) ||
+      inq.notes?.toLowerCase().includes(s);
+    const matchesStatus = inquiryStatus === 'ALL' || inq.status === inquiryStatus;
     return matchesSearch && matchesStatus;
   });
+  const paginatedInquiries = filteredInquiries.slice(
+    (inquiryPage - 1) * PAGE_SIZE,
+    inquiryPage * PAGE_SIZE
+  );
 
   const filteredBatches = batches.filter((b) => {
     const searchLow = searchQuery.toLowerCase();
@@ -439,6 +699,93 @@ export default function AdminPanel({
     const matchesStatus = statusFilter === 'ALL' || b.status === statusFilter || b.mode === statusFilter;
     return matchesSearch && matchesStatus;
   });
+
+  // 2. Manage Events (Pagination: 10/page)
+  const filteredEvents = events.filter((ev) => {
+    const s = eventSearch.toLowerCase().trim();
+    const matchesSearch =
+      !s ||
+      ev.title?.toLowerCase().includes(s) ||
+      ev.tagline?.toLowerCase().includes(s) ||
+      ev.speakerName?.toLowerCase().includes(s) ||
+      ev.speakerRole?.toLowerCase().includes(s) ||
+      ev.venue?.toLowerCase().includes(s) ||
+      ev.category?.toLowerCase().includes(s);
+    let matchesFilter = true;
+    if (eventFilter === 'UPCOMING') matchesFilter = !ev.isPastEvent;
+    else if (eventFilter === 'PAST') matchesFilter = !!ev.isPastEvent;
+    else if (eventFilter === 'ONLINE' || eventFilter === 'OFFLINE' || eventFilter === 'HYBRID') matchesFilter = ev.mode?.toUpperCase() === eventFilter;
+    else if (eventFilter !== 'ALL') matchesFilter = ev.category?.toLowerCase() === eventFilter.toLowerCase();
+    return matchesSearch && matchesFilter;
+  });
+  const paginatedEvents = filteredEvents.slice(
+    (eventPage - 1) * PAGE_SIZE,
+    eventPage * PAGE_SIZE
+  );
+
+  // 3. Manage Blogs ("Manage Blocks") (Pagination: 10/page)
+  const filteredBlogs = blogs.filter((b) => {
+    const s = blogSearch.toLowerCase().trim();
+    const matchesSearch =
+      !s ||
+      b.title?.toLowerCase().includes(s) ||
+      b.excerpt?.toLowerCase().includes(s) ||
+      b.authorName?.toLowerCase().includes(s) ||
+      b.category?.toLowerCase().includes(s) ||
+      b.tags?.toLowerCase().includes(s);
+    let matchesFilter = true;
+    if (blogFilter === 'FEATURED') matchesFilter = !!b.isFeatured;
+    else if (blogFilter !== 'ALL') matchesFilter = b.category?.toLowerCase() === blogFilter.toLowerCase();
+    return matchesSearch && matchesFilter;
+  });
+  const paginatedBlogs = filteredBlogs.slice(
+    (blogPage - 1) * PAGE_SIZE,
+    blogPage * PAGE_SIZE
+  );
+
+  // 4. Faculty & Timetable (Pagination: 10/page)
+  const filteredFaculty = facultyMembers.filter((f) => {
+    const s = facultySearch.toLowerCase().trim();
+    const matchesSearch =
+      !s ||
+      f.name?.toLowerCase().includes(s) ||
+      f.facultyNo?.toLowerCase().includes(s) ||
+      f.email?.toLowerCase().includes(s) ||
+      f.role?.toLowerCase().includes(s) ||
+      f.specialization?.toLowerCase().includes(s) ||
+      f.officeLocation?.toLowerCase().includes(s);
+    const matchesStatus = facultyFilter === 'ALL' || f.status === facultyFilter;
+    return matchesSearch && matchesStatus;
+  });
+  const paginatedFaculty = filteredFaculty.slice(
+    (facultyPage - 1) * PAGE_SIZE,
+    facultyPage * PAGE_SIZE
+  );
+
+  // 5. Students & Mocks (Pagination: 10/page)
+  const filteredStudents = studentsList.filter((s) => {
+    const q = studentSearch.toLowerCase().trim();
+    const matchesSearch =
+      !q ||
+      s.name?.toLowerCase().includes(q) ||
+      s.studentId?.toLowerCase().includes(q) ||
+      s.email?.toLowerCase().includes(q) ||
+      s.mobile?.toLowerCase().includes(q) ||
+      s.courseName?.toLowerCase().includes(q) ||
+      s.batchName?.toLowerCase().includes(q);
+    let matchesStatus = true;
+    if (studentFilter === 'MOCK_CLEARED') matchesStatus = s.mockInterviewStatus?.toLowerCase().includes('clear') || s.mockInterviewStatus?.toLowerCase().includes('pass');
+    else if (studentFilter === 'MOCK_SCHEDULED') matchesStatus = s.mockInterviewStatus?.toLowerCase().includes('schedul');
+    else if (studentFilter === 'MOCK_PENDING') matchesStatus = s.mockInterviewStatus?.toLowerCase().includes('pend') || s.mockInterviewStatus?.toLowerCase().includes('review');
+    else if (studentFilter === 'PAID') matchesStatus = s.paymentStatus === 'PAID';
+    else if (studentFilter === 'FEES_DUE') matchesStatus = (s.remainingFees && s.remainingFees > 0) || s.paymentStatus !== 'PAID';
+    else if (studentFilter !== 'ALL') matchesStatus = s.mockInterviewStatus?.toLowerCase().includes(studentFilter.toLowerCase()) || s.paymentStatus === studentFilter;
+    return matchesSearch && matchesStatus;
+  });
+  const paginatedStudents = filteredStudents.slice(
+    (studentPage - 1) * PAGE_SIZE,
+    studentPage * PAGE_SIZE
+  );
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-12 gap-8 py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -594,6 +941,40 @@ export default function AdminPanel({
                 </span>
               )}
             </button>
+
+            <button
+              onClick={() => {
+                setActiveTab('faculty');
+                resetFeedback();
+              }}
+              className={`w-full px-4 py-3 rounded-xl flex items-center justify-between transition-all ${
+                activeTab === 'faculty'
+                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30 font-bold'
+                  : 'text-slate-300 hover:bg-slate-800/60'
+              }`}
+            >
+              <span className="flex items-center gap-2.5">
+                <Users className="w-4 h-4 text-emerald-400" /> Faculty & Timetable
+              </span>
+              <span className="text-[11px] text-slate-400">{facultyMembers.length}</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab('students');
+                resetFeedback();
+              }}
+              className={`w-full px-4 py-3 rounded-xl flex items-center justify-between transition-all ${
+                activeTab === 'students'
+                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30 font-bold'
+                  : 'text-slate-300 hover:bg-slate-800/60'
+              }`}
+            >
+              <span className="flex items-center gap-2.5">
+                <GraduationCap className="w-4 h-4 text-blue-400" /> Students & Mocks
+              </span>
+              <span className="text-[11px] text-slate-400">{studentsList.length}</span>
+            </button>
           </nav>
 
           <div className="pt-4 border-t border-slate-800 space-y-2">
@@ -644,29 +1025,29 @@ export default function AdminPanel({
         {activeTab === 'analytics' && (
           <div className="space-y-6 animate-in fade-in duration-200">
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-              <div className="glass-card rounded-2xl p-4 border border-slate-800 space-y-1">
-                <span className="text-[11px] text-slate-400 block font-medium">Inquiries</span>
-                <span className="text-2xl font-black text-white">{inquiries.length}</span>
+              <div className="glass-card rounded-2xl p-4 border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/60 space-y-1 shadow-xs">
+                <span className="text-[11px] text-slate-500 dark:text-slate-400 block font-medium">Inquiries</span>
+                <span className="text-2xl font-black text-slate-900 dark:text-white">{inquiries.length}</span>
               </div>
-              <div className="glass-card rounded-2xl p-4 border border-blue-500/30 bg-blue-950/10 space-y-1">
-                <span className="text-[11px] text-blue-300 block font-medium">New Leads</span>
-                <span className="text-2xl font-black text-blue-400">{newLeadsCount}</span>
+              <div className="glass-card rounded-2xl p-4 border border-blue-200 dark:border-blue-500/30 bg-blue-50/70 dark:bg-blue-950/10 space-y-1 shadow-xs">
+                <span className="text-[11px] text-blue-700 dark:text-blue-300 block font-medium">New Leads</span>
+                <span className="text-2xl font-black text-blue-600 dark:text-blue-400">{newLeadsCount}</span>
               </div>
-              <div className="glass-card rounded-2xl p-4 border border-purple-500/30 bg-purple-950/10 space-y-1">
-                <span className="text-[11px] text-purple-300 block font-medium">Active Batches</span>
-                <span className="text-2xl font-black text-purple-400">{batches.length}</span>
+              <div className="glass-card rounded-2xl p-4 border border-purple-200 dark:border-purple-500/30 bg-purple-50/70 dark:bg-purple-950/10 space-y-1 shadow-xs">
+                <span className="text-[11px] text-purple-700 dark:text-purple-300 block font-medium">Active Batches</span>
+                <span className="text-2xl font-black text-purple-600 dark:text-purple-400">{batches.length}</span>
               </div>
-              <div className="glass-card rounded-2xl p-4 border border-cyan-500/30 bg-cyan-950/10 space-y-1">
-                <span className="text-[11px] text-cyan-300 block font-medium">Events</span>
-                <span className="text-2xl font-black text-cyan-400">{events.length}</span>
+              <div className="glass-card rounded-2xl p-4 border border-cyan-200 dark:border-cyan-500/30 bg-cyan-50/70 dark:bg-cyan-950/10 space-y-1 shadow-xs">
+                <span className="text-[11px] text-cyan-700 dark:text-cyan-300 block font-medium">Events</span>
+                <span className="text-2xl font-black text-cyan-600 dark:text-cyan-400">{events.length}</span>
               </div>
-              <div className="glass-card rounded-2xl p-4 border border-amber-500/30 bg-amber-950/10 space-y-1">
-                <span className="text-[11px] text-amber-300 block font-medium">Campuses</span>
-                <span className="text-2xl font-black text-amber-400">{campuses.length}</span>
+              <div className="glass-card rounded-2xl p-4 border border-amber-200 dark:border-amber-500/30 bg-amber-50/70 dark:bg-amber-950/10 space-y-1 shadow-xs">
+                <span className="text-[11px] text-amber-700 dark:text-amber-300 block font-medium">Campuses</span>
+                <span className="text-2xl font-black text-amber-600 dark:text-amber-400">{campuses.length}</span>
               </div>
-              <div className="glass-card rounded-2xl p-4 border border-emerald-500/30 bg-emerald-950/10 space-y-1">
-                <span className="text-[11px] text-emerald-300 block font-medium">Hiring Drives</span>
-                <span className="text-2xl font-black text-emerald-400">{drives.length}</span>
+              <div className="glass-card rounded-2xl p-4 border border-emerald-200 dark:border-emerald-500/30 bg-emerald-50/70 dark:bg-emerald-950/10 space-y-1 shadow-xs">
+                <span className="text-[11px] text-emerald-700 dark:text-emerald-300 block font-medium">Hiring Drives</span>
+                <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400">{drives.length}</span>
               </div>
             </div>
 
@@ -696,7 +1077,11 @@ export default function AdminPanel({
                           {b.startDate} • {b.timing}
                         </span>
                       </div>
-                      <span className="px-2.5 py-1 rounded text-[10px] font-extrabold bg-emerald-950/80 border border-emerald-500/40 text-emerald-300">
+                      <span
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold text-white shadow-sm flex items-center gap-1.5 shrink-0"
+                        style={{ color: '#ffffff', backgroundColor: '#059669' }}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-200 animate-pulse" style={{ backgroundColor: '#a7f3d0' }} />
                         {b.seatsAvailable} Seats Left
                       </span>
                     </div>
@@ -730,13 +1115,16 @@ export default function AdminPanel({
                         </span>
                       </div>
                       <span
-                        className={`px-2.5 py-1 rounded text-[10px] font-bold ${
-                          d.status === 'ACTIVE'
-                            ? 'bg-emerald-500/20 text-emerald-400'
-                            : d.status === 'UPCOMING'
-                            ? 'bg-blue-500/20 text-blue-400'
-                            : 'bg-slate-700 text-slate-400'
-                        }`}
+                        className="px-2.5 py-1 rounded text-[10px] font-bold text-white shadow-xs"
+                        style={{
+                          backgroundColor:
+                            d.status === 'ACTIVE'
+                              ? '#059669'
+                              : d.status === 'UPCOMING'
+                              ? '#2563eb'
+                              : '#475569',
+                          color: '#ffffff',
+                        }}
                       >
                         {d.status}
                       </span>
@@ -764,9 +1152,12 @@ export default function AdminPanel({
                 {['ALL', 'NEW', 'CONTACTED', 'ENROLLED', 'CLOSED'].map((st) => (
                   <button
                     key={st}
-                    onClick={() => setStatusFilter(st)}
+                    onClick={() => {
+                      setInquiryStatus(st);
+                      setInquiryPage(1);
+                    }}
                     className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${
-                      statusFilter === st
+                      inquiryStatus === st
                         ? 'bg-purple-600 text-white shadow'
                         : 'text-slate-400 hover:text-white'
                     }`}
@@ -782,8 +1173,11 @@ export default function AdminPanel({
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
               <input
                 type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                value={inquirySearch}
+                onChange={(e) => {
+                  setInquirySearch(e.target.value);
+                  setInquiryPage(1);
+                }}
                 placeholder="Search leads by student name, email, phone, or course..."
                 className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-purple-500"
               />
@@ -808,7 +1202,7 @@ export default function AdminPanel({
                       </td>
                     </tr>
                   ) : (
-                    filteredInquiries.map((inq) => (
+                    paginatedInquiries.map((inq) => (
                       <tr key={inq.id} className="hover:bg-slate-900/50">
                         <td className="p-4">
                           <div className="font-bold text-white text-sm">{inq.name}</div>
@@ -877,6 +1271,14 @@ export default function AdminPanel({
                 </tbody>
               </table>
             </div>
+
+            <AdminPagination
+              currentPage={inquiryPage}
+              totalItems={filteredInquiries.length}
+              pageSize={PAGE_SIZE}
+              onPageChange={setInquiryPage}
+              itemName="inquiries & leads"
+            />
           </div>
         )}
 
@@ -1064,8 +1466,8 @@ export default function AdminPanel({
                         <span>Timing: <strong className="text-white">{b.timing}</strong></span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Users className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                        <span className="text-slate-200">Seats: <strong className="text-emerald-300 font-extrabold">{b.seatsAvailable} Left</strong> / <strong className="text-white font-bold">{b.seatsTotal} Total</strong></span>
+                        <Users className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span className="dark:text-slate-200 text-slate-700">Seats: <strong className="text-emerald-600 dark:text-emerald-400 font-extrabold">{b.seatsAvailable} Left</strong> / <strong className="dark:text-white text-slate-900 font-bold">{b.seatsTotal} Total</strong></span>
                       </div>
                     </div>
                   </div>
@@ -1119,73 +1521,123 @@ export default function AdminPanel({
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {events.map((ev) => (
-                <div
-                  key={ev.id}
-                  className="glass-card rounded-2xl p-5 border border-slate-800 flex flex-col justify-between gap-4 hover:border-cyan-500/40 transition-all"
-                >
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[10px] font-bold text-cyan-400 uppercase bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-500/20">
-                        {ev.category} • {ev.mode}
-                      </span>
-                      <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                          ev.isPastEvent
-                            ? 'bg-slate-800 text-slate-400'
-                            : 'bg-emerald-500/20 text-emerald-400'
-                        }`}
-                      >
-                        {ev.isPastEvent ? 'Past Event' : 'Upcoming Live'}
-                      </span>
-                    </div>
+            {/* Filter Pills & Search Bar */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs overflow-x-auto">
+                {['ALL', 'UPCOMING', 'PAST', 'ONLINE', 'OFFLINE'].map((st) => (
+                  <button
+                    key={st}
+                    onClick={() => {
+                      setEventFilter(st);
+                      setEventPage(1);
+                    }}
+                    className={`px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap ${
+                      eventFilter === st
+                        ? 'bg-cyan-600 text-white shadow'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    {st === 'ALL' ? 'All Events' : st === 'UPCOMING' ? '🟢 Upcoming Live' : st === 'PAST' ? '📅 Past Archive' : st}
+                  </button>
+                ))}
+              </div>
 
-                    <h3 className="font-bold text-white text-base leading-snug">{ev.title}</h3>
-                    <p className="text-xs text-slate-400 line-clamp-2">{ev.tagline}</p>
-
-                    <div className="text-xs text-slate-300 space-y-1 pt-2 border-t border-slate-800/80">
-                      <div>
-                        📅 {ev.eventDate} ({ev.eventTime})
-                      </div>
-                      <div>
-                        🎙️ Speaker: <span className="text-white font-semibold">{ev.speakerName}</span> ({ev.speakerRole})
-                      </div>
-                      <div className="text-slate-400 text-[11px]">📍 {ev.venue}</div>
-                    </div>
-                  </div>
-
-                  <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
-                    <Link
-                      href={`/events/${ev.slug}`}
-                      target="_blank"
-                      className="text-xs text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1"
-                    >
-                      <Eye className="w-3.5 h-3.5" /> View Public Page
-                    </Link>
-
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => {
-                          setEditingEvent(ev);
-                          resetFeedback();
-                        }}
-                        className="px-3 py-1.5 rounded-lg bg-blue-950/40 text-blue-400 hover:bg-blue-900/60 text-xs font-semibold flex items-center gap-1.5 border border-blue-500/30"
-                      >
-                        <Edit className="w-3.5 h-3.5" /> Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteEvent(ev.id)}
-                        className="p-1.5 rounded-lg bg-red-950/40 text-red-400 hover:bg-red-900/60 border border-red-500/30"
-                        title="Delete Event"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
+              <div className="relative w-full sm:w-72">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={eventSearch}
+                  onChange={(e) => {
+                    setEventSearch(e.target.value);
+                    setEventPage(1);
+                  }}
+                  placeholder="Search events by title, speaker, venue..."
+                  className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500"
+                />
+              </div>
             </div>
+
+            {filteredEvents.length === 0 ? (
+              <div className="glass-card rounded-2xl p-12 text-center text-slate-400 border border-slate-800 text-xs">
+                No workshops or events found matching your search and filter criteria.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {paginatedEvents.map((ev) => (
+                  <div
+                    key={ev.id}
+                    className="glass-card rounded-2xl p-5 border border-slate-800 flex flex-col justify-between gap-4 hover:border-cyan-500/40 transition-all"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[10px] font-bold text-cyan-400 uppercase bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-500/20">
+                          {ev.category} • {ev.mode}
+                        </span>
+                        <span
+                          className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                            ev.isPastEvent
+                              ? 'bg-slate-800 text-slate-400'
+                              : 'bg-emerald-500/20 text-emerald-400'
+                          }`}
+                        >
+                          {ev.isPastEvent ? 'Past Event' : 'Upcoming Live'}
+                        </span>
+                      </div>
+
+                      <h3 className="font-bold text-white text-base leading-snug">{ev.title}</h3>
+                      <p className="text-xs text-slate-400 line-clamp-2">{ev.tagline}</p>
+
+                      <div className="text-xs text-slate-300 space-y-1 pt-2 border-t border-slate-800/80">
+                        <div>
+                          📅 {ev.eventDate} ({ev.eventTime})
+                        </div>
+                        <div>
+                          🎙️ Speaker: <span className="text-white font-semibold">{ev.speakerName}</span> ({ev.speakerRole})
+                        </div>
+                        <div className="text-slate-400 text-[11px]">📍 {ev.venue}</div>
+                      </div>
+                    </div>
+
+                    <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
+                      <Link
+                        href={`/events/${ev.slug}`}
+                        target="_blank"
+                        className="text-xs text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1"
+                      >
+                        <Eye className="w-3.5 h-3.5" /> View Public Page
+                      </Link>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => {
+                            setEditingEvent(ev);
+                            resetFeedback();
+                          }}
+                          className="px-3 py-1.5 rounded-lg bg-blue-950/40 text-blue-400 hover:bg-blue-900/60 text-xs font-semibold flex items-center gap-1.5 border border-blue-500/30"
+                        >
+                          <Edit className="w-3.5 h-3.5" /> Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteEvent(ev.id)}
+                          className="p-1.5 rounded-lg bg-red-950/40 text-red-400 hover:bg-red-900/60 border border-red-500/30"
+                          title="Delete Event"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <AdminPagination
+              currentPage={eventPage}
+              totalItems={filteredEvents.length}
+              pageSize={PAGE_SIZE}
+              onPageChange={setEventPage}
+              itemName="workshops & events"
+            />
           </div>
         )}
 
@@ -1210,64 +1662,114 @@ export default function AdminPanel({
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {blogs.map((b) => (
-                <div
-                  key={b.id}
-                  className="glass-card rounded-2xl p-5 border border-slate-800 flex flex-col justify-between gap-4 hover:border-blue-500/40 transition-all"
-                >
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[10px] font-bold text-blue-400 uppercase bg-blue-950/40 px-2 py-0.5 rounded border border-blue-500/20">
-                        {b.category}
-                      </span>
-                      {b.isFeatured && (
-                        <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 text-[10px] font-bold">
-                          Featured
-                        </span>
-                      )}
-                    </div>
+            {/* Filter Pills & Search Bar */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs overflow-x-auto">
+                {['ALL', 'FEATURED', 'Career Guide', 'Tutorial', 'Tech Insights'].map((st) => (
+                  <button
+                    key={st}
+                    onClick={() => {
+                      setBlogFilter(st);
+                      setBlogPage(1);
+                    }}
+                    className={`px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap ${
+                      blogFilter === st
+                        ? 'bg-blue-600 text-white shadow'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    {st === 'ALL' ? 'All Articles' : st === 'FEATURED' ? '⭐ Featured' : st}
+                  </button>
+                ))}
+              </div>
 
-                    <h3 className="font-bold text-white text-base leading-snug">{b.title}</h3>
-                    <p className="text-xs text-slate-400 line-clamp-2">{b.excerpt}</p>
-
-                    <div className="text-xs text-slate-400 pt-2 border-t border-slate-800/80 flex items-center justify-between">
-                      <span>By {b.authorName}</span>
-                      <span>{b.readTime}</span>
-                    </div>
-                  </div>
-
-                  <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
-                    <Link
-                      href={`/blog/${b.slug}`}
-                      target="_blank"
-                      className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1"
-                    >
-                      <Eye className="w-3.5 h-3.5" /> View Article
-                    </Link>
-
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => {
-                          setEditingBlog(b);
-                          resetFeedback();
-                        }}
-                        className="px-3 py-1.5 rounded-lg bg-blue-950/40 text-blue-400 hover:bg-blue-900/60 text-xs font-semibold flex items-center gap-1.5 border border-blue-500/30"
-                      >
-                        <Edit className="w-3.5 h-3.5" /> Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteBlog(b.id)}
-                        className="p-1.5 rounded-lg bg-red-950/40 text-red-400 hover:bg-red-900/60 border border-red-500/30"
-                        title="Delete Blog Post"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
+              <div className="relative w-full sm:w-72">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={blogSearch}
+                  onChange={(e) => {
+                    setBlogSearch(e.target.value);
+                    setBlogPage(1);
+                  }}
+                  placeholder="Search articles by title, author, keyword..."
+                  className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500"
+                />
+              </div>
             </div>
+
+            {filteredBlogs.length === 0 ? (
+              <div className="glass-card rounded-2xl p-12 text-center text-slate-400 border border-slate-800 text-xs">
+                No blog articles found matching your search and filter criteria.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {paginatedBlogs.map((b) => (
+                  <div
+                    key={b.id}
+                    className="glass-card rounded-2xl p-5 border border-slate-800 flex flex-col justify-between gap-4 hover:border-blue-500/40 transition-all"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[10px] font-bold text-blue-400 uppercase bg-blue-950/40 px-2 py-0.5 rounded border border-blue-500/20">
+                          {b.category}
+                        </span>
+                        {b.isFeatured && (
+                          <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 text-[10px] font-bold">
+                            Featured
+                          </span>
+                        )}
+                      </div>
+
+                      <h3 className="font-bold text-white text-base leading-snug">{b.title}</h3>
+                      <p className="text-xs text-slate-400 line-clamp-2">{b.excerpt}</p>
+
+                      <div className="text-xs text-slate-400 pt-2 border-t border-slate-800/80 flex items-center justify-between">
+                        <span>By {b.authorName}</span>
+                        <span>{b.readTime}</span>
+                      </div>
+                    </div>
+
+                    <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
+                      <Link
+                        href={`/blog/${b.slug}`}
+                        target="_blank"
+                        className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1"
+                      >
+                        <Eye className="w-3.5 h-3.5" /> View Article
+                      </Link>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => {
+                            setEditingBlog(b);
+                            resetFeedback();
+                          }}
+                          className="px-3 py-1.5 rounded-lg bg-blue-950/40 text-blue-400 hover:bg-blue-900/60 text-xs font-semibold flex items-center gap-1.5 border border-blue-500/30"
+                        >
+                          <Edit className="w-3.5 h-3.5" /> Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteBlog(b.id)}
+                          className="p-1.5 rounded-lg bg-red-950/40 text-red-400 hover:bg-red-900/60 border border-red-500/30"
+                          title="Delete Blog Post"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <AdminPagination
+              currentPage={blogPage}
+              totalItems={filteredBlogs.length}
+              pageSize={PAGE_SIZE}
+              onPageChange={setBlogPage}
+              itemName="blog articles"
+            />
           </div>
         )}
 
@@ -1466,6 +1968,326 @@ export default function AdminPanel({
                   </div>
                 );
               })}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 8: Faculty & Timetable Management */}
+        {activeTab === 'faculty' && (
+          <div className="space-y-6 animate-in fade-in duration-200">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+                  <Briefcase className="w-5 h-5 text-emerald-600 dark:text-emerald-400 stroke-[2.4]" />
+                  <span>Faculty Profiles & Lecture Schedules ({facultyMembers.length})</span>
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+                  Manage institute lead trainers, lecture timings, cabin allocations, and weekly cohort timetables.
+                </p>
+              </div>
+            </div>
+
+            {/* Filter Pills & Search Bar */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-1.5 bg-white dark:bg-slate-900 p-1 rounded-xl border border-slate-200 dark:border-slate-800 text-xs overflow-x-auto shadow-xs">
+                {['ALL', 'ACTIVE', 'ON_LEAVE'].map((st) => (
+                  <button
+                    key={st}
+                    onClick={() => {
+                      setFacultyFilter(st);
+                      setFacultyPage(1);
+                    }}
+                    className={`px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap ${
+                      facultyFilter === st
+                        ? 'bg-emerald-600 text-white shadow-xs'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    {st === 'ALL' ? 'All Faculty' : st === 'ACTIVE' ? '🟢 Active' : '🏖️ On Leave'}
+                  </button>
+                ))}
+              </div>
+
+              <div className="relative w-full sm:w-72">
+                <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={facultySearch}
+                  onChange={(e) => {
+                    setFacultySearch(e.target.value);
+                    setFacultyPage(1);
+                  }}
+                  placeholder="Search faculty by name, ID, or course..."
+                  className="w-full pl-9 pr-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 shadow-xs"
+                />
+              </div>
+            </div>
+
+            {filteredFaculty.length === 0 ? (
+              <div className="rounded-2xl p-12 text-center text-slate-400 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 text-xs">
+                No faculty members found matching your search and filter criteria.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {paginatedFaculty.map((fac) => {
+                  let slots: any[] = [];
+                  try {
+                    slots = JSON.parse(fac.timetableJson || '[]');
+                  } catch {
+                    slots = [];
+                  }
+
+                  return (
+                    <div
+                      key={fac.id}
+                      className="rounded-2xl p-5 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 space-y-4 hover:border-emerald-500/50 transition-all shadow-sm hover:shadow-md"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-center gap-3.5">
+                          <div className="w-12 h-12 rounded-xl overflow-hidden relative shrink-0 border-2 border-emerald-500/60 shadow-xs">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={fac.photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'}
+                              alt={fac.name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-mono text-emerald-700 dark:text-emerald-400 text-xs font-black">{fac.facultyNo || 'FAC-2026-101'}</span>
+                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-500/30">
+                                {fac.status || 'ACTIVE'}
+                              </span>
+                            </div>
+                            <h4 className="font-black text-slate-900 dark:text-white text-base leading-tight mt-0.5">{fac.name}</h4>
+                            <p className="text-xs text-slate-600 dark:text-slate-400 font-medium line-clamp-1">{fac.role}</p>
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={() => openEditFaculty(fac)}
+                          className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white dark:bg-emerald-600 dark:hover:bg-emerald-500 text-xs font-bold flex items-center gap-1.5 shrink-0 cursor-pointer shadow-sm hover:shadow-md transition-all"
+                        >
+                          <Edit className="w-3.5 h-3.5 stroke-[2.2]" /> <span>Edit Timetable & Details</span>
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2.5 text-xs">
+                        <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800/80 shadow-xs space-y-0.5">
+                          <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-bold uppercase tracking-wider">Official Contact</span>
+                          <div className="font-bold text-slate-900 dark:text-slate-100 truncate text-xs">{fac.email}</div>
+                          <div className="text-[11px] text-slate-600 dark:text-slate-400 font-medium">{fac.phone}</div>
+                        </div>
+                        <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800/80 shadow-xs space-y-0.5">
+                          <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-bold uppercase tracking-wider">Allocated Office Cabin</span>
+                          <div className="font-bold text-slate-900 dark:text-slate-100 truncate text-xs">{fac.officeLocation?.split(',')[0] || 'Cabin 402'}</div>
+                          <div className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">{fac.specialization || 'AI & ML Systems'}</div>
+                        </div>
+                      </div>
+
+                      <div className="p-3.5 rounded-xl bg-emerald-50/50 dark:bg-slate-950/70 border border-emerald-200/80 dark:border-slate-800 space-y-2.5 shadow-xs">
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="font-bold text-slate-900 dark:text-slate-200 flex items-center gap-1.5">
+                            <Clock className="w-3.5 h-3.5 text-emerald-600 dark:text-purple-400 stroke-[2.2]" />
+                            <span>Weekly Timetable ({slots.length} Lectures)</span>
+                          </span>
+                          <span className="text-[11px] text-emerald-800 dark:text-purple-300 font-bold">Assigned Tracks: {fac.courses?.length || 0}</span>
+                        </div>
+                        {slots.length === 0 ? (
+                          <div className="text-xs text-slate-500 italic p-2">No lecture slots configured yet. Click edit to add weekly lectures.</div>
+                        ) : (
+                          <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1">
+                            {slots.slice(0, 4).map((slot: any, sIdx: number) => (
+                              <div key={sIdx} className="flex items-center justify-between text-[11px] p-2 rounded-lg bg-white dark:bg-slate-900 border border-emerald-100 dark:border-slate-800 shadow-xs">
+                                <span className="font-black text-emerald-700 dark:text-emerald-400 font-mono text-[11px] shrink-0">{slot.day} • {slot.time}</span>
+                                <span className="text-slate-800 dark:text-slate-200 font-semibold truncate max-w-[190px] mx-2">{slot.course} ({slot.batch})</span>
+                                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-100 text-blue-800 border border-blue-200 dark:bg-blue-950/50 dark:text-blue-300 dark:border-blue-800/50 shrink-0">{slot.type}</span>
+                              </div>
+                            ))}
+                            {slots.length > 4 && (
+                              <div className="text-[10px] text-slate-600 dark:text-slate-400 font-semibold text-center pt-1">+ {slots.length - 4} more scheduled lecture sessions</div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            <AdminPagination
+              currentPage={facultyPage}
+              totalItems={filteredFaculty.length}
+              pageSize={PAGE_SIZE}
+              onPageChange={setFacultyPage}
+              itemName="faculty members"
+            />
+          </div>
+        )}
+
+        {/* TAB 9: Student Management & Mock Evaluations */}
+        {activeTab === 'students' && (
+          <div className="space-y-6 animate-in fade-in duration-200">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+                  <GraduationCap className="w-5 h-5 text-blue-600 dark:text-blue-400 stroke-[2.4]" />
+                  <span>Enrolled Students & Mock Interviews ({studentsList.length})</span>
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+                  Update student batch timings, attendance %, lab practical scores, and 1-on-1 mock interview evaluations.
+                </p>
+              </div>
+            </div>
+
+            {/* Filter Pills & Search Bar */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-1.5 bg-white dark:bg-slate-900 p-1 rounded-xl border border-slate-200 dark:border-slate-800 text-xs overflow-x-auto shadow-xs">
+                {[
+                  { id: 'ALL', label: 'All Students' },
+                  { id: 'MOCK_CLEARED', label: '✅ Mock Cleared' },
+                  { id: 'MOCK_SCHEDULED', label: '📅 Mock Scheduled' },
+                  { id: 'MOCK_PENDING', label: '⏳ Mock Pending' },
+                  { id: 'PAID', label: '💰 Fees Paid' },
+                  { id: 'FEES_DUE', label: '⚠️ Fees Due' },
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      setStudentFilter(item.id);
+                      setStudentPage(1);
+                    }}
+                    className={`px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap ${
+                      studentFilter === item.id
+                        ? 'bg-blue-600 text-white shadow-xs'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="relative w-full sm:w-72">
+                <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={studentSearch}
+                  onChange={(e) => {
+                    setStudentSearch(e.target.value);
+                    setStudentPage(1);
+                  }}
+                  placeholder="Search by student ID, name, batch..."
+                  className="w-full pl-9 pr-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 shadow-xs"
+                />
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 overflow-hidden shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-slate-100/80 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 font-extrabold uppercase tracking-wider text-[11px] border-b border-slate-200 dark:border-slate-800">
+                    <tr>
+                      <th className="p-4">Student & ID</th>
+                      <th className="p-4">Enrolled Course & Batch Timing</th>
+                      <th className="p-4 text-center">Attendance</th>
+                      <th className="p-4 text-center">Lab Score</th>
+                      <th className="p-4">Mock Interview Status</th>
+                      <th className="p-4">Tuition Status</th>
+                      <th className="p-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
+                    {filteredStudents.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="p-8 text-center text-slate-400 text-xs">
+                          No students found matching your search and filter criteria.
+                        </td>
+                      </tr>
+                    ) : (
+                      paginatedStudents.map((st) => (
+                        <tr key={st.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
+                          <td className="p-4 space-y-0.5">
+                            <div className="font-extrabold text-slate-900 dark:text-white text-sm">{st.name}</div>
+                            <div className="font-mono text-blue-700 dark:text-blue-400 text-xs font-bold">{st.studentId}</div>
+                            <div className="text-slate-600 dark:text-slate-400 text-[11px] font-medium">{st.email} • {st.mobile}</div>
+                          </td>
+
+                          <td className="p-4 space-y-1">
+                            <div className="font-bold text-slate-900 dark:text-slate-200">{st.courseName}</div>
+                            <div className="text-[11px] text-purple-700 dark:text-purple-300 font-bold flex items-center gap-1">
+                              <Clock className="w-3 h-3 text-purple-600 dark:text-purple-400" /> {st.batchName}
+                            </div>
+                            <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">{st.courseMode}</div>
+                          </td>
+
+                          <td className="p-4 text-center">
+                            <span
+                              className={`px-2.5 py-1 rounded-lg font-black font-mono ${
+                                st.attendancePct >= 85
+                                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/15 dark:text-emerald-400 dark:border-emerald-500/30'
+                                  : 'bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-500/15 dark:text-amber-400 dark:border-amber-500/30'
+                              }`}
+                            >
+                              {st.attendancePct}%
+                            </span>
+                          </td>
+
+                          <td className="p-4 text-center">
+                            <span className="px-2.5 py-1 rounded-lg bg-blue-100 text-blue-800 font-black font-mono border border-blue-300 dark:bg-blue-500/15 dark:text-blue-400 dark:border-blue-500/30">
+                              {st.labScore}/100
+                            </span>
+                          </td>
+
+                          <td className="p-4 space-y-1">
+                            <div className="inline-block px-2.5 py-1 rounded-md text-[10px] font-extrabold bg-purple-100 text-purple-900 dark:bg-purple-500/20 dark:text-purple-300 border border-purple-300 dark:border-purple-500/30">
+                              {st.mockInterviewStatus}
+                            </div>
+                            <div className="text-[11px] text-slate-600 dark:text-slate-400">Date: <strong className="text-slate-900 dark:text-slate-200 font-bold">{st.mockInterviewDate}</strong></div>
+                            {st.mockFeedback && (
+                              <div className="text-[10px] text-slate-600 dark:text-slate-400 italic line-clamp-1">&ldquo;{st.mockFeedback}&rdquo;</div>
+                            )}
+                          </td>
+
+                          <td className="p-4 space-y-1 text-xs">
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                              st.paymentStatus === 'PAID'
+                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-400'
+                                : 'bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-500/20 dark:text-amber-400'
+                            }`}>
+                              {st.paymentStatus}
+                            </span>
+                            <div className="text-[11px] text-slate-700 dark:text-slate-400 font-semibold">Paid: ₹{st.paidFees?.toLocaleString()}</div>
+                            {st.remainingFees > 0 && (
+                              <div className="text-[10px] text-rose-600 dark:text-rose-400 font-bold">Due: ₹{st.remainingFees?.toLocaleString()}</div>
+                            )}
+                          </td>
+
+                          <td className="p-4 text-right">
+                            <button
+                              onClick={() => openEditStudent(st)}
+                              className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-600 dark:hover:bg-blue-500 text-xs font-bold inline-flex items-center gap-1.5 transition-all shadow-sm hover:shadow-md cursor-pointer"
+                            >
+                              <Edit className="w-3.5 h-3.5 stroke-[2.2]" /> <span>Edit Academic & Mock</span>
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="p-4 border-t border-slate-200 dark:border-slate-800">
+                <AdminPagination
+                  currentPage={studentPage}
+                  totalItems={filteredStudents.length}
+                  pageSize={PAGE_SIZE}
+                  onPageChange={setStudentPage}
+                  itemName="enrolled students"
+                />
+              </div>
             </div>
           </div>
         )}
@@ -3495,6 +4317,474 @@ export default function AdminPanel({
                 className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/30 transition-all"
               >
                 {loading ? 'Saving Changes...' : 'Save Drive Changes'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* 9. EDIT FACULTY & TIMETABLE MODAL */}
+      {editingFaculty && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto">
+          <div className="w-full max-w-3xl bg-white dark:bg-slate-900 rounded-2xl p-6 border border-emerald-500/40 text-slate-900 dark:text-white space-y-5 max-h-[90vh] overflow-y-auto my-8 shadow-2xl">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+              <div>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <Briefcase className="w-5 h-5 text-emerald-600 dark:text-emerald-400" /> Edit Faculty Profile & Lecture Schedule
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
+                  Update trainer credentials, office location, contact details, and weekly lecture agenda.
+                </p>
+              </div>
+              <button onClick={() => setEditingFaculty(null)} className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white p-1">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdateFacultySubmit} className="space-y-4 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Faculty Full Name *</label>
+                  <input
+                    type="text"
+                    name="name"
+                    defaultValue={editingFaculty.name}
+                    required
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Official Designation / Role *</label>
+                  <input
+                    type="text"
+                    name="role"
+                    defaultValue={editingFaculty.role}
+                    required
+                    placeholder="e.g. Lead AI Scientist & Ex-Microsoft Specialist"
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Faculty ID Number *</label>
+                  <input
+                    type="text"
+                    name="facultyNo"
+                    defaultValue={editingFaculty.facultyNo || 'FAC-2026-101'}
+                    required
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white font-mono uppercase focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Official Email *</label>
+                  <input
+                    type="email"
+                    name="email"
+                    defaultValue={editingFaculty.email}
+                    required
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Direct Phone / Hotline *</label>
+                  <input
+                    type="text"
+                    name="phone"
+                    defaultValue={editingFaculty.phone || '+91 98765 43210'}
+                    required
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="sm:col-span-2">
+                  <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Allocated Campus & Office Cabin *</label>
+                  <input
+                    type="text"
+                    name="officeLocation"
+                    defaultValue={editingFaculty.officeLocation || 'Faculty Cabin 402, Main Tech Park HQ (Hyderabad)'}
+                    required
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Status</label>
+                  <select
+                    name="status"
+                    defaultValue={editingFaculty.status || 'ACTIVE'}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white font-bold"
+                  >
+                    <option value="ACTIVE">ACTIVE</option>
+                    <option value="ON_LEAVE">ON_LEAVE</option>
+                    <option value="RESEARCH_SABBATICAL">RESEARCH_SABBATICAL</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Department Specialization</label>
+                <input
+                  type="text"
+                  name="specialization"
+                  defaultValue={editingFaculty.specialization || 'Generative AI & LLM Systems'}
+                  required
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+
+              {/* TIMETABLE SLOTS EDITOR */}
+              <div className="pt-3 border-t border-slate-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-1.5">
+                      <Clock className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Weekly Lecture Timetable Slots ({facultyTimetableSlots.length})
+                    </h4>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-400">Configure day, lecture timing, topic, and Google Meet video links.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleAddTimetableSlot}
+                    className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-xs"
+                  >
+                    <Plus className="w-3.5 h-3.5" /> Add Lecture Slot
+                  </button>
+                </div>
+
+                <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
+                  {facultyTimetableSlots.map((slot, idx) => (
+                    <div
+                      key={idx}
+                      className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 space-y-2 relative group"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-emerald-700 dark:text-emerald-400 text-xs font-mono">
+                          Slot #{idx + 1}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveTimetableSlot(idx)}
+                          className="p-1 rounded text-rose-500 hover:bg-rose-100 dark:hover:bg-rose-950/50"
+                          title="Delete slot"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                        <div>
+                          <label className="text-[10px] text-slate-600 dark:text-slate-400 font-semibold">Day</label>
+                          <select
+                            value={slot.day}
+                            onChange={(e) => handleUpdateTimetableSlot(idx, 'day', e.target.value)}
+                            className="w-full px-2 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-semibold"
+                          >
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] text-slate-600 dark:text-slate-400 font-semibold">Lecture Time</label>
+                          <input
+                            type="text"
+                            value={slot.time}
+                            onChange={(e) => handleUpdateTimetableSlot(idx, 'time', e.target.value)}
+                            placeholder="09:00 AM - 11:00 AM"
+                            className="w-full px-2 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-mono"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] text-slate-600 dark:text-slate-400 font-semibold">Batch Code</label>
+                          <input
+                            type="text"
+                            value={slot.batch}
+                            onChange={(e) => handleUpdateTimetableSlot(idx, 'batch', e.target.value)}
+                            placeholder="GEN-AI-B1"
+                            className="w-full px-2 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-xs"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] text-slate-600 dark:text-slate-400 font-semibold">Session Type</label>
+                          <select
+                            value={slot.type}
+                            onChange={(e) => handleUpdateTimetableSlot(idx, 'type', e.target.value)}
+                            className="w-full px-2 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-xs"
+                          >
+                            <option value="Live Lab">Live Lab</option>
+                            <option value="Theory & Architecture">Theory & Architecture</option>
+                            <option value="Mock Interview">Mock Interview</option>
+                            <option value="Doubt Clearing">Doubt Clearing</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <div>
+                          <label className="text-[10px] text-slate-600 dark:text-slate-400 font-semibold">Course Name</label>
+                          <input
+                            type="text"
+                            value={slot.course}
+                            onChange={(e) => handleUpdateTimetableSlot(idx, 'course', e.target.value)}
+                            className="w-full px-2 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-xs"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] text-slate-600 dark:text-slate-400 font-semibold">Classroom / Lab Location</label>
+                          <input
+                            type="text"
+                            value={slot.location}
+                            onChange={(e) => handleUpdateTimetableSlot(idx, 'location', e.target.value)}
+                            className="w-full px-2 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-xs"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] text-slate-600 dark:text-slate-400 font-semibold">Google Meet URL</label>
+                          <input
+                            type="url"
+                            value={slot.meetLink || ''}
+                            onChange={(e) => handleUpdateTimetableSlot(idx, 'meetLink', e.target.value)}
+                            placeholder="https://meet.google.com/..."
+                            className="w-full px-2 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-mono"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="text-[10px] text-slate-600 dark:text-slate-400 font-semibold">Lecture Topic / Hands-on Lab Agenda</label>
+                        <input
+                          type="text"
+                          value={slot.topic}
+                          onChange={(e) => handleUpdateTimetableSlot(idx, 'topic', e.target.value)}
+                          placeholder="e.g. Fine-Tuning Llama 3 with LoRA & Unsloth"
+                          className="w-full px-2 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-xs"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/30 transition-all cursor-pointer"
+              >
+                {loading ? 'Saving Faculty Details...' : 'Save Faculty Profile & Lecture Schedule'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* 10. EDIT STUDENT & MOCK EVALUATION MODAL */}
+      {editingStudent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto">
+          <div className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl p-6 border border-blue-500/40 text-slate-900 dark:text-white space-y-4 max-h-[90vh] overflow-y-auto my-8 shadow-2xl">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+              <div>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <GraduationCap className="w-5 h-5 text-blue-600 dark:text-blue-400" /> Edit Student & Mock Evaluation
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
+                  Update student batch, class timing, attendance %, lab score, and 1-on-1 mock interview feedback.
+                </p>
+              </div>
+              <button onClick={() => setEditingStudent(null)} className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white p-1">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdateStudentSubmit} className="space-y-4 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Student Full Name *</label>
+                  <input
+                    type="text"
+                    name="name"
+                    defaultValue={editingStudent.name}
+                    required
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Registered Email *</label>
+                  <input
+                    type="email"
+                    name="email"
+                    defaultValue={editingStudent.email}
+                    required
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Mobile Hotline *</label>
+                  <input
+                    type="text"
+                    name="mobile"
+                    defaultValue={editingStudent.mobile}
+                    required
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="sm:col-span-2">
+                  <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Enrolled Course Name *</label>
+                  <input
+                    type="text"
+                    name="courseName"
+                    defaultValue={editingStudent.courseName}
+                    required
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Course Mode</label>
+                  <select
+                    name="courseMode"
+                    defaultValue={editingStudent.courseMode || 'Hybrid (Classroom + Online)'}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white"
+                  >
+                    <option value="Hybrid (Classroom + Online)">Hybrid</option>
+                    <option value="Live Interactive Online">Live Online</option>
+                    <option value="Offline Classroom (In-Person)">Offline Classroom</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Batch & Lecture Timing *</label>
+                  <input
+                    type="text"
+                    name="batchName"
+                    defaultValue={editingStudent.batchName}
+                    required
+                    placeholder="e.g. GENAI-2026-A1 • 07:30 AM - 09:30 AM"
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Attendance Record (%)</label>
+                  <input
+                    type="number"
+                    name="attendancePct"
+                    min="0"
+                    max="100"
+                    defaultValue={editingStudent.attendancePct}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white font-mono focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Practical Lab Score (/100)</label>
+                  <input
+                    type="number"
+                    name="labScore"
+                    min="0"
+                    max="100"
+                    defaultValue={editingStudent.labScore}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white font-mono focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
+              {/* MOCK INTERVIEW SECTION - Calm Highlight Theme */}
+              <div className="p-4 rounded-xl bg-purple-50/80 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-500/30 space-y-3">
+                <h4 className="font-bold text-xs flex items-center gap-1.5 text-purple-900 dark:text-purple-300">
+                  <Award className="w-4 h-4 text-purple-600 dark:text-purple-400" /> 1-on-1 Mock Technical Interview & Placement Readiness
+                </h4>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-purple-950 dark:text-purple-200 font-semibold mb-1">Scheduled Mock Date & Time</label>
+                    <input
+                      type="text"
+                      name="mockInterviewDate"
+                      defaultValue={editingStudent.mockInterviewDate || 'Tomorrow, 06:00 PM - 07:00 PM'}
+                      placeholder="e.g. Sept 30, 2026 • 06:00 PM - 07:00 PM"
+                      className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-purple-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-purple-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-purple-950 dark:text-purple-200 font-semibold mb-1">Mock Interview Status / Verdict</label>
+                    <select
+                      name="mockInterviewStatus"
+                      defaultValue={editingStudent.mockInterviewStatus || 'Scheduled'}
+                      className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-purple-200 dark:border-slate-700 text-slate-900 dark:text-white font-bold"
+                    >
+                      <option value="Scheduled">Scheduled</option>
+                      <option value="Cleared - Ready for Enterprise Drives">Cleared - Ready for Enterprise Drives</option>
+                      <option value="System Design Round Passed - DSA Review Needed">System Design Round Passed - DSA Review Needed</option>
+                      <option value="Under Evaluation - Capstone Project Review">Under Evaluation - Capstone Project Review</option>
+                      <option value="Re-take Scheduled next week">Re-take Scheduled next week</option>
+                      <option value="Pending">Pending</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-purple-950 dark:text-purple-200 font-semibold mb-1">Faculty / Evaluator Technical Feedback & Notes</label>
+                  <textarea
+                    name="mockFeedback"
+                    rows={3}
+                    defaultValue={editingStudent.mockFeedback || ''}
+                    placeholder="e.g. Excellent grasp of LLM prompt optimization and multi-agent coordination. Recommended for Tier-1 placements..."
+                    className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-purple-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-purple-500"
+                  />
+                </div>
+              </div>
+
+              {/* TUITION FEE SECTION */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Fee Payment Status</label>
+                  <select
+                    name="paymentStatus"
+                    defaultValue={editingStudent.paymentStatus || 'SEAT_RESERVED'}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white font-bold"
+                  >
+                    <option value="SEAT_RESERVED">SEAT_RESERVED</option>
+                    <option value="PAID">PAID</option>
+                    <option value="PARTIAL_PAID">PARTIAL_PAID</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Fees Paid (₹)</label>
+                  <input
+                    type="number"
+                    name="paidFees"
+                    defaultValue={editingStudent.paidFees || 1000}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-400 mb-1 font-semibold">Remaining Fees (₹)</label>
+                  <input
+                    type="number"
+                    name="remainingFees"
+                    defaultValue={editingStudent.remainingFees || 0}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white font-mono"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
+              >
+                {loading ? 'Saving Student Record...' : 'Save Student Academic & Mock Updates'}
               </button>
             </form>
           </div>

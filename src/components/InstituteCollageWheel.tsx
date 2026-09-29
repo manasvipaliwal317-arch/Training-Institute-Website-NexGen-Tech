@@ -221,7 +221,7 @@ export default function InstituteCollageWheel() {
                 }}
               >
                 <div className="glass-card rounded-2xl overflow-hidden border border-slate-700/80 bg-slate-900/90 shadow-2xl transition-all duration-300">
-                  {/* Image Container with Badge Overlay */}
+                  {/* Image Container with Sparkling Reveal Effects */}
                   <div className="relative h-56 sm:h-64 w-full overflow-hidden">
                     <Image
                       src={item.image}
@@ -233,8 +233,25 @@ export default function InstituteCollageWheel() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-90" />
 
+                    {/* Sparkling Light Sweep Glint on Card Reveal & Hover */}
+                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/35 to-transparent skew-x-12 pointer-events-none z-10" />
+
+                    {/* Active Center Card Sparkling Stars & Halo */}
+                    {isCenter && (
+                      <>
+                        <div className="absolute top-2 right-2 z-20 pointer-events-none flex items-center gap-1 bg-slate-950/80 px-2 py-0.5 rounded-full border border-amber-400/40 text-amber-300 text-[10px] font-bold shadow-lg animate-pulse">
+                          <Sparkles className="w-3 h-3 text-amber-300 animate-spin" style={{ animationDuration: '3s' }} />
+                          <span>Revealed</span>
+                        </div>
+                        <div className="absolute -bottom-1 -left-1 z-20 pointer-events-none">
+                          <Sparkles className="w-5 h-5 text-cyan-300 animate-bounce" />
+                        </div>
+                        <div className="absolute inset-0 bg-radial-gradient from-amber-400/10 via-transparent to-transparent pointer-events-none" />
+                      </>
+                    )}
+
                     {/* Category Top Badge */}
-                    <div className="absolute top-3 left-3 flex items-center gap-2">
+                    <div className="absolute top-3 left-3 flex items-center gap-2 z-20">
                       <span className={`px-3 py-1 rounded-full bg-gradient-to-r ${item.badgeBg} text-white font-extrabold text-[10px] uppercase tracking-wider shadow-md flex items-center gap-1.5`}>
                         <IconComponent className="w-3.5 h-3.5 text-white" />
                         <span>{item.category}</span>
@@ -242,19 +259,20 @@ export default function InstituteCollageWheel() {
                     </div>
 
                     {/* Expand Zoom Icon Button */}
-                    <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity z-20">
                       <div className="p-2 rounded-full bg-slate-900/80 text-white border border-white/20 backdrop-blur-md hover:bg-blue-600 transition-colors shadow-lg">
                         <Maximize2 className="w-4 h-4" />
                       </div>
                     </div>
 
-                    {/* Bottom Stats Pill */}
-                    <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white">
-                      <span className="bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/10 font-medium">
-                        {item.stats}
+                    {/* Bottom Stats Pill with Sparkling Indicator */}
+                    <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white z-20">
+                      <span className="bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/10 font-medium flex items-center gap-1">
+                        <Sparkles className="w-3 h-3 text-amber-400" />
+                        <span>{item.stats}</span>
                       </span>
                       <span className="text-[11px] font-semibold text-blue-400 group-hover:underline flex items-center gap-1">
-                        {isCenter ? 'Click to Enlarge' : 'Rotate Here'}
+                        {isCenter ? 'Click to Enlarge ✦' : 'Rotate Here'}
                       </span>
                     </div>
                   </div>

@@ -33,15 +33,15 @@ export default async function EventsPage() {
     <div className="space-y-16 py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Header */}
       <ZoomIn>
-        <div className="glass-card rounded-3xl p-8 sm:p-14 border border-cyan-500/20 bg-gradient-to-br from-slate-900 via-cyan-950/30 to-slate-900 text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold uppercase tracking-wider mx-auto">
-            <Sparkles className="w-4 h-4 text-amber-300" />
+        <div className="glass-card rounded-3xl p-8 sm:p-14 border border-cyan-200/80 dark:border-cyan-500/20 bg-gradient-to-br from-cyan-50/70 via-sky-50/50 to-slate-50/80 dark:from-slate-900 dark:via-cyan-950/30 dark:to-slate-900 text-center space-y-4 shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 text-xs font-semibold uppercase tracking-wider mx-auto">
+            <Sparkles className="w-4 h-4 text-amber-500 dark:text-amber-300" />
             <span>Industry Exposure & Learning</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tight">
+          <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
             Tech Workshops & <span className="gradient-text-cyan">Masterclasses</span>
           </h1>
-          <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+          <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
             Upgrade your engineering skills with free live masterclasses, hands-on weekend hackathons, and technical panel discussions with lead architects.
           </p>
         </div>
