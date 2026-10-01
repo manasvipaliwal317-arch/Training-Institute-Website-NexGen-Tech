@@ -6,7 +6,7 @@ import { ChevronRight, Home } from 'lucide-react';
 
 export default function Breadcrumbs() {
   const pathname = usePathname();
-  if (pathname === '/') return null;
+  if (pathname === '/' || pathname === '/_not-found' || pathname.includes('not-found')) return null;
 
   const pathSegments = pathname.split('/').filter((seg) => seg.length > 0);
 
@@ -25,7 +25,7 @@ export default function Breadcrumbs() {
           <div key={url} className="flex items-center gap-2 capitalize">
             <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 stroke-[2]" />
             {isLast ? (
-              <span className="font-bold text-slate-900 dark:text-white line-clamp-1">{formattedSegment}</span>
+              <span className="font-bold text-slate-800 dark:text-slate-100 line-clamp-1">{formattedSegment}</span>
             ) : (
               <Link href={url} className="hover:text-blue-600 dark:hover:text-white transition-colors font-medium text-slate-700 dark:text-slate-300">
                 {formattedSegment}
