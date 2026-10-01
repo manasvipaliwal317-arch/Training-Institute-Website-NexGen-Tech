@@ -11,7 +11,7 @@ export default function Breadcrumbs() {
   const pathSegments = pathname.split('/').filter((seg) => seg.length > 0);
 
   return (
-    <nav className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400 py-2">
+    <nav className="flex items-center flex-wrap gap-x-2 gap-y-1 text-xs text-slate-600 dark:text-slate-400 py-2">
       <Link href="/" className="hover:text-blue-600 dark:hover:text-white transition-colors flex items-center gap-1 font-semibold text-slate-700 dark:text-slate-300">
         <Home className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 stroke-[2.2]" />
         <span>Home</span>

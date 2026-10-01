@@ -270,7 +270,7 @@ export default function InteractiveCertificate() {
               </div>
 
               {/* FOOTER ROW: QR CODE, SIGNATURE & AUTHORIZED SEAL */}
-              <div className="mt-6 pt-4 border-t border-slate-300 flex items-end justify-between gap-2 relative z-10 font-sans">
+              <div className="mt-6 pt-4 border-t border-slate-300 flex flex-wrap sm:flex-nowrap items-end justify-between gap-3 relative z-10 font-sans">
                 
                 {/* BOTTOM LEFT: QR CODE & ID INFO */}
                 <div className="flex items-start gap-2">

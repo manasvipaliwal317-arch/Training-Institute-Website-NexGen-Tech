@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const TRACKS = [
-  { tech: 'AI & Machine Learning', domain: 'Engineering' },
+  { tech: 'AI & Data Science', domain: 'Engineering' },
   { tech: 'Full Stack & Cloud', domain: 'Development' },
-  { tech: 'DevOps & Kubernetes', domain: 'Architecture' },
-  { tech: 'Data Science & Big Data', domain: 'Analytics' },
-  { tech: 'Cybersecurity & Ethical Hacking', domain: 'Defense' },
+  { tech: 'DevOps & Cloud', domain: 'Architecture' },
+  { tech: 'Data Analytics & AI', domain: 'Analytics' },
+  { tech: 'Cyber Security', domain: 'Defense' },
 ];
 
 export default function HeroDynamicHeadline() {
@@ -24,9 +24,9 @@ export default function HeroDynamicHeadline() {
   const current = TRACKS[currentIndex];
 
   return (
-    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black dark:text-white text-slate-900 tracking-tight leading-[1.12]">
+    <h1 className="text-2xl sm:text-4xl lg:text-6xl font-black dark:text-white text-slate-900 tracking-tight leading-[1.18] sm:leading-[1.12]">
       Build Your Career in <br className="hidden sm:inline" />
-      <span className="inline-block relative min-w-[280px] sm:min-w-[420px] lg:min-w-[490px] h-[1.25em] align-bottom overflow-hidden">
+      <span className="inline-block relative min-w-[170px] sm:min-w-[320px] lg:min-w-[420px] max-w-full h-[1.25em] align-bottom overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.span
             key={current.tech}

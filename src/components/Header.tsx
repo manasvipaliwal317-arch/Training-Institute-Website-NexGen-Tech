@@ -517,10 +517,10 @@ export default function Header() {
             </nav>
 
             {/* Right Action CTA & Mobile Trigger */}
-            <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+            <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
               <Link
                 href="/student/login"
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 border-violet-600 bg-violet-100/80 hover:bg-violet-200 text-violet-950 dark:bg-violet-950/60 dark:border-violet-500 dark:text-violet-200 hover:text-violet-950 dark:hover:text-white text-xs font-black transition-all shadow-xs"
+                className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 border-violet-600 bg-violet-100/80 hover:bg-violet-200 text-violet-950 dark:bg-violet-950/60 dark:border-violet-500 dark:text-violet-200 hover:text-violet-950 dark:hover:text-white text-xs font-black transition-all shadow-xs"
                 title="Student Portal Login"
               >
                 <GraduationCap className="w-4 h-4 text-violet-800 dark:text-violet-400 stroke-[2.5]" />
@@ -529,7 +529,7 @@ export default function Header() {
 
               <Link
                 href="/faculty/login"
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 border-emerald-600 bg-emerald-100/80 hover:bg-emerald-200 text-emerald-950 dark:bg-emerald-950/60 dark:border-emerald-500 dark:text-emerald-200 hover:text-emerald-950 dark:hover:text-white text-xs font-black transition-all shadow-xs"
+                className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 border-emerald-600 bg-emerald-100/80 hover:bg-emerald-200 text-emerald-950 dark:bg-emerald-950/60 dark:border-emerald-500 dark:text-emerald-200 hover:text-emerald-950 dark:hover:text-white text-xs font-black transition-all shadow-xs"
                 title="Faculty & Mentor Portal Login"
               >
                 <Briefcase className="w-4 h-4 text-emerald-800 dark:text-emerald-400 stroke-[2.5]" />
