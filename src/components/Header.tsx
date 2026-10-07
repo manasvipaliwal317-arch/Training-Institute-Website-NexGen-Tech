@@ -448,13 +448,13 @@ export default function Header() {
                               key={item.name}
                               href={item.href}
                               onClick={() => setOutcomesDropdownOpen(false)}
-                              className={`flex items-start gap-3 p-2.5 rounded-xl border transition-all group/item ${
+                              className={`flex items-start gap-3 p-2.5 rounded-xl border transition-all duration-150 active:scale-95 cursor-pointer group/item ${
                                 isItemActive
                                   ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-600 dark:text-emerald-400'
                                   : 'dark:border-slate-800/80 border-slate-100 hover:border-emerald-500/30 dark:hover:bg-slate-800/80 hover:bg-slate-50'
                               }`}
                             >
-                              <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-500 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-all shrink-0 mt-0.5 shadow-sm">
+                              <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-500 group-hover/item:bg-emerald-600 group-hover/item:text-white group-hover/item:scale-110 active:scale-90 transition-all shrink-0 mt-0.5 shadow-sm">
                                 <IconComp className="w-4 h-4" />
                               </div>
                               <div className="flex-1 min-w-0">
@@ -488,14 +488,6 @@ export default function Header() {
                 Placements
               </Link>
 
-              <Link
-                href="/blog"
-                className={`transition-colors hover:text-pink-600 dark:hover:text-blue-400 py-2 ${
-                  isActive('/blog') ? 'text-pink-600 dark:text-blue-400 font-semibold' : 'dark:text-slate-300 text-violet-800'
-                }`}
-              >
-                Blog
-              </Link>
 
               <Link
                 href="/contact"
@@ -552,22 +544,30 @@ export default function Header() {
 
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-slate-800 bg-slate-950/98 backdrop-blur-2xl px-4 py-6 space-y-3 animate-in slide-in-from-top-4 duration-200 max-h-[85vh] overflow-y-auto">
-            <nav className="flex flex-col space-y-1.5 font-medium text-sm">
+          <div className="lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white/98 dark:bg-slate-950/98 backdrop-blur-2xl px-4 py-5 space-y-4 animate-in slide-in-from-top-3 duration-200 max-h-[85vh] overflow-y-auto shadow-2xl">
+            <nav className="flex flex-col space-y-1 text-sm font-semibold">
               <Link
                 href="/"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800/60"
+                className={`px-3.5 py-2.5 rounded-xl transition-colors flex items-center justify-between ${
+                  isActive('/')
+                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold'
+                    : 'text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/80'
+                }`}
               >
-                Home
+                <span>Home</span>
               </Link>
 
               <Link
                 href="/about"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800/60"
+                className={`px-3.5 py-2.5 rounded-xl transition-colors flex items-center justify-between ${
+                  isActive('/about')
+                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold'
+                    : 'text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/80'
+                }`}
               >
-                About Us
+                <span>About Us</span>
               </Link>
 
               {/* Mobile Courses Accordion */}
@@ -575,28 +575,32 @@ export default function Header() {
                 <button
                   type="button"
                   onClick={() => setMobileCoursesOpen((prev) => !prev)}
-                  className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800/60 text-left font-medium cursor-pointer"
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-left font-bold cursor-pointer transition-colors ${
+                    isCoursesActive
+                      ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                      : 'text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/80'
+                  }`}
                 >
-                  <span className="flex items-center gap-2">
-                    <Brain className="w-4 h-4 text-blue-400" />
-                    Courses & Programs
+                  <span className="flex items-center gap-2.5">
+                    <Brain className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    <span>Courses & Programs</span>
                   </span>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform duration-200 ${
-                      mobileCoursesOpen ? 'rotate-180 text-blue-400' : ''
+                      mobileCoursesOpen ? 'rotate-180 text-blue-600 dark:text-blue-400' : ''
                     }`}
                   />
                 </button>
 
                 {mobileCoursesOpen && (
-                  <div className="pl-4 pr-2 py-1.5 space-y-1 bg-slate-900/70 rounded-xl mt-1 border border-slate-800/60">
+                  <div className="p-2 space-y-1 bg-slate-100/90 dark:bg-slate-900/90 rounded-2xl mt-1 border border-slate-200 dark:border-slate-800 shadow-xs">
                     <Link
                       href="/courses"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold text-blue-400 hover:bg-slate-800/80"
+                      className="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black text-blue-700 dark:text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 transition-colors"
                     >
-                      <span>Explore All 15+ Courses</span>
-                      <ArrowRight className="w-3 h-3" />
+                      <span>Explore All 15+ Tech Programs</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                     {courseCategories.map((cat) => {
                       const IconComp = cat.icon;
@@ -605,12 +609,12 @@ export default function Header() {
                           key={cat.slug}
                           href={`/courses?category=${cat.slug}`}
                           onClick={() => setMobileMenuOpen(false)}
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:text-white hover:bg-slate-800/80"
+                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-slate-800 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                         >
-                          <IconComp className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                          <IconComp className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400 shrink-0" />
                           <div className="flex-1 flex items-center justify-between">
                             <span>{cat.name}</span>
-                            <span className="text-[9px] px-1.5 py-0.2 rounded bg-blue-500/20 text-blue-300">
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-500/15 text-blue-700 dark:text-blue-300">
                               {cat.badge}
                             </span>
                           </div>
@@ -626,36 +630,52 @@ export default function Header() {
                 <button
                   type="button"
                   onClick={() => setMobileOutcomesOpen((prev) => !prev)}
-                  className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800/60 text-left font-medium cursor-pointer"
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-left font-bold cursor-pointer transition-colors ${
+                    isOutcomesActive
+                      ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400'
+                      : 'text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/80'
+                  }`}
                 >
-                  <span className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-emerald-400" />
-                    Outcomes & Ecosystem
+                  <span className="flex items-center gap-2.5">
+                    <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                    <span>Outcomes & Ecosystem</span>
                   </span>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform duration-200 ${
-                      mobileOutcomesOpen ? 'rotate-180 text-emerald-400' : ''
+                      mobileOutcomesOpen ? 'rotate-180 text-emerald-600 dark:text-emerald-400' : ''
                     }`}
                   />
                 </button>
 
                 {mobileOutcomesOpen && (
-                  <div className="pl-4 pr-2 py-1.5 space-y-1 bg-slate-900/70 rounded-xl mt-1 border border-slate-800/60">
+                  <div className="p-2 space-y-1 bg-slate-100/90 dark:bg-slate-900/90 rounded-2xl mt-1 border border-slate-200 dark:border-slate-800 shadow-xs">
                     {outcomesSubmenu.map((item) => {
                       const IconComp = item.icon;
+                      const isItemActive = pathname === item.href;
                       return (
                         <Link
                           key={item.name}
                           href={item.href}
                           onClick={() => setMobileMenuOpen(false)}
-                          className="flex items-start gap-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors"
+                          className={`flex items-start gap-2.5 p-2.5 rounded-xl transition-all active:scale-95 cursor-pointer ${
+                            isItemActive
+                              ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 font-bold border border-emerald-500/30'
+                              : 'text-slate-800 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800'
+                          }`}
                         >
-                          <IconComp className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
-                          <div>
-                            <div className="font-semibold text-white">{item.name}</div>
-                            <div className="text-[10px] text-slate-400 leading-tight">
-                              {item.desc}
+                          <IconComp className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-1">
+                              <span className="font-bold text-xs text-slate-900 dark:text-white truncate">
+                                {item.name}
+                              </span>
+                              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 shrink-0">
+                                {item.tag}
+                              </span>
                             </div>
+                            <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-tight mt-0.5">
+                              {item.desc}
+                            </p>
                           </div>
                         </Link>
                       );
@@ -667,34 +687,44 @@ export default function Header() {
               <Link
                 href="/placements"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800/60"
+                className={`px-3.5 py-2.5 rounded-xl transition-colors flex items-center justify-between ${
+                  isActive('/placements')
+                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold'
+                    : 'text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/80'
+                }`}
               >
-                Placements & Hiring
+                <span>Placements & Hiring</span>
               </Link>
-              <Link
-                href="/blog"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800/60"
-              >
-                Tech Blog & Guidance
-              </Link>
+
+
               <Link
                 href="/contact"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800/60"
+                className={`px-3.5 py-2.5 rounded-xl transition-colors flex items-center justify-between ${
+                  isActive('/contact')
+                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold'
+                    : 'text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/80'
+                }`}
               >
-                Contact Counselors
+                <span>Contact Counselors</span>
               </Link>
+
               <Link
                 href="/certificate"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg text-amber-300 font-semibold hover:bg-slate-800/60 flex items-center gap-2"
+                className="px-3.5 py-2.5 rounded-xl text-amber-700 dark:text-amber-300 bg-amber-500/10 border border-amber-500/25 font-bold text-sm flex items-center justify-between hover:bg-amber-500/20 transition-all"
               >
-                <Award className="w-4 h-4 text-amber-400" /> Certificate Verification
+                <span className="flex items-center gap-2">
+                  <Award className="w-4 h-4 text-amber-500" />
+                  <span>Certificate Verification</span>
+                </span>
+                <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300">
+                  Instant
+                </span>
               </Link>
             </nav>
 
-            <div className="pt-2 space-y-2">
+            <div className="pt-2 space-y-2.5 border-t border-slate-200 dark:border-slate-800/80">
               <div className="grid grid-cols-2 gap-2">
                 <Link
                   href="/student/login"
@@ -713,12 +743,13 @@ export default function Header() {
                   <span>Faculty Portal</span>
                 </Link>
               </div>
+
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   setModalOpen(true);
                 }}
-                className="w-full py-3 rounded-xl bg-blue-600 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30 cursor-pointer"
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 cursor-pointer"
               >
                 <Sparkles className="w-4 h-4 text-amber-300" />
                 <span>Book Free Demo Class</span>

@@ -31,15 +31,15 @@ export default async function BlogIndexPage() {
   return (
     <div className="space-y-16 py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Header */}
-      <div className="glass-card rounded-3xl p-8 sm:p-14 border border-blue-500/20 bg-gradient-to-br from-slate-900 via-blue-950/40 to-slate-900 text-center space-y-4">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold uppercase tracking-wider mx-auto">
-          <BookOpen className="w-4 h-4" />
+      <div className="rounded-3xl p-8 sm:p-14 bg-[#ffedd5] dark:bg-[#1c130b] border border-orange-200/60 dark:border-amber-900/40 text-center space-y-4 shadow-sm">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-100 dark:bg-amber-500/10 border border-orange-300 dark:border-amber-500/30 text-orange-900 dark:text-amber-400 text-xs font-black uppercase tracking-wider mx-auto">
+          <BookOpen className="w-4 h-4 text-orange-700 dark:text-amber-400" />
           <span>Engineering Insights & Roadmaps</span>
         </div>
-        <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tight">
+        <h1 className="text-4xl sm:text-5xl font-black text-slate-950 dark:text-white tracking-tight">
           Tech Blog & <span className="gradient-text">Career Guidance</span>
         </h1>
-        <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+        <p className="text-slate-700 dark:text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed font-medium">
           Deep-dive technical guides, architecture breakdowns, and career growth strategies written by senior engineers and faculty leads.
         </p>
       </div>

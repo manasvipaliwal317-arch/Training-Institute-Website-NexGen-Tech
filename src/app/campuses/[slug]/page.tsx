@@ -60,15 +60,21 @@ export default async function SingleCampusPage({ params }: CampusPageProps) {
 
             <p className="text-slate-300 text-sm leading-relaxed">{campus.address}</p>
 
-            <div className="flex flex-wrap items-center gap-6 pt-2 text-xs sm:text-sm text-slate-300">
-              <span className="flex items-center gap-1.5 font-bold text-emerald-400">
-                <Phone className="w-4 h-4" /> {campus.phone}
-              </span>
-              <span className="flex items-center gap-1.5 text-blue-400 font-medium">
-                <Mail className="w-4 h-4" /> {campus.email}
-              </span>
-              <span className="flex items-center gap-1.5 text-amber-400">
-                <Clock className="w-4 h-4" /> {campus.workingHours}
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6 pt-2 text-xs sm:text-sm">
+              <a
+                href={`tel:${campus.phone.replace(/[^0-9+]/g, '')}`}
+                className="flex items-center gap-1.5 font-bold text-emerald-600 dark:text-emerald-400 hover:underline"
+              >
+                <Phone className="w-4 h-4 shrink-0" /> {campus.phone}
+              </a>
+              <a
+                href={`mailto:${campus.email}`}
+                className="flex items-center gap-1.5 font-bold text-blue-600 dark:text-blue-300 hover:underline"
+              >
+                <Mail className="w-4 h-4 shrink-0 text-blue-600 dark:text-blue-400" /> {campus.email}
+              </a>
+              <span className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-medium">
+                <Clock className="w-4 h-4 shrink-0" /> {campus.workingHours}
               </span>
             </div>
           </div>

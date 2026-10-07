@@ -159,10 +159,10 @@ export default function StudentDashboardClient({ student }: StudentDashboardClie
       <div className="flex items-center gap-2 border-b dark:border-slate-800 border-slate-200 pb-2 overflow-x-auto">
         <button
           onClick={() => setActiveTab('overview')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 cursor-pointer ${
+          className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 cursor-pointer shrink-0 ${
             activeTab === 'overview'
-              ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-              : 'dark:text-slate-400 text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25 ring-2 ring-blue-500/40'
+              : 'text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
           }`}
         >
           <TrendingUp className="w-4 h-4" />
@@ -171,10 +171,10 @@ export default function StudentDashboardClient({ student }: StudentDashboardClie
 
         <button
           onClick={() => setActiveTab('fees')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 cursor-pointer ${
+          className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 cursor-pointer shrink-0 ${
             activeTab === 'fees'
-              ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-              : 'dark:text-slate-400 text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25 ring-2 ring-blue-500/40'
+              : 'text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
           }`}
         >
           <CreditCard className="w-4 h-4" />
@@ -186,10 +186,10 @@ export default function StudentDashboardClient({ student }: StudentDashboardClie
 
         <button
           onClick={() => setActiveTab('interviews')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 cursor-pointer ${
+          className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 cursor-pointer shrink-0 ${
             activeTab === 'interviews'
-              ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-              : 'dark:text-slate-400 text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25 ring-2 ring-blue-500/40'
+              : 'text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
           }`}
         >
           <Award className="w-4 h-4" />
@@ -198,10 +198,10 @@ export default function StudentDashboardClient({ student }: StudentDashboardClie
 
         <button
           onClick={() => setActiveTab('notices')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 cursor-pointer ${
+          className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center gap-2 cursor-pointer shrink-0 ${
             activeTab === 'notices'
-              ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-              : 'dark:text-slate-400 text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25 ring-2 ring-blue-500/40'
+              : 'text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
           }`}
         >
           <FileText className="w-4 h-4" />
@@ -216,18 +216,18 @@ export default function StudentDashboardClient({ student }: StudentDashboardClie
         <div className="space-y-6">
           {/* 4 Stats Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="glass-card rounded-2xl p-5 border border-emerald-500/30 dark:bg-slate-900/90 bg-white space-y-2">
-              <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Lab Attendance</span>
-              <div className="text-3xl font-black text-emerald-500">{student.attendancePct}%</div>
+            <div className="glass-card rounded-2xl p-5 border border-emerald-500/30 dark:bg-slate-900/90 bg-white space-y-2 shadow-sm">
+              <span className="text-xs text-slate-700 dark:text-slate-300 font-bold uppercase tracking-wider block">Lab Attendance</span>
+              <div className="text-3xl font-black text-emerald-600 dark:text-emerald-400">{student.attendancePct}%</div>
               <div className="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
                 <div className="bg-emerald-500 h-full rounded-full" style={{ width: `${student.attendancePct}%` }} />
               </div>
-              <span className="text-[11px] text-slate-400 block">Excellent attendance record</span>
+              <span className="text-[11px] text-slate-600 dark:text-slate-400 font-medium block">Excellent attendance record</span>
             </div>
 
-            <div className="glass-card rounded-2xl p-5 border border-blue-500/30 dark:bg-slate-900/90 bg-white space-y-2">
-              <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Assignments</span>
-              <div className="text-3xl font-black text-blue-500">
+            <div className="glass-card rounded-2xl p-5 border border-blue-500/30 dark:bg-slate-900/90 bg-white space-y-2 shadow-sm">
+              <span className="text-xs text-slate-700 dark:text-slate-300 font-bold uppercase tracking-wider block">Assignments</span>
+              <div className="text-3xl font-black text-blue-600 dark:text-blue-400">
                 {student.assignmentsDone} / {student.assignmentsTot}
               </div>
               <div className="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
@@ -236,44 +236,44 @@ export default function StudentDashboardClient({ student }: StudentDashboardClie
                   style={{ width: `${(student.assignmentsDone / student.assignmentsTot) * 100}%` }}
                 />
               </div>
-              <span className="text-[11px] text-slate-400 block">Next due: Sunday midnight</span>
+              <span className="text-[11px] text-slate-600 dark:text-slate-400 font-medium block">Next due: Sunday midnight</span>
             </div>
 
-            <div className="glass-card rounded-2xl p-5 border border-purple-500/30 dark:bg-slate-900/90 bg-white space-y-2">
-              <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Lab Practical Score</span>
-              <div className="text-3xl font-black text-purple-400">{student.labScore} / 100</div>
+            <div className="glass-card rounded-2xl p-5 border border-purple-500/30 dark:bg-slate-900/90 bg-white space-y-2 shadow-sm">
+              <span className="text-xs text-slate-700 dark:text-slate-300 font-bold uppercase tracking-wider block">Lab Practical Score</span>
+              <div className="text-3xl font-black text-purple-600 dark:text-purple-400">{student.labScore} / 100</div>
               <div className="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
                 <div className="bg-purple-500 h-full rounded-full" style={{ width: `${student.labScore}%` }} />
               </div>
-              <span className="text-[11px] text-slate-400 block">Top 5% of cohort</span>
+              <span className="text-[11px] text-slate-600 dark:text-slate-400 font-medium block">Top 5% of cohort</span>
             </div>
 
-            <div className="glass-card rounded-2xl p-5 border border-amber-500/30 dark:bg-slate-900/90 bg-white space-y-2">
-              <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Curriculum Progress</span>
-              <div className="text-3xl font-black text-amber-400">72%</div>
+            <div className="glass-card rounded-2xl p-5 border border-amber-500/30 dark:bg-slate-900/90 bg-white space-y-2 shadow-sm">
+              <span className="text-xs text-slate-700 dark:text-slate-300 font-bold uppercase tracking-wider block">Curriculum Progress</span>
+              <div className="text-3xl font-black text-amber-600 dark:text-amber-400">72%</div>
               <div className="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
                 <div className="bg-amber-400 h-full rounded-full" style={{ width: '72%' }} />
               </div>
-              <span className="text-[11px] text-slate-400 block">Capstone Project in progress</span>
+              <span className="text-[11px] text-slate-600 dark:text-slate-400 font-medium block">Capstone Project in progress</span>
             </div>
           </div>
 
           {/* Active Course Module Progress */}
-          <div className="glass-card rounded-3xl p-6 sm:p-8 border border-blue-500/25 dark:bg-slate-900/90 bg-white space-y-4">
+          <div className="glass-card rounded-3xl p-6 sm:p-8 border border-blue-500/25 dark:bg-slate-900/90 bg-white space-y-4 shadow-sm">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-bold">Current Active Module</h3>
-              <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-500 text-xs font-bold">In Progress</span>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Current Active Module</h3>
+              <span className="px-3 py-1 rounded-full bg-blue-500/15 border border-blue-500/30 text-blue-700 dark:text-blue-300 text-xs font-bold">In Progress</span>
             </div>
             <div className="p-4 rounded-2xl dark:bg-slate-950/70 bg-slate-50 border border-slate-200 dark:border-slate-800 space-y-2">
-              <div className="font-bold text-sm">Module 4: Advanced Architecture & Production Labs</div>
-              <p className="text-xs dark:text-slate-400 text-slate-600 leading-relaxed">
+              <div className="font-bold text-sm text-slate-900 dark:text-white">Module 4: Advanced Architecture & Production Labs</div>
+              <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
                 Building scalable cloud architectures, containerized Docker microservices, automated CI/CD pipelines, and real-time database integrations.
               </p>
               <div className="flex flex-wrap gap-2 pt-2">
-                <span className="px-2.5 py-1 rounded-md bg-blue-500/10 text-blue-400 text-[11px] font-semibold">Docker</span>
-                <span className="px-2.5 py-1 rounded-md bg-purple-500/10 text-purple-400 text-[11px] font-semibold">PostgreSQL</span>
-                <span className="px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 text-[11px] font-semibold">Prisma ORM</span>
-                <span className="px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-400 text-[11px] font-semibold">Next.js 15 Server Actions</span>
+                <span className="px-2.5 py-1 rounded-md bg-blue-100 dark:bg-blue-500/20 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-[11px] font-bold">Docker</span>
+                <span className="px-2.5 py-1 rounded-md bg-purple-100 dark:bg-purple-500/20 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800 text-[11px] font-bold">PostgreSQL</span>
+                <span className="px-2.5 py-1 rounded-md bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-[11px] font-bold">Prisma ORM</span>
+                <span className="px-2.5 py-1 rounded-md bg-amber-100 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 text-[11px] font-bold">Next.js 15 Server Actions</span>
               </div>
             </div>
           </div>
@@ -283,13 +283,13 @@ export default function StudentDashboardClient({ student }: StudentDashboardClie
       {/* TAB: FEES & REMAINING BALANCE */}
       {activeTab === 'fees' && (
         <div className="space-y-6">
-          <div className="glass-card rounded-3xl p-6 sm:p-8 border border-blue-500/30 dark:bg-slate-900/90 bg-white space-y-6">
+          <div className="glass-card rounded-3xl p-6 sm:p-8 border border-blue-500/30 dark:bg-slate-900/90 bg-white space-y-6 shadow-sm">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b dark:border-slate-800 border-slate-200">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-blue-500">Official Fee Statement</span>
-                <h2 className="text-2xl font-black mt-1">Fee Breakdown & Payment Schedule</h2>
+                <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Official Fee Statement</span>
+                <h2 className="text-2xl font-black mt-1 text-slate-900 dark:text-white">Fee Breakdown & Payment Schedule</h2>
               </div>
-              <span className="px-3.5 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-500 text-xs font-bold">
+              <span className="px-3.5 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 text-xs font-bold">
                 Seat Locked with ₹1,000 ✅
               </span>
             </div>
@@ -297,51 +297,51 @@ export default function StudentDashboardClient({ student }: StudentDashboardClie
             {/* Fee Metrics */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="p-5 rounded-2xl dark:bg-slate-950/70 bg-slate-50 border border-slate-200 dark:border-slate-800 space-y-1">
-                <span className="text-xs text-slate-400 font-semibold block">Total Course Fee</span>
-                <div className="text-2xl font-black">₹{student.totalFees.toLocaleString()}</div>
-                <span className="text-[11px] text-slate-400">Standard Academic Tuition</span>
+                <span className="text-xs text-slate-700 dark:text-slate-300 font-bold block">Total Course Fee</span>
+                <div className="text-2xl font-black text-slate-900 dark:text-white">₹{student.totalFees.toLocaleString()}</div>
+                <span className="text-[11px] text-slate-600 dark:text-slate-400 font-medium">Standard Academic Tuition</span>
               </div>
 
-              <div className="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 space-y-1">
-                <span className="text-xs font-semibold block">Seat Fee Paid</span>
-                <div className="text-2xl font-black">₹{student.paidFees.toLocaleString()}</div>
-                <span className="text-[11px] text-emerald-400">Verified & Receipt Generated</span>
+              <div className="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 space-y-1">
+                <span className="text-xs font-bold block">Seat Fee Paid</span>
+                <div className="text-2xl font-black text-emerald-700 dark:text-emerald-400">₹{student.paidFees.toLocaleString()}</div>
+                <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-medium">Verified & Receipt Generated</span>
               </div>
 
-              <div className="p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-500 space-y-1">
-                <span className="text-xs font-semibold block">Remaining Tuition Due</span>
-                <div className="text-2xl font-black">₹{student.remainingFees.toLocaleString()}</div>
-                <span className="text-[11px] text-amber-400">Payable before batch orientation</span>
+              <div className="p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-400 space-y-1">
+                <span className="text-xs font-bold block">Remaining Tuition Due</span>
+                <div className="text-2xl font-black text-amber-700 dark:text-amber-400">₹{student.remainingFees.toLocaleString()}</div>
+                <span className="text-[11px] text-amber-700 dark:text-amber-400 font-medium">Payable before batch orientation</span>
               </div>
             </div>
 
             {/* Installment Plan Schedule */}
             <div className="space-y-3">
-              <h3 className="text-sm font-bold">Flexible Installment Options</h3>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Flexible Installment Options</h3>
               <div className="space-y-2 text-xs">
                 <div className="p-4 rounded-xl dark:bg-slate-950 bg-slate-50 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
                   <div>
-                    <span className="font-bold block">Installment 1: ₹{Math.round(student.remainingFees / 2).toLocaleString()}</span>
-                    <span className="text-slate-400 text-[11px]">Due Date: Oct 10, 2026 (Before Module 2)</span>
+                    <span className="font-bold text-slate-900 dark:text-white block">Installment 1: ₹{Math.round(student.remainingFees / 2).toLocaleString()}</span>
+                    <span className="text-slate-600 dark:text-slate-400 text-[11px] font-medium">Due Date: Oct 10, 2026 (Before Module 2)</span>
                   </div>
-                  <span className="px-2.5 py-1 rounded bg-amber-500/15 text-amber-400 font-semibold text-[11px]">Pending</span>
+                  <span className="px-2.5 py-1 rounded bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-400 font-bold text-[11px]">Pending</span>
                 </div>
 
                 <div className="p-4 rounded-xl dark:bg-slate-950 bg-slate-50 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
                   <div>
-                    <span className="font-bold block">Installment 2: ₹{Math.round(student.remainingFees / 2).toLocaleString()}</span>
-                    <span className="text-slate-400 text-[11px]">Due Date: Nov 15, 2026 (Before Placement Drives)</span>
+                    <span className="font-bold text-slate-900 dark:text-white block">Installment 2: ₹{Math.round(student.remainingFees / 2).toLocaleString()}</span>
+                    <span className="text-slate-600 dark:text-slate-400 text-[11px] font-medium">Due Date: Nov 15, 2026 (Before Placement Drives)</span>
                   </div>
-                  <span className="px-2.5 py-1 rounded bg-slate-500/15 text-slate-400 font-semibold text-[11px]">Upcoming</span>
+                  <span className="px-2.5 py-1 rounded bg-slate-500/15 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px]">Upcoming</span>
                 </div>
               </div>
             </div>
 
             {/* Pay Remaining Fee CTA */}
-            <div className="p-6 rounded-2xl bg-gradient-to-r from-blue-600/20 via-indigo-600/20 to-purple-600/20 border border-blue-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="p-6 rounded-2xl bg-gradient-to-r from-blue-600/15 via-indigo-600/15 to-purple-600/15 border border-blue-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
-                <h4 className="font-bold text-sm">Pay Remaining Tuition or Installment</h4>
-                <p className="text-xs dark:text-slate-300 text-slate-600 mt-0.5">
+                <h4 className="font-bold text-sm text-slate-900 dark:text-white">Pay Remaining Tuition or Installment</h4>
+                <p className="text-xs text-slate-700 dark:text-slate-300 mt-0.5">
                   Avail 0% interest EMI or pay via UPI, NetBanking, or Credit Card.
                 </p>
               </div>
@@ -360,13 +360,13 @@ export default function StudentDashboardClient({ student }: StudentDashboardClie
       {/* TAB: MOCK INTERVIEWS & CAREER */}
       {activeTab === 'interviews' && (
         <div className="space-y-6">
-          <div className="glass-card rounded-3xl p-6 sm:p-8 border border-purple-500/30 dark:bg-slate-900/90 bg-white space-y-6">
+          <div className="glass-card rounded-3xl p-6 sm:p-8 border border-purple-500/30 dark:bg-slate-900/90 bg-white space-y-6 shadow-sm">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4 border-b dark:border-slate-800 border-slate-200">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-purple-400">Career Mentorship Portal</span>
-                <h2 className="text-2xl font-black mt-1">1-on-1 Mock Technical Interviews</h2>
+                <span className="text-xs font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400">Career Mentorship Portal</span>
+                <h2 className="text-2xl font-black mt-1 text-slate-900 dark:text-white">1-on-1 Mock Technical Interviews</h2>
               </div>
-              <span className="px-3 py-1 rounded-full bg-purple-500/15 text-purple-400 text-xs font-bold">
+              <span className="px-3 py-1 rounded-full bg-purple-500/15 border border-purple-500/30 text-purple-700 dark:text-purple-300 text-xs font-bold">
                 {student.mockInterviewStatus}
               </span>
             </div>
@@ -384,22 +384,22 @@ export default function StudentDashboardClient({ student }: StudentDashboardClie
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-                <div className="p-3 rounded-xl bg-white/80 dark:bg-slate-950/60 border border-indigo-100 dark:border-slate-800 shadow-xs">
-                  <span className="text-slate-500 dark:text-slate-400 block font-bold text-[10px] uppercase tracking-wider">Date & Time</span>
+                <div className="p-3 rounded-xl bg-white/90 dark:bg-slate-950/70 border border-indigo-100 dark:border-slate-800 shadow-xs">
+                  <span className="text-slate-600 dark:text-slate-400 block font-bold text-[10px] uppercase tracking-wider">Date & Time</span>
                   <span className="font-black text-slate-900 dark:text-white text-sm block mt-1">{student.mockInterviewDate}</span>
                 </div>
-                <div className="p-3 rounded-xl bg-white/80 dark:bg-slate-950/60 border border-indigo-100 dark:border-slate-800 shadow-xs">
-                  <span className="text-slate-500 dark:text-slate-400 block font-bold text-[10px] uppercase tracking-wider">Assigned Tech Mentor</span>
+                <div className="p-3 rounded-xl bg-white/90 dark:bg-slate-950/70 border border-indigo-100 dark:border-slate-800 shadow-xs">
+                  <span className="text-slate-600 dark:text-slate-400 block font-bold text-[10px] uppercase tracking-wider">Assigned Tech Mentor</span>
                   <span className="font-black text-slate-900 dark:text-white text-sm block mt-1">Senior Tech Lead (Amazon)</span>
                 </div>
-                <div className="p-3 rounded-xl bg-white/80 dark:bg-slate-950/60 border border-indigo-100 dark:border-slate-800 shadow-xs">
-                  <span className="text-slate-500 dark:text-slate-400 block font-bold text-[10px] uppercase tracking-wider">Evaluation Format</span>
+                <div className="p-3 rounded-xl bg-white/90 dark:bg-slate-950/70 border border-indigo-100 dark:border-slate-800 shadow-xs">
+                  <span className="text-slate-600 dark:text-slate-400 block font-bold text-[10px] uppercase tracking-wider">Evaluation Format</span>
                   <span className="font-black text-slate-900 dark:text-white text-sm block mt-1">Live Coding + System Design (60 Min)</span>
                 </div>
               </div>
 
               <div className="pt-3 border-t border-indigo-200/80 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <span className="text-xs text-indigo-900 dark:text-indigo-300 font-bold">Google Meet invite sent to your registered email</span>
+                <span className="text-xs text-indigo-950 dark:text-indigo-300 font-bold">Google Meet invite sent to your registered email</span>
                 <button
                   onClick={() => alert('Meeting room opens 10 minutes prior to the scheduled slot.')}
                   className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-extrabold text-xs shadow-md shadow-indigo-500/20 transition-all cursor-pointer"
@@ -411,16 +411,16 @@ export default function StudentDashboardClient({ student }: StudentDashboardClie
 
             {/* Mentor Feedback & Placement Notes */}
             <div className="space-y-3">
-              <h3 className="text-sm font-bold">Recent Mentor Evaluation & Feedback</h3>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Recent Mentor Evaluation & Feedback</h3>
               <div className="p-5 rounded-2xl dark:bg-slate-950/70 bg-slate-50 border border-slate-200 dark:border-slate-800 space-y-2">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold dark:text-white text-slate-900">Module 3 Evaluation Round</span>
-                  <span className="text-emerald-500 font-semibold">Score: 92/100 (Cleared)</span>
+                  <span className="font-bold text-slate-900 dark:text-white">Module 3 Evaluation Round</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">Score: 92/100 (Cleared)</span>
                 </div>
-                <p className="text-xs dark:text-slate-300 text-slate-600 leading-relaxed italic">
+                <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed italic">
                   &ldquo;{student.mockFeedback}&rdquo;
                 </p>
-                <div className="pt-2 flex items-center gap-4 text-xs dark:text-slate-400 text-slate-500">
+                <div className="pt-2 flex items-center gap-4 text-xs text-slate-600 dark:text-slate-400 font-medium">
                   <span>DSA: 9.0/10</span>
                   <span>System Design: 8.5/10</span>
                   <span>Behavioral / HR: 9.5/10</span>
@@ -434,36 +434,36 @@ export default function StudentDashboardClient({ student }: StudentDashboardClie
       {/* TAB: NOTICES & LABS */}
       {activeTab === 'notices' && (
         <div className="space-y-6">
-          <div className="glass-card rounded-3xl p-6 sm:p-8 border border-blue-500/30 dark:bg-slate-900/90 bg-white space-y-6">
-            <h2 className="text-2xl font-black">Important Academy Notices & Resources</h2>
+          <div className="glass-card rounded-3xl p-6 sm:p-8 border border-blue-500/30 dark:bg-slate-900/90 bg-white space-y-6 shadow-sm">
+            <h2 className="text-2xl font-black text-slate-900 dark:text-white">Important Academy Notices & Resources</h2>
 
             <div className="space-y-3 text-xs sm:text-sm">
               <div className="p-4 rounded-2xl dark:bg-slate-950/80 bg-slate-50 border border-slate-200 dark:border-slate-800 space-y-1">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold dark:text-white text-slate-900">Physical Lab Timing & Workstation Allotment</span>
-                  <span className="text-[11px] text-slate-400">Campus Notice</span>
+                  <span className="font-bold text-slate-900 dark:text-white">Physical Lab Timing & Workstation Allotment</span>
+                  <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400">Campus Notice</span>
                 </div>
-                <p className="text-xs dark:text-slate-300 text-slate-600 leading-relaxed">
-                  Your designated campus is <strong>{student.campus}</strong>. High-speed GPU workstation labs are open Mon - Sun from 8:00 AM to 9:00 PM. Please carry your student ID card or digital admission slip for biometric check-in.
+                <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+                  Your designated campus is <strong className="text-slate-900 dark:text-white">{student.campus}</strong>. High-speed GPU workstation labs are open Mon - Sun from 8:00 AM to 9:00 PM. Please carry your student ID card or digital admission slip for biometric check-in.
                 </p>
               </div>
 
               <div className="p-4 rounded-2xl dark:bg-slate-950/80 bg-slate-50 border border-slate-200 dark:border-slate-800 space-y-1">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold dark:text-white text-slate-900">GitHub Classroom & LMS Portal Credentials</span>
-                  <span className="text-[11px] text-emerald-500 font-semibold">Active</span>
+                  <span className="font-bold text-slate-900 dark:text-white">GitHub Classroom & LMS Portal Credentials</span>
+                  <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold">Active</span>
                 </div>
-                <p className="text-xs dark:text-slate-300 text-slate-600 leading-relaxed">
-                  LMS access is synced with your email (<strong>{student.email}</strong>). Capstone project repositories and code review automated tests are accessible 24/7.
+                <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+                  LMS access is synced with your email (<strong className="text-slate-900 dark:text-white">{student.email}</strong>). Capstone project repositories and code review automated tests are accessible 24/7.
                 </p>
               </div>
 
               <div className="p-4 rounded-2xl dark:bg-slate-950/80 bg-slate-50 border border-slate-200 dark:border-slate-800 space-y-1">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold dark:text-white text-slate-900">Upcoming Mega Placement Drive Registration</span>
-                  <span className="text-[11px] text-purple-400 font-semibold">Admissions Drive</span>
+                  <span className="font-bold text-slate-900 dark:text-white">Upcoming Mega Placement Drive Registration</span>
+                  <span className="text-[11px] text-purple-600 dark:text-purple-400 font-bold">Admissions Drive</span>
                 </div>
-                <p className="text-xs dark:text-slate-300 text-slate-600 leading-relaxed">
+                <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
                   Hiring partners including Amazon, Microsoft, Infosys, and Deloitte will conduct on-campus hiring for students who have cleared Module 4 and the primary technical mock interview.
                 </p>
               </div>
@@ -472,14 +472,14 @@ export default function StudentDashboardClient({ student }: StudentDashboardClie
             {/* Helpline Box */}
             <div className="p-5 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
               <div>
-                <span className="font-bold text-blue-500 block">Need Student Coordinator Assistance?</span>
-                <span className="text-slate-400">Call Academic Support Helpline: +91 800-999-8800 (9 AM - 7 PM)</span>
+                <span className="font-bold text-blue-700 dark:text-blue-400 block">Need Student Coordinator Assistance?</span>
+                <span className="text-slate-600 dark:text-slate-400">Call Academic Support Helpline: +91 800-999-8800 (9 AM - 7 PM)</span>
               </div>
               <a
                 href="https://wa.me/918009998800"
                 target="_blank"
                 rel="noreferrer"
-                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-all shrink-0"
+                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-all shrink-0 shadow-md shadow-emerald-500/20"
               >
                 Chat on WhatsApp
               </a>

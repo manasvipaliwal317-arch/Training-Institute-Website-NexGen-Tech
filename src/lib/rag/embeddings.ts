@@ -1,5 +1,4 @@
-const DEFAULT_API_KEY = process.env.GEMINI_API_KEY || '';
-const EMBEDDING_MODEL = process.env.GEMINI_EMBEDDING_MODEL || 'gemini-embedding-001';
+const EMBEDDING_MODEL = process.env.GEMINI_EMBEDDING_MODEL || 'models/gemini-embedding-001';
 
 /**
  * Calculates cosine similarity between two numeric vectors.
@@ -28,21 +27,21 @@ export function cosineSimilarity(vecA: number[], vecB: number[]): number {
  */
 export async function generateEmbedding(
   text: string,
-  apiKey: string = DEFAULT_API_KEY
+  apiKey?: string
 ): Promise<number[]> {
-  const modelName = EMBEDDING_MODEL.startsWith('models/')
-    ? EMBEDDING_MODEL
-    : `models/${EMBEDDING_MODEL}`;
+  const activeKey = apiKey || process.env.GEMINI_API_KEY || '';
+  const rawModel = process.env.GEMINI_EMBEDDING_MODEL || EMBEDDING_MODEL || 'models/gemini-embedding-001';
+  const modelName = rawModel.startsWith('models/') ? rawModel : `models/${rawModel}`;
 
   const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/${modelName}:embedContent?key=${apiKey}`,
+    `https://generativelanguage.googleapis.com/v1beta/${modelName}:embedContent?key=${activeKey}`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         content: { parts: [{ text: text.trim() }] },
       }),
-      signal: AbortSignal.timeout(15000),
+      signal: AbortSignal.timeout(10000),
     }
   );
 
@@ -66,13 +65,13 @@ export async function generateEmbedding(
  */
 export async function batchGenerateEmbeddings(
   texts: string[],
-  apiKey: string = DEFAULT_API_KEY
+  apiKey?: string
 ): Promise<number[][]> {
   if (texts.length === 0) return [];
 
-  const modelName = EMBEDDING_MODEL.startsWith('models/')
-    ? EMBEDDING_MODEL
-    : `models/${EMBEDDING_MODEL}`;
+  const activeKey = apiKey || process.env.GEMINI_API_KEY || '';
+  const rawModel = process.env.GEMINI_EMBEDDING_MODEL || EMBEDDING_MODEL || 'gemini-embedding-001';
+  const modelName = rawModel.startsWith('models/') ? rawModel : `models/${rawModel}`;
 
   // Batch in chunks of 50 to respect API payload limits
   const BATCH_SIZE = 50;
@@ -86,7 +85,7 @@ export async function batchGenerateEmbeddings(
     }));
 
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/${modelName}:batchEmbedContents?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/${modelName}:batchEmbedContents?key=${activeKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

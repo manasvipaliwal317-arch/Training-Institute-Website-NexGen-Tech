@@ -16,7 +16,7 @@ export interface RagMetadata {
   question?: string;
   contentHash?: string;
   updatedAt?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface RagDocumentChunk {
@@ -39,6 +39,25 @@ export type QueryCategory =
   | 'MIXED'
   | 'UNSUPPORTED';
 
+export type QueryIntent =
+  | 'course_inquiry'
+  | 'fees_and_scholarships'
+  | 'batches_and_timings'
+  | 'technical_explanation'
+  | 'placements_and_careers'
+  | 'admissions_and_refunds'
+  | 'campus_and_facilities'
+  | 'general_counseling';
+
+export interface QueryAnalysis {
+  intent: QueryIntent;
+  targetCourseSlug?: string;
+  targetCourseName?: string;
+  ragExtractionFields: string[]; // e.g., ['tuition_fees', 'batch_schedules', 'tools', 'curriculum']
+  llmGenerationGoals: string[]; // e.g., ['explain_concepts', 'mentor_career_path', 'code_solution']
+  normalizedQuery: string;
+}
+
 export interface RagQueryClassification {
   category: QueryCategory;
   isInstituteQuery: boolean;
@@ -47,6 +66,7 @@ export interface RagQueryClassification {
   confidence: number;
   reformulatedQuery: string;
   detectedEntities?: string[];
+  analysis: QueryAnalysis;
 }
 
 export type ResponseSource = 'rag' | 'general' | 'rag_unavailable';

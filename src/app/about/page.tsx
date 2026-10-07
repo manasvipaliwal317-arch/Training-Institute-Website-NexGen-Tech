@@ -94,50 +94,52 @@ export default async function AboutPage() {
       </section>
 
       {/* Mission, Vision & Values */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <StaggerItem>
-            <MotionCard className="h-full">
-              <div className="glass-card rounded-2xl p-8 border border-slate-800 space-y-4 h-full">
-                <div className="w-12 h-12 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center">
-                  <Target className="w-6 h-6" />
+      <section className="relative w-full py-16 px-4 sm:px-6 lg:px-8 bg-[#dbeafe] dark:bg-[#0c182b] overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <StaggerItem>
+              <MotionCard className="h-full">
+                <div className="rounded-2xl p-8 border-2 border-blue-200/90 dark:border-slate-800 bg-white dark:bg-slate-900/95 space-y-4 hover:border-blue-500 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 h-full group shadow-md">
+                  <div className="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-600/20 text-blue-700 dark:text-blue-400 flex items-center justify-center border border-blue-300 dark:border-blue-500/30 group-hover:scale-115 group-hover:rotate-6 transition-all duration-300 shadow-sm">
+                    <Target className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-xl font-black text-slate-950 dark:text-white">Our Mission</h3>
+                  <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed font-normal">
+                    To empower students and working professionals with deep technical expertise, practical project exposure, and soft skills needed to excel in top tech organizations worldwide.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-white">Our Mission</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">
-                  To empower students and working professionals with deep technical expertise, practical project exposure, and soft skills needed to excel in top tech organizations worldwide.
-                </p>
-              </div>
-            </MotionCard>
-          </StaggerItem>
+              </MotionCard>
+            </StaggerItem>
 
-          <StaggerItem>
-            <MotionCard className="h-full">
-              <div className="glass-card rounded-2xl p-8 border border-slate-800 space-y-4 h-full">
-                <div className="w-12 h-12 rounded-xl bg-purple-600/20 text-purple-400 flex items-center justify-center">
-                  <Eye className="w-6 h-6" />
+            <StaggerItem>
+              <MotionCard className="h-full">
+                <div className="rounded-2xl p-8 border-2 border-purple-200/90 dark:border-slate-800 bg-white dark:bg-slate-900/95 space-y-4 hover:border-purple-500 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 h-full group shadow-md">
+                  <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-600/20 text-purple-700 dark:text-purple-400 flex items-center justify-center border border-purple-300 dark:border-purple-500/30 group-hover:scale-115 group-hover:rotate-6 transition-all duration-300 shadow-sm">
+                    <Eye className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-xl font-black text-slate-950 dark:text-white">Our Vision</h3>
+                  <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed font-normal">
+                    To be recognized globally as the gold standard in hands-on IT education, pioneering new learning methodologies in AI, Cloud Computing, Cyber Defense, and Software Engineering.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-white">Our Vision</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">
-                  To be recognized globally as the gold standard in hands-on IT education, pioneering new learning methodologies in AI, Cloud Computing, Cyber Defense, and Software Engineering.
-                </p>
-              </div>
-            </MotionCard>
-          </StaggerItem>
+              </MotionCard>
+            </StaggerItem>
 
-          <StaggerItem>
-            <MotionCard className="h-full">
-              <div className="glass-card rounded-2xl p-8 border border-slate-800 space-y-4 h-full">
-                <div className="w-12 h-12 rounded-xl bg-emerald-600/20 text-emerald-400 flex items-center justify-center">
-                  <ShieldCheck className="w-6 h-6" />
+            <StaggerItem>
+              <MotionCard className="h-full">
+                <div className="rounded-2xl p-8 border-2 border-emerald-200/90 dark:border-slate-800 bg-white dark:bg-slate-900/95 space-y-4 hover:border-emerald-500 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 h-full group shadow-md">
+                  <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-600/20 text-emerald-700 dark:text-emerald-400 flex items-center justify-center border border-emerald-300 dark:border-emerald-500/30 group-hover:scale-115 group-hover:rotate-6 transition-all duration-300 shadow-sm">
+                    <ShieldCheck className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-xl font-black text-slate-950 dark:text-white">Our Core Values</h3>
+                  <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed font-normal">
+                    Uncompromising quality, hands-on rigor, continuous innovation, mentor transparency, and unwavering commitment to student career outcomes.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-white">Our Core Values</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">
-                  Uncompromising quality, hands-on rigor, continuous innovation, mentor transparency, and unwavering commitment to student career outcomes.
-                </p>
-              </div>
-            </MotionCard>
-          </StaggerItem>
-        </StaggerContainer>
+              </MotionCard>
+            </StaggerItem>
+          </StaggerContainer>
+        </div>
       </section>
 
       {/* Trainer Profiles Section */}
@@ -217,36 +219,36 @@ export default async function AboutPage() {
       </section>
 
       {/* Placement Assistance Ecosystem */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="glass-card rounded-3xl p-8 sm:p-12 border border-slate-800 space-y-8">
+      <section className="relative w-full py-16 px-4 sm:px-6 lg:px-8 bg-[#d1fae5] dark:bg-[#06241a] overflow-hidden">
+        <div className="max-w-7xl mx-auto space-y-8">
           <div className="text-center space-y-2 max-w-2xl mx-auto">
-            <div className="text-xs font-bold uppercase tracking-wider text-emerald-400">Career Assistance</div>
-            <h2 className="text-3xl font-black text-white">Our 4-Step Placement Accelerator</h2>
+            <div className="text-xs font-black uppercase tracking-wider text-emerald-900 dark:text-emerald-400">Career Assistance</div>
+            <h2 className="text-3xl font-black text-slate-950 dark:text-white">Our 4-Step Placement Accelerator</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="p-6 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
-              <div className="text-xs font-extrabold text-blue-400 uppercase">Step 01</div>
-              <h4 className="font-bold text-white text-base">Profile & Portfolio Building</h4>
-              <p className="text-xs text-slate-400">Crafting ATS-friendly resumes, GitHub portfolios, and Behance design showcases.</p>
+            <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/95 border-2 border-emerald-300/80 dark:border-slate-800 space-y-2 hover:-translate-y-1 hover:shadow-xl hover:border-blue-500 transition-all duration-300 group shadow-md">
+              <div className="text-xs font-black text-blue-700 dark:text-blue-400 uppercase">Step 01</div>
+              <h4 className="font-black text-slate-950 dark:text-white text-base">Profile & Portfolio Building</h4>
+              <p className="text-xs text-slate-700 dark:text-slate-300 font-medium">Crafting ATS-friendly resumes, GitHub portfolios, and Behance design showcases.</p>
             </div>
 
-            <div className="p-6 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
-              <div className="text-xs font-extrabold text-purple-400 uppercase">Step 02</div>
-              <h4 className="font-bold text-white text-base">Technical Mock Interviews</h4>
-              <p className="text-xs text-slate-400">1-on-1 coding rounds and System Design mock sessions with senior engineers.</p>
+            <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/95 border-2 border-emerald-300/80 dark:border-slate-800 space-y-2 hover:-translate-y-1 hover:shadow-xl hover:border-purple-500 transition-all duration-300 group shadow-md">
+              <div className="text-xs font-black text-purple-700 dark:text-purple-400 uppercase">Step 02</div>
+              <h4 className="font-black text-slate-950 dark:text-white text-base">Technical Mock Interviews</h4>
+              <p className="text-xs text-slate-700 dark:text-slate-300 font-medium">1-on-1 coding rounds and System Design mock sessions with senior engineers.</p>
             </div>
 
-            <div className="p-6 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
-              <div className="text-xs font-extrabold text-emerald-400 uppercase">Step 03</div>
-              <h4 className="font-bold text-white text-base">Direct Recruitment Drives</h4>
-              <p className="text-xs text-slate-400">Exclusive hiring drives with 450+ partner companies and fast-track interviews.</p>
+            <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/95 border-2 border-emerald-300/80 dark:border-slate-800 space-y-2 hover:-translate-y-1 hover:shadow-xl hover:border-emerald-500 transition-all duration-300 group shadow-md">
+              <div className="text-xs font-black text-emerald-700 dark:text-emerald-400 uppercase">Step 03</div>
+              <h4 className="font-black text-slate-950 dark:text-white text-base">Direct Recruitment Drives</h4>
+              <p className="text-xs text-slate-700 dark:text-slate-300 font-medium">Exclusive hiring drives with 450+ partner companies and fast-track interviews.</p>
             </div>
 
-            <div className="p-6 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
-              <div className="text-xs font-extrabold text-amber-400 uppercase">Step 04</div>
-              <h4 className="font-bold text-white text-base">Offer Negotiation & Onboarding</h4>
-              <p className="text-xs text-slate-400">Guidance on CTC negotiation, offer evaluation, and workplace transition.</p>
+            <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/95 border-2 border-emerald-300/80 dark:border-slate-800 space-y-2 hover:-translate-y-1 hover:shadow-xl hover:border-amber-500 transition-all duration-300 group shadow-md">
+              <div className="text-xs font-black text-amber-700 dark:text-amber-400 uppercase">Step 04</div>
+              <h4 className="font-black text-slate-950 dark:text-white text-base">Offer Negotiation & Onboarding</h4>
+              <p className="text-xs text-slate-700 dark:text-slate-300 font-medium">Guidance on CTC negotiation, offer evaluation, and workplace transition.</p>
             </div>
           </div>
         </div>

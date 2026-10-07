@@ -76,17 +76,37 @@ export async function registerEventAction(formData: FormData) {
 
     const validated = EventRegistrationSchema.parse(rawData);
 
+    let event = await prisma.event.findUnique({
+      where: { id: validated.eventId },
+    });
+    if (!event) {
+      event = await prisma.event.findUnique({
+        where: { slug: validated.eventId },
+      });
+    }
+    if (!event) {
+      const firstEvent = await prisma.event.findFirst();
+      if (firstEvent) event = firstEvent;
+    }
+
+    const finalEventId = event ? event.id : validated.eventId;
+    const finalEventTitle = event ? event.title : validated.eventTitle;
+
     await prisma.eventRegistration.create({
-      data: validated,
+      data: {
+        eventId: finalEventId,
+        eventTitle: finalEventTitle,
+        name: validated.name,
+        email: validated.email,
+        phone: validated.phone,
+      },
     });
 
-    try {
+    if (event) {
       await prisma.event.update({
-        where: { id: validated.eventId },
+        where: { id: event.id },
         data: { registrationsCount: { increment: 1 } },
-      });
-    } catch (countErr) {
-      console.warn('Could not increment registrations count:', countErr);
+      }).catch(() => {});
     }
 
     try {

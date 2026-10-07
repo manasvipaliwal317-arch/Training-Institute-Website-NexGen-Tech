@@ -31,34 +31,34 @@ export default function FacultyMovingChain({ trainers }: FacultyMovingChainProps
           {chainList.map((t, idx) => (
             <div key={`${t.id}-${idx}`} className="flex items-center gap-6 shrink-0">
               {/* Faculty Card Link in the Chain */}
-              <div className="w-80 glass-card glass-card-hover rounded-2xl p-6 border border-slate-200/80 dark:border-blue-500/30 bg-gradient-to-br from-white via-sky-50/50 to-indigo-50/40 dark:from-slate-900 dark:via-indigo-950/40 dark:to-slate-900 shadow-md hover:shadow-xl space-y-4 hover:border-blue-400 transition-all duration-300 whitespace-normal group">
+              <div className="w-80 rounded-2xl p-6 border-2 border-indigo-200/90 dark:border-indigo-500/30 bg-white dark:bg-slate-900/95 shadow-lg hover:shadow-2xl space-y-4 hover:border-indigo-500 transition-all duration-300 whitespace-normal group">
                 <div className="flex items-center gap-4">
-                  <div className="relative w-16 h-16 rounded-2xl overflow-hidden border-2 border-blue-500/40 shrink-0 shadow-md group-hover:scale-105 transition-transform duration-500">
+                  <div className="relative w-16 h-16 rounded-2xl overflow-hidden border-2 border-indigo-500/40 shrink-0 shadow-md group-hover:scale-105 transition-transform duration-500">
                     <Image src={t.photo} alt={t.name} fill className="object-cover" />
                   </div>
                   <div>
-                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-[10px] font-bold uppercase tracking-wider">
+                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-100 border border-indigo-300 text-indigo-800 dark:bg-blue-500/10 dark:border-blue-500/30 dark:text-blue-400 text-[10px] font-black uppercase tracking-wider">
                       Ex-{t.formerCompany}
                     </div>
-                    <h3 className="text-base font-black dark:text-white text-slate-900 group-hover:text-blue-500 transition-colors">
+                    <h3 className="text-base font-black dark:text-white text-slate-950 group-hover:text-indigo-600 transition-colors">
                       {t.name}
                     </h3>
-                    <p className="text-xs font-semibold text-purple-600 dark:text-purple-400 line-clamp-1">
+                    <p className="text-xs font-bold text-purple-700 dark:text-purple-400 line-clamp-1">
                       {t.role}
                     </p>
                   </div>
                 </div>
 
-                <p className="dark:text-slate-400 text-slate-600 text-xs line-clamp-2 leading-relaxed font-normal">
+                <p className="dark:text-slate-300 text-slate-700 text-xs line-clamp-2 leading-relaxed font-normal">
                   {t.bio}
                 </p>
 
-                <div className="pt-3 border-t dark:border-slate-800/80 border-slate-300/80 flex items-center justify-between text-xs">
-                  <span className="font-semibold dark:text-slate-300 text-slate-700 flex items-center gap-1">
-                    <Award className="w-3.5 h-3.5 text-blue-500" />
+                <div className="pt-3 border-t dark:border-slate-800/80 border-indigo-100 flex items-center justify-between text-xs">
+                  <span className="font-bold dark:text-slate-300 text-slate-800 flex items-center gap-1">
+                    <Award className="w-3.5 h-3.5 text-indigo-600 dark:text-blue-400" />
                     {t.experienceYrs}+ Yrs Experience
                   </span>
-                  <span className="font-extrabold text-amber-500 dark:text-amber-400 flex items-center gap-1">
+                  <span className="font-black text-amber-500 dark:text-amber-400 flex items-center gap-1">
                     <Star className="w-3.5 h-3.5 fill-amber-400" />
                     {t.rating}
                   </span>

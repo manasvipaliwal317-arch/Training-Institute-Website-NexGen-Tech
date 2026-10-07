@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
@@ -12,6 +12,7 @@ import {
   Layers,
   Users,
   Star,
+  ChevronLeft,
   ChevronRight,
   BookOpen,
   Sparkles,
@@ -65,6 +66,33 @@ export default function CourseCatalogClient({
   const [sortBy, setSortBy] = useState('popular');
   const [modalOpen, setModalOpen] = useState(false);
   const [activeCourseModal, setActiveCourseModal] = useState<{ slug: string; name: string } | null>(null);
+
+  // Category Slider Reference & Scroll State
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
+    if (sliderRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
+      setCanScrollLeft(scrollLeft > 8);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 8);
+    }
+  };
+
+  useEffect(() => {
+    checkScroll();
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
+  }, [categories]);
+
+  const slide = (direction: 'left' | 'right') => {
+    if (sliderRef.current) {
+      const scrollAmount = direction === 'left' ? -280 : 280;
+      sliderRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      setTimeout(checkScroll, 350);
+    }
+  };
 
   useEffect(() => {
     if (categoryFromQuery !== null) {
@@ -168,31 +196,71 @@ export default function CourseCatalogClient({
           </div>
         </div>
 
-        {/* Category Pills Bar */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none text-xs">
+        {/* Category Slider Bar - Single Line with Left/Right Slide Controls and Smooth Track */}
+        <div className="relative flex items-center gap-2 pt-1">
+          {/* Slide Left Button */}
           <button
-            onClick={() => setSelectedCategory('')}
-            className={`px-4 py-2 rounded-xl font-semibold whitespace-nowrap transition-all ${
-              selectedCategory === ''
-                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
-                : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:bg-slate-800'
+            type="button"
+            onClick={() => slide('left')}
+            disabled={!canScrollLeft}
+            aria-label="Slide Left"
+            title="Slide Left"
+            className={`p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-white shadow-sm transition-all shrink-0 cursor-pointer ${
+              canScrollLeft
+                ? 'opacity-100 hover:bg-blue-600 hover:text-white hover:border-blue-600 active:scale-90 shadow-md'
+                : 'opacity-25 cursor-not-allowed pointer-events-none'
             }`}
           >
-            All Programs ({courses.length})
+            <ChevronLeft className="w-4 h-4" />
           </button>
-          {categories.map((cat) => (
+
+          {/* Slider Track (Single line horizontal scroll with sleek slide bar) */}
+          <div
+            ref={sliderRef}
+            onScroll={checkScroll}
+            className="flex-1 flex items-center gap-2 overflow-x-auto scroll-smooth py-1 scrollbar-thin select-none text-xs"
+            style={{ scrollbarWidth: 'thin' }}
+          >
             <button
-              key={cat.id}
-              onClick={() => setSelectedCategory(cat.slug)}
-              className={`px-4 py-2 rounded-xl font-semibold whitespace-nowrap transition-all ${
-                selectedCategory === cat.slug
+              onClick={() => setSelectedCategory('')}
+              className={`px-4 py-2 rounded-xl font-bold whitespace-nowrap shrink-0 transition-all cursor-pointer active:scale-95 ${
+                selectedCategory === ''
                   ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
-                  : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:bg-slate-800'
+                  : 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-blue-400 dark:hover:border-blue-500 shadow-xs'
               }`}
             >
-              {cat.name}
+              All Programs ({courses.length})
             </button>
-          ))}
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.slug)}
+                className={`px-4 py-2 rounded-xl font-bold whitespace-nowrap shrink-0 transition-all cursor-pointer active:scale-95 ${
+                  selectedCategory === cat.slug
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
+                    : 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-blue-400 dark:hover:border-blue-500 shadow-xs'
+                }`}
+              >
+                {cat.name}
+              </button>
+            ))}
+          </div>
+
+          {/* Slide Right Button */}
+          <button
+            type="button"
+            onClick={() => slide('right')}
+            disabled={!canScrollRight}
+            aria-label="Slide Right"
+            title="Slide Right"
+            className={`p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-white shadow-sm transition-all shrink-0 cursor-pointer ${
+              canScrollRight
+                ? 'opacity-100 hover:bg-blue-600 hover:text-white hover:border-blue-600 active:scale-90 shadow-md'
+                : 'opacity-25 cursor-not-allowed pointer-events-none'
+            }`}
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
@@ -299,18 +367,20 @@ export default function CourseCatalogClient({
 
                     <div className="flex items-center gap-2 shrink-0">
                       <button
+                        type="button"
                         onClick={() => {
                           setActiveCourseModal({ slug: course.slug, name: course.title });
                           setModalOpen(true);
                         }}
-                        className="px-3.5 py-2 rounded-xl dark:bg-slate-800 bg-slate-200 hover:bg-slate-300 dark:hover:bg-slate-700 dark:text-slate-200 text-slate-800 text-xs font-semibold transition-colors shrink-0 cursor-pointer"
-                        title="Book Demo"
+                        className="px-3.5 py-2 rounded-xl dark:bg-slate-800 bg-slate-200 hover:bg-slate-300 dark:hover:bg-slate-700 dark:text-slate-200 text-slate-800 text-xs font-bold transition-all active:scale-95 hover:scale-105 shrink-0 cursor-pointer shadow-xs"
+                        title="Book Free Demo"
                       >
                         Demo
                       </button>
                       <Link
                         href={`/courses/${course.slug}`}
-                        className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-all shadow-md shadow-blue-600/20 flex items-center gap-1.5 whitespace-nowrap shrink-0"
+                        className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-95 hover:scale-105 text-white font-bold text-xs transition-all shadow-md shadow-blue-600/25 flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
+                        title="View Detailed Syllabus"
                       >
                         <span>Syllabus</span>
                         <ChevronRight className="w-4 h-4 shrink-0" />

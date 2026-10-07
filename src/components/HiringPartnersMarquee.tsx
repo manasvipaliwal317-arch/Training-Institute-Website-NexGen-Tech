@@ -112,26 +112,17 @@ const PARTNERS: Partner[] = [
 ];
 
 function EqualizerBars() {
-  const [randomHeights, setRandomHeights] = useState<number[]>([]);
-
-  useEffect(() => {
-    // initial state to avoid hydration mismatch delay if possible, but it's client side anyway.
-    setRandomHeights(Array.from({ length: 32 }, () => Math.floor(Math.random() * 28) + 8));
-
-    const interval = setInterval(() => {
-      const heights = Array.from({ length: 32 }, () => Math.floor(Math.random() * 28) + 8);
-      setRandomHeights(heights);
-    }, 500);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <div className="absolute inset-0 pointer-events-none opacity-25 flex items-end justify-between px-4 z-0">
-      {randomHeights.map((h, i) => (
+    <div className="absolute inset-0 pointer-events-none opacity-20 flex items-end justify-between px-4 z-0 overflow-hidden">
+      {Array.from({ length: 32 }).map((_, i) => (
         <div
           key={i}
-          className="w-1.5 rounded-t-full bg-gradient-to-t from-blue-600 via-indigo-500 to-purple-400 transition-all duration-500 ease-out"
-          style={{ height: `${h || 0}px` }}
+          className="w-1.5 rounded-t-full bg-gradient-to-t from-blue-600 via-indigo-500 to-purple-400"
+          style={{
+            height: '16px',
+            animation: `equalizer-pulse ${1.1 + (i % 5) * 0.25}s ease-in-out infinite alternate`,
+            animationDelay: `${(i * 0.07).toFixed(2)}s`,
+          }}
         />
       ))}
     </div>

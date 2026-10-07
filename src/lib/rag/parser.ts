@@ -46,7 +46,7 @@ export function extractSemanticChunks(): RagDocumentChunk[] {
     // 1. Corporate Identity, Vision, and Platform Overview
     {
       id: 'chunk_corp_identity_overview',
-      text: `SECTION: 1. Corporate Identity, Vision, and Platform Overview
+      text: `Corporate Identity, Vision, and Platform Overview
 Institute Name: NEXGENTECH Academy and Research (Brand Identity: Tech Nova Institute Web Platform)
 Motto / Tagline: "Learn Today. Lead Tomorrow."
 Organizational Focus: Enterprise-grade IT training, applied computer science research, career-transition bootcamps, and corporate skilling.
@@ -55,7 +55,7 @@ Mission Statement: To bridge academic education and fast-moving technological pa
       metadata: {
         source: sourceName,
         document: docFilename,
-        section: '1. Corporate Identity, Vision, and Platform Overview',
+        section: 'Corporate Identity, Vision, and Platform Overview',
         type: 'institutional_knowledge',
         page: 1,
       },
@@ -64,7 +64,7 @@ Mission Statement: To bridge academic education and fast-moving technological pa
     // 2. Executive Leadership & Department Heads
     {
       id: 'chunk_leadership_directory',
-      text: `SECTION: 2. Executive Leadership, Department Heads & Key Personnel Directory
+      text: `Executive Leadership, Department Heads & Key Personnel Directory
 NexgenTech Academy & Research is governed by enterprise engineers, research scientists, and academic leaders:
 - Dr. Rajeshwar V. Sharma: Chief Executive Officer (CEO) & Co-Founder | Executive Leadership | Direct Contact Desk: ceo@nexgentechacademy.com. Leads strategic vision, institutional partnerships, and educational quality. Holds a PhD in Distributed Computing with 20+ years of engineering leadership experience.
 - Dr. Ananya Mukherjee: Chief Technology Officer (CTO) & Head of AI Labs | R&D & Applied AI Research | Direct Contact Desk: research@nexgentechacademy.com. Directs NexgenTech Labs, overseeing research fellowships, LLM architectures, RAG engineering, and open-source contributions.
@@ -76,7 +76,7 @@ NexgenTech Academy & Research is governed by enterprise engineers, research scie
       metadata: {
         source: sourceName,
         document: docFilename,
-        section: '2. Executive Leadership, Department Heads & Key Personnel Directory',
+        section: 'Executive Leadership, Department Heads & Key Personnel Directory',
         type: 'leadership',
         page: 2,
       },
@@ -85,7 +85,7 @@ NexgenTech Academy & Research is governed by enterprise engineers, research scie
     // 3. Legal Entity, Accreditations & Transparent Disclosures
     {
       id: 'chunk_legal_accreditations',
-      text: `SECTION: 3. Legal Entity, Accreditations & Transparent Disclosures
+      text: `Legal Entity, Accreditations & Transparent Disclosures
 - Corporate Entity: NexgenTech Academy & Research Private Limited (Incorporated under the Companies Act, 2013).
 - CIN (Corporate Identity Number): U72900TG2020PTC148920
 - GSTIN: 36AABCN1234F1Z8 (Telangana) | 29AABCN1234F1Z9 (Karnataka)
@@ -94,7 +94,7 @@ NexgenTech Academy & Research is governed by enterprise engineers, research scie
       metadata: {
         source: sourceName,
         document: docFilename,
-        section: '3. Legal Entity, Accreditations & Transparent Disclosures',
+        section: 'Legal Entity, Accreditations & Transparent Disclosures',
         type: 'institutional_knowledge',
         page: 3,
       },
@@ -103,7 +103,7 @@ NexgenTech Academy & Research is governed by enterprise engineers, research scie
     // 4. Campuses, Facilities, and Public Contact Channels
     {
       id: 'chunk_campuses_facilities_contact',
-      text: `SECTION: 4. Campuses, Facilities, and Public Contact Channels
+      text: `Campuses, Facilities, and Public Contact Channels
 Main Campus - Tech Park (HQ):
 - Address: Building 4B, Cybercity Tech Park, Hitec Phase 2, Hyderabad, Telangana - 500081.
 - Landmark: Mindspace Circle & Hitec City Metro Station.
@@ -124,7 +124,7 @@ Public Communication Directory:
       metadata: {
         source: sourceName,
         document: docFilename,
-        section: '4. Campuses, Facilities, and Public Contact Channels',
+        section: 'Campuses, Facilities, and Public Contact Channels',
         type: 'campus',
         page: 4,
       },
@@ -133,7 +133,7 @@ Public Communication Directory:
     // 5. Admissions Process, Scholarships & Transparent Refund Policy
     {
       id: 'chunk_admissions_refund_scholarships',
-      text: `SECTION: 5. Admissions Process, Scholarships & Transparent Refund Policy
+      text: `Admissions Process, Scholarships & Transparent Refund Policy
 Admissions Process:
 - Application Step 1: Submit application via website form or walk-in consultation at Hyderabad or Bengaluru campus.
 - Application Step 2: Aptitude and coding assessment (60 minutes) covering logical reasoning, problem-solving, and basic syntax.
@@ -153,7 +153,7 @@ Financial Aid & Scholarships:
       metadata: {
         source: sourceName,
         document: docFilename,
-        section: '5. Admissions Process, Scholarships & Transparent Refund Policy',
+        section: 'Admissions Process, Scholarships & Transparent Refund Policy',
         type: 'admissions',
         page: 5,
       },
@@ -162,7 +162,7 @@ Financial Aid & Scholarships:
     // 6. Placements Cell, Salary Benchmarks & Enterprise Hiring Partners
     {
       id: 'chunk_placements_salaries_partners',
-      text: `SECTION: 6. Placements Cell, Salary Benchmarks & Enterprise Hiring Partners
+      text: `Placements Cell, Salary Benchmarks & Enterprise Hiring Partners
 - Placement Assistance Model: 100% placement support with dedicated corporate relationship managers for 12 months post-graduation.
 - Average Package (CTC): INR 7.8 LPA across all programs.
 - Highest Package (CTC): INR 24.5 LPA secured in Cloud / AI domains.
@@ -172,7 +172,7 @@ Financial Aid & Scholarships:
       metadata: {
         source: sourceName,
         document: docFilename,
-        section: '6. Placements Cell, Salary Benchmarks & Enterprise Hiring Partners',
+        section: 'Placements Cell, Salary Benchmarks & Enterprise Hiring Partners',
         type: 'placements',
         page: 6,
       },
@@ -186,7 +186,7 @@ ANSWER: The Main Campus is situated at Building 4B, Cybercity Tech Park, Hitec P
       metadata: {
         source: sourceName,
         document: docFilename,
-        section: '7. Grounding Corpus & Frequently Asked Questions',
+        section: 'Institutional Frequently Asked Questions',
         type: 'faq',
         question: "What is the exact physical address of NexgenTech Academy's Hyderabad campus?",
         page: 7,
@@ -199,7 +199,7 @@ ANSWER: NexgenTech's Innovation Hub is located along the Outer Ring Road, Marath
       metadata: {
         source: sourceName,
         document: docFilename,
-        section: '7. Grounding Corpus & Frequently Asked Questions',
+        section: 'Institutional Frequently Asked Questions',
         type: 'faq',
         question: 'Where is the Bengaluru branch campus located?',
         page: 7,
@@ -212,7 +212,7 @@ ANSWER: You can call our toll-free line at +91 800-999-8800 (Mon–Sat: 8:00 AM 
       metadata: {
         source: sourceName,
         document: docFilename,
-        section: '7. Grounding Corpus & Frequently Asked Questions',
+        section: 'Institutional Frequently Asked Questions',
         type: 'faq',
         question: 'How can I reach the admissions office by telephone or WhatsApp?',
         page: 7,
@@ -225,7 +225,7 @@ ANSWER: All admissions inquiries, applications, and course registration queries 
       metadata: {
         source: sourceName,
         document: docFilename,
-        section: '7. Grounding Corpus & Frequently Asked Questions',
+        section: 'Institutional Frequently Asked Questions',
         type: 'faq',
         question: 'What is the official contact email for course registrations?',
         page: 7,
@@ -238,7 +238,7 @@ ANSWER: Yes. Prospective students can book a complimentary live demo session or 
       metadata: {
         source: sourceName,
         document: docFilename,
-        section: '7. Grounding Corpus & Frequently Asked Questions',
+        section: 'Institutional Frequently Asked Questions',
         type: 'faq',
         question: 'Does NexgenTech offer a free demo class before enrollment?',
         page: 7,
@@ -251,7 +251,7 @@ ANSWER: The website is built with Next.js 15 (App Router), TypeScript, Tailwind 
       metadata: {
         source: sourceName,
         document: docFilename,
-        section: '7. Grounding Corpus & Frequently Asked Questions',
+        section: 'Institutional Frequently Asked Questions',
         type: 'faq',
         question: 'What modern technology stack powers the NexgenTech training portal?',
         page: 7,
@@ -264,7 +264,7 @@ ANSWER: NexgenTech provides a transparent 100% money-back guarantee if a formal 
       metadata: {
         source: sourceName,
         document: docFilename,
-        section: '7. Grounding Corpus & Frequently Asked Questions',
+        section: 'Institutional Frequently Asked Questions',
         type: 'faq',
         question: 'What happens if I am dissatisfied with the training after joining?',
         page: 7,
@@ -277,7 +277,7 @@ ANSWER: Yes. NexgenTech offers 0% interest EMI payment plans spanning 6, 9, or 1
       metadata: {
         source: sourceName,
         document: docFilename,
-        section: '7. Grounding Corpus & Frequently Asked Questions',
+        section: 'Institutional Frequently Asked Questions',
         type: 'faq',
         question: 'Are installment or EMI options available for tuition fees?',
         page: 7,
@@ -290,17 +290,39 @@ ANSWER: Students receive up to 12 months of active 100% placement support post-g
       metadata: {
         source: sourceName,
         document: docFilename,
-        section: '7. Grounding Corpus & Frequently Asked Questions',
+        section: 'Institutional Frequently Asked Questions',
         type: 'faq',
         question: 'What kind of placement assistance is provided?',
         page: 7,
       },
     },
 
+    // Dedicated Individual Track Detail: Digital Marketing
+    {
+      id: 'chunk_course_digital_marketing',
+      text: `Digital Marketing & Growth Hacking Mastery
+- Program: Digital Marketing & Growth Hacking Mastery
+- Slug / URL: /courses/digital-marketing-growth-mastery
+- Tuition Fee: ₹32,000 (Regular ₹45,000)
+- Duration & Mode: 3 Months | Online / Hybrid | All Levels
+- Core Curriculum: Full-funnel performance marketing, Paid Search Ads (PPC), Social Media Marketing (Meta, LinkedIn), SEO (Technical & On-Page), Conversion Rate Optimization (CRO), Email Automation, and Web Analytics.
+- Tools & Tech Stack: Google Ads, Meta Ads Manager, Google Analytics 4 (GA4), Google Tag Manager, Semrush, Ahrefs, HubSpot, Mailchimp, Canva Pro.
+- Capstone Projects: Multi-Channel E-Commerce Growth Campaign, Live Google Search & Display Ads Optimization, Organic SEO Audit & Rank Booster.
+- Career Roles & Salary: Performance Marketing Specialist (₹5.5 - 9.0 LPA), SEO & Content Strategist (₹4.5 - 7.5 LPA), Growth Hacker (₹6.5 - 11.0 LPA).
+- Upcoming Batches: Cohorts starting every month (Morning 7:30 AM & Evening 6:30 PM IST). 100% placement support with verified hiring partners.`,
+      metadata: {
+        source: 'WEBSITE_PORTAL_CATALOG',
+        document: 'portal_courses_database',
+        section: 'Digital Marketing & Growth Hacking Mastery',
+        type: 'course_detail',
+        page: 8,
+      },
+    },
+
     // 8. Live Website Course Catalog & Exact Tuition Fees
     {
       id: 'chunk_website_courses_catalog',
-      text: `SECTION: 8. Live Website Course Catalog & Tuition Fees
+      text: `Official Course Catalog & Tuition Fees
 NexGenTech Academy offers 15 enterprise-grade training certifications with exact pricing and durations:
 1. Generative AI & Large Language Models (LLM) Systems: ₹65,000 (Regular ₹85,000) | Duration: 6 Months | Mode: Hybrid / Online | Level: Advanced | Focus: Transformer models, LangChain, LlamaIndex, fine-tuning, RAG architectures, and multi-agent systems (/courses/generative-ai-llm-systems).
 2. Full Stack Next.js 15, React 19 & Cloud Engineering: ₹45,000 (Regular ₹60,000) | Duration: 5 Months | Mode: Hybrid | Level: Intermediate | Focus: Next.js 15 App Router, React 19, Server Actions, TypeScript, Tailwind, PostgreSQL, Prisma, AWS deployment (/courses/full-stack-nextjs-react-cloud).
@@ -315,12 +337,12 @@ NexGenTech Academy offers 15 enterprise-grade training certifications with exact
 11. Graphic Design & Brand Identity Professional: ₹30,000 | Duration: 3 Months | Mode: Offline | Level: Beginner.
 12. Web Design & Responsive Visual Development: ₹28,000 | Duration: 3 Months | Mode: Online | Level: Beginner.
 13. Enterprise Networking & CCNA Security Certification: ₹38,000 | Duration: 4 Months | Mode: Offline | Level: All Levels.
-14. Digital Marketing & Growth Hacking Mastery: ₹32,000 | Duration: 3 Months | Mode: Online | Level: All Levels.
-15. Advanced AI Prompt Engineering & Workflow Automation: ₹25,000 | Duration: 2 Months | Mode: Online | Level: All Levels.`,
+14. Digital Marketing & Growth Hacking Mastery: ₹32,000 (Regular ₹45,000) | Duration: 3 Months | Mode: Online / Hybrid | Level: All Levels | Focus: Google Ads, Meta Ads Manager, GA4, Semrush, Ahrefs, Mailchimp, Technical SEO (/courses/digital-marketing-growth-mastery).
+15. Advanced AI Prompt Engineering & Workflow Automation: ₹25,000 (Regular ₹35,000) | Duration: 2 Months | Mode: Online | Level: All Levels | Focus: Prompt Patterns, AutoGPT, Zapier Automation, LLM Workflows (/courses/prompt-engineering-automation).`,
       metadata: {
         source: 'WEBSITE_PORTAL_CATALOG',
         document: 'portal_courses_database',
-        section: '8. Live Website Course Catalog & Tuition Fees',
+        section: 'Official Course Catalog & Tuition Fees',
         type: 'courses',
         page: 8,
       },
@@ -329,7 +351,7 @@ NexGenTech Academy offers 15 enterprise-grade training certifications with exact
     // 9. Live Website Placements, Star Hires & Corporate Placement Drives
     {
       id: 'chunk_website_placements_and_alumni',
-      text: `SECTION: 9. Live Website Placements, Star Hires & Corporate Placement Drives
+      text: `Placements, Star Hires & Corporate Placement Drives
 NexGenTech Academy maintains an active 94% placement record with over 450+ global hiring partners and top salary packages up to 42 LPA (average 12.8 LPA in commercial software engineering, 7.8 LPA across all programs).
 
 Recent Star Placements from the Academy Portal:
@@ -352,7 +374,7 @@ Students receive direct interviews, weekly mock interviews, DSA/system design co
       metadata: {
         source: 'WEBSITE_PORTAL_CATALOG',
         document: 'portal_placements_database',
-        section: '9. Live Website Placements, Star Hires & Corporate Placement Drives',
+        section: 'Placements, Star Hires & Corporate Placement Drives',
         type: 'placements',
         page: 9,
       },
@@ -361,7 +383,7 @@ Students receive direct interviews, weekly mock interviews, DSA/system design co
     // 10. Live Website Upcoming Events, Workshops & Masterclasses
     {
       id: 'chunk_website_events_and_workshops',
-      text: `SECTION: 10. Live Website Upcoming Events, Workshops & Masterclasses
+      text: `Upcoming Events, Workshops & Masterclasses
 NexGenTech Academy hosts regular high-impact industry events, masterclasses, and hands-on workshops:
 1. "Building Production RAG Systems with LlamaIndex & Vector Search"
    - Category: Masterclass | Speaker: Dr. Vikramaditya Sharma (Lead AI Scientist, Ex-Microsoft AI) | Date: Saturday, Aug 29, 2026 | Time: 6:00 PM - 8:00 PM IST | Mode: Hybrid.
@@ -376,7 +398,7 @@ NexGenTech Academy hosts regular high-impact industry events, masterclasses, and
       metadata: {
         source: 'WEBSITE_PORTAL_CATALOG',
         document: 'portal_events_database',
-        section: '10. Live Website Upcoming Events, Workshops & Masterclasses',
+        section: 'Upcoming Events, Workshops & Masterclasses',
         type: 'events',
         page: 10,
       },
@@ -385,7 +407,7 @@ NexGenTech Academy hosts regular high-impact industry events, masterclasses, and
     // 11. Live Website Lead Trainers & Faculty Profiles
     {
       id: 'chunk_website_trainers_and_mentors',
-      text: `SECTION: 11. Live Website Lead Trainers & Faculty Profiles
+      text: `Lead Trainers & Faculty Profiles
 NexGenTech Academy instructors are senior architects and principal engineers with decades of tier-1 tech experience:
 - Dr. Vikramaditya Sharma: Lead AI Scientist & Ex-Microsoft AI Specialist (14+ years experience). Teaches Generative AI, LLMs, Neural Networks, and Advanced Machine Learning.
 - Priya Sundaram: Staff Full Stack Architect & Ex-Amazon (11+ years experience). Teaches Next.js 15, React 19, Node.js, Distributed Microservices, and Cloud Systems.
@@ -394,7 +416,7 @@ NexGenTech Academy instructors are senior architects and principal engineers wit
       metadata: {
         source: 'WEBSITE_PORTAL_CATALOG',
         document: 'portal_trainers_database',
-        section: '11. Live Website Lead Trainers & Faculty Profiles',
+        section: 'Lead Trainers & Faculty Profiles',
         type: 'trainers',
         page: 11,
       },
@@ -403,7 +425,7 @@ NexGenTech Academy instructors are senior architects and principal engineers wit
     // 12. Live Website Upcoming Batches, Cohort Timings & Modes
     {
       id: 'chunk_website_batches_and_timings',
-      text: `SECTION: 12. Live Website Upcoming Batches, Cohort Timings & Modes
+      text: `Upcoming Batches, Cohort Timings & Modes
 NexGenTech Academy operates flexible batches starting every month (including September 2026 cohorts):
 - Morning Cohorts: 7:30 AM – 9:30 AM IST (Mon–Fri) — Ideal for working professionals and early starters.
 - Evening Cohorts: 7:00 PM – 9:00 PM IST (Mon–Fri) — Ideal for software engineers and college students.
@@ -413,7 +435,7 @@ NexGenTech Academy operates flexible batches starting every month (including Sep
       metadata: {
         source: 'WEBSITE_PORTAL_CATALOG',
         document: 'portal_batches_database',
-        section: '12. Live Website Upcoming Batches, Cohort Timings & Modes',
+        section: 'Upcoming Batches, Cohort Timings & Modes',
         type: 'batches',
         page: 12,
       },

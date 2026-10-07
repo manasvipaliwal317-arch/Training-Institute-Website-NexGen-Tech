@@ -19,15 +19,15 @@ export default async function CampusesPage() {
   return (
     <div className="space-y-16 py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Header */}
-      <div className="glass-card rounded-3xl p-8 sm:p-14 border border-blue-200/80 dark:border-blue-500/20 bg-gradient-to-br from-blue-50/80 via-sky-50/50 to-slate-50/90 dark:from-slate-900 dark:via-blue-950/40 dark:to-slate-900 text-center space-y-4 shadow-sm">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs font-semibold uppercase tracking-wider mx-auto">
+      <div className="rounded-3xl p-8 sm:p-14 bg-[#dbeafe] dark:bg-[#0c182b] border border-blue-200/60 dark:border-blue-900/40 text-center space-y-4 shadow-sm">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100 dark:bg-blue-500/10 border border-blue-300 dark:border-blue-500/30 text-blue-700 dark:text-blue-400 text-xs font-black uppercase tracking-wider mx-auto">
           <Building2 className="w-4 h-4" />
           <span>Multi-Branch Physical Network</span>
         </div>
-        <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+        <h1 className="text-4xl sm:text-5xl font-black text-slate-950 dark:text-white tracking-tight">
           Visit Our <span className="gradient-text">State-of-the-Art Campuses</span>
         </h1>
-        <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+        <p className="text-slate-700 dark:text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed font-medium">
           Equipped with NVIDIA A100 GPU clusters, Cisco network labs, Apple Mac UI/UX design workstations, and 24/7 collaborative hackathon spaces.
         </p>
       </div>
@@ -57,38 +57,67 @@ export default async function CampusesPage() {
 
                   <h2 className="text-2xl sm:text-3xl font-black text-white">{campus.name}</h2>
 
-                  <div className="space-y-2.5 text-xs sm:text-sm text-slate-300">
-                    <div className="flex items-start gap-2.5">
-                      <MapPin className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
-                      <span>{campus.address}</span>
-                    </div>
+                  <div className="space-y-3 text-xs sm:text-sm text-slate-300">
+                    {/* Clickable Address / Google Maps */}
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(campus.address)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex items-start gap-2.5 p-2 -ml-2 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
+                      title="Open campus address in Google Maps"
+                    >
+                      <MapPin className="w-4 h-4 text-blue-400 shrink-0 mt-0.5 group-hover:scale-120 group-hover:text-blue-300 transition-transform" />
+                      <span className="group-hover:text-white group-hover:underline transition-colors leading-relaxed">
+                        {campus.address}
+                      </span>
+                    </a>
 
-                    <div className="flex items-start gap-2.5">
-                      <Navigation className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
-                      <div>
+                    {/* Clickable Nearby Landmarks */}
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${campus.name} ${campus.landmarks}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex items-start gap-2.5 p-2 -ml-2 rounded-xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
+                      title="View nearby landmarks on Google Maps"
+                    >
+                      <Navigation className="w-4 h-4 text-purple-400 shrink-0 mt-0.5 group-hover:scale-120 group-hover:text-purple-300 transition-transform" />
+                      <div className="group-hover:text-white transition-colors">
                         <strong className="text-white">Nearby Landmarks:</strong> {campus.landmarks}
                       </div>
-                    </div>
+                    </a>
 
-                    <div className="flex items-center gap-2.5">
+                    {/* Working Hours */}
+                    <div className="flex items-center gap-2.5 px-2">
                       <Clock className="w-4 h-4 text-amber-400 shrink-0" />
-                      <span>{campus.workingHours}</span>
+                      <span className="text-slate-300 font-medium">{campus.workingHours}</span>
                     </div>
 
-                    <div className="flex items-center gap-4 pt-1">
-                      <span className="flex items-center gap-1.5 font-bold text-emerald-400">
-                        <Phone className="w-4 h-4" /> {campus.phone}
-                      </span>
-                      <span className="flex items-center gap-1.5 text-slate-400">
-                        <Mail className="w-4 h-4 text-blue-400" /> {campus.email}
-                      </span>
+                    {/* Functional Phone & Email links with tactile click effect */}
+                    <div className="flex flex-wrap items-center gap-3 pt-2">
+                      <a
+                        href={`tel:${campus.phone.replace(/[^0-9+]/g, '')}`}
+                        className="group inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-100/90 dark:bg-emerald-950/60 hover:bg-emerald-200 dark:hover:bg-emerald-900/60 border border-emerald-400 dark:border-emerald-700/60 text-emerald-950 dark:text-emerald-200 font-bold active:scale-90 transition-all cursor-pointer shadow-sm hover:shadow-[0_0_12px_rgba(16,185,129,0.3)]"
+                        title={`Call ${campus.name} desk`}
+                      >
+                        <Phone className="w-4 h-4 text-emerald-800 dark:text-emerald-400 group-hover:scale-115 group-hover:animate-bounce transition-transform shrink-0" />
+                        <span className="font-bold tracking-tight text-emerald-950 dark:text-emerald-200">{campus.phone}</span>
+                      </a>
+
+                      <a
+                        href={`mailto:${campus.email}`}
+                        className="group inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-blue-100/90 dark:bg-blue-950/60 hover:bg-blue-200 dark:hover:bg-blue-900/60 border border-blue-400 dark:border-blue-700/60 text-blue-950 dark:text-blue-200 font-bold active:scale-90 transition-all cursor-pointer shadow-sm hover:shadow-[0_0_12px_rgba(59,130,246,0.3)]"
+                        title={`Email ${campus.name}`}
+                      >
+                        <Mail className="w-4 h-4 text-blue-800 dark:text-blue-400 group-hover:scale-115 transition-transform shrink-0" />
+                        <span className="font-bold tracking-tight text-blue-950 dark:text-blue-200">{campus.email}</span>
+                      </a>
                     </div>
                   </div>
 
-                  <div className="pt-3 flex flex-wrap items-center gap-3">
+                  <div className="pt-4 flex flex-wrap items-center gap-3">
                     <Link
                       href={`/campuses/${campus.slug}`}
-                      className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-all shadow-md shadow-blue-600/20 flex items-center gap-1.5"
+                      className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-bold text-xs transition-all shadow-lg shadow-blue-600/30 flex items-center gap-2 hover:scale-[1.02] cursor-pointer"
                     >
                       <span>Explore Campus Specs</span>
                       <ChevronRight className="w-4 h-4" />

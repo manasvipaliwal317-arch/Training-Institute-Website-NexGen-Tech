@@ -43,8 +43,9 @@ export default function HomeClientSection({
     return (
       <>
         <button
+          type="button"
           onClick={() => setModalOpen(true)}
-          className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs transition-all shadow-md shadow-purple-600/20"
+          className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 active:scale-95 text-white font-semibold text-xs transition-all shadow-md shadow-purple-600/20 cursor-pointer"
         >
           Reserve Seat
         </button>
@@ -65,8 +66,9 @@ export default function HomeClientSection({
     return (
       <>
         <button
+          type="button"
           onClick={() => setModalOpen(true)}
-          className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs transition-all shadow-md shadow-cyan-600/20"
+          className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 active:scale-95 text-white font-semibold text-xs transition-all shadow-md shadow-cyan-600/20 cursor-pointer"
         >
           Register Free RSVP
         </button>
@@ -206,7 +208,7 @@ export default function HomeClientSection({
               <button
                 type="submit"
                 disabled={formLoading}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 transition-all"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 active:scale-95 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 transition-all cursor-pointer"
               >
                 <Sparkles className="w-4 h-4 text-amber-300" />
                 {formLoading ? <span>Reserving Seat...</span> : <span>Reserve Free Demo Seat 🚀</span>}

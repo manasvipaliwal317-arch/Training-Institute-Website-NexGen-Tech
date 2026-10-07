@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import ContactClientSection from '@/components/ContactClientSection';
 import { MapPin, Phone, Mail, Clock, Sparkles, MessageCircle, Globe, Building2 } from 'lucide-react';
@@ -27,15 +28,15 @@ export default async function ContactPage() {
     <div className="space-y-16 py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Header */}
       <FadeInUp duration={0.4}>
-        <div className="glass-card rounded-3xl p-8 sm:p-14 border border-blue-200/80 dark:border-blue-500/20 bg-gradient-to-br from-blue-50/80 via-sky-50/50 to-slate-50/90 dark:from-slate-900 dark:via-blue-950/40 dark:to-slate-900 text-center space-y-4 shadow-sm">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs font-semibold uppercase tracking-wider mx-auto">
+        <div className="rounded-3xl p-8 sm:p-14 bg-[#dbeafe] dark:bg-[#0c182b] border border-blue-200/60 dark:border-blue-900/40 text-center space-y-4 shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100 dark:bg-blue-500/10 border border-blue-300 dark:border-blue-500/30 text-blue-700 dark:text-blue-400 text-xs font-black uppercase tracking-wider mx-auto">
             <Sparkles className="w-4 h-4 text-amber-500 dark:text-amber-300" />
             <span>Get Instant Admissions Guidance</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-4xl sm:text-5xl font-black text-slate-950 dark:text-white tracking-tight">
             We Are Here to <span className="gradient-text">Guide Your Tech Journey</span>
           </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+          <p className="text-slate-700 dark:text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed font-medium">
             Have questions about course fees, batch timings, or syllabus details? Our academic counselors are available 7 days a week.
           </p>
 
@@ -60,22 +61,33 @@ export default async function ContactPage() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                <Building2 className="w-5 h-5 text-purple-400" /> Campus Branches ({campuses.length})
+                <Building2 className="w-5 h-5 text-blue-600 dark:text-blue-400" /> Campus Branches ({campuses.length})
               </h2>
               <span className="text-xs text-slate-400">Open 7 Days a Week</span>
             </div>
 
             {campuses.map((camp) => (
               <StaggerItem key={camp.id}>
-                <MotionCard className="glass-card rounded-2xl p-5 border border-slate-800 space-y-3 hover:border-purple-500/40 transition-all">
+                <MotionCard className="glass-card rounded-2xl p-5 border border-slate-800 space-y-3 hover:border-blue-500/40 transition-all group">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-2.5">
-                      <div className="p-2.5 rounded-xl bg-blue-600/20 text-blue-400 shrink-0">
-                        <MapPin className="w-5 h-5" />
-                      </div>
+                      <a
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(camp.address)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-11 h-11 rounded-xl bg-blue-600 dark:bg-blue-600 text-white shadow-md shadow-blue-600/30 flex items-center justify-center shrink-0 hover:bg-blue-700 hover:scale-110 active:scale-95 transition-all cursor-pointer"
+                        title="View address in Google Maps"
+                      >
+                        <MapPin className="w-5 h-5 text-white" />
+                      </a>
                       <div>
-                        <h3 className="font-bold text-white text-base leading-tight">{camp.name}</h3>
-                        <p className="text-[11px] text-purple-300 font-semibold">{camp.type} • {camp.city}</p>
+                        <Link
+                          href={`/campuses/${camp.slug}`}
+                          className="font-bold text-white text-base leading-tight hover:text-blue-400 transition-colors block cursor-pointer"
+                        >
+                          {camp.name}
+                        </Link>
+                        <p className="text-[11px] text-blue-600 dark:text-blue-300 font-semibold">{camp.type} • {camp.city}</p>
                       </div>
                     </div>
                     {camp.isMain && (
@@ -85,14 +97,28 @@ export default async function ContactPage() {
                     )}
                   </div>
 
-                  <p className="text-xs text-slate-300 leading-relaxed">{camp.address}</p>
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(camp.address)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-slate-300 hover:text-white hover:underline transition-colors block leading-relaxed cursor-pointer"
+                    title="Get directions in Google Maps"
+                  >
+                    {camp.address}
+                  </a>
 
                   <div className="pt-2 border-t border-slate-800/80 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-300">
-                    <span className="flex items-center gap-1.5">
-                      <Phone className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> {camp.phone}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-amber-400 shrink-0" /> {camp.workingHours}
+                    <a
+                      href={`tel:${camp.phone.replace(/[^0-9+]/g, '')}`}
+                      className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 active:scale-95 transition-all cursor-pointer font-bold"
+                      title={`Call ${camp.name}`}
+                    >
+                      <Phone className="w-3.5 h-3.5 shrink-0" />
+                      <span>{camp.phone}</span>
+                    </a>
+                    <span className="flex items-center gap-1.5 text-slate-400">
+                      <Clock className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+                      <span>{camp.workingHours}</span>
                     </span>
                   </div>
                 </MotionCard>
@@ -103,17 +129,28 @@ export default async function ContactPage() {
           <StaggerItem>
             <MotionCard className="glass-card rounded-2xl p-5 border border-slate-800 space-y-3">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-purple-600/20 text-purple-400">
-                  <Mail className="w-5 h-5" />
-                </div>
+                <a
+                  href="mailto:admissions@nexgentechacademy.com"
+                  className="w-11 h-11 rounded-xl bg-blue-600 dark:bg-blue-600 text-white shadow-md shadow-blue-600/30 flex items-center justify-center shrink-0 hover:bg-blue-700 hover:scale-110 active:scale-95 transition-all cursor-pointer"
+                  title="Send Email to Admissions Desk"
+                >
+                  <Mail className="w-5 h-5 text-white" />
+                </a>
                 <div>
                   <h3 className="font-bold text-white text-sm">Admissions & Counseling Support</h3>
-                  <p className="text-xs text-slate-400">admissions@nexgentechacademy.com</p>
+                  <a
+                    href="mailto:admissions@nexgentechacademy.com"
+                    className="text-xs text-blue-600 dark:text-blue-300 hover:text-blue-700 dark:hover:text-blue-200 hover:underline active:scale-95 transition-all block cursor-pointer font-semibold"
+                  >
+                    admissions@nexgentechacademy.com
+                  </a>
                 </div>
               </div>
               <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
-                <span className="flex items-center gap-1.5"><Globe className="w-3.5 h-3.5 text-purple-400" /> Digital Desk Online</span>
-                <span className="text-amber-400 font-semibold">Response &lt; 15 mins</span>
+                <span className="flex items-center gap-1.5">
+                  <Globe className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> Digital Desk Online
+                </span>
+                <span className="text-amber-600 dark:text-amber-400 font-semibold">Response &lt; 15 mins</span>
               </div>
             </MotionCard>
           </StaggerItem>

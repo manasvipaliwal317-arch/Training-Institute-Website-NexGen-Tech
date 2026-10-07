@@ -116,10 +116,10 @@ export default function StudentLoginClient() {
             <button
               type="button"
               onClick={fillDemoStudent}
-              className="w-full py-2.5 rounded-xl border border-dashed border-blue-500/40 hover:bg-blue-500/10 text-blue-500 dark:text-blue-400 text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+              className="w-full py-2.5 rounded-xl border border-dashed border-blue-500/60 bg-blue-50/80 hover:bg-blue-100/90 dark:bg-blue-950/50 dark:hover:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
             >
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>Click to auto-fill Demo Student Credentials</span>
+              <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+              <span className="text-blue-700 dark:text-blue-300 font-bold">Click to auto-fill Demo Student Credentials</span>
             </button>
           </div>
         </form>

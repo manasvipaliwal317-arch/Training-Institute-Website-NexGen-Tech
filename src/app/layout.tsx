@@ -80,7 +80,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} dark scroll-smooth`}>
+    <html lang="en" className={`${inter.variable} dark scroll-smooth`} data-scroll-behavior="smooth">
       <body className="min-h-screen flex flex-col bg-[#0b0f19] light:bg-[#f8fafc] text-slate-100 light:text-slate-900 transition-colors duration-200 selection:bg-blue-600 selection:text-white">
         <ThemeProvider>
           <JsonLd data={getOrganizationSchema()} />

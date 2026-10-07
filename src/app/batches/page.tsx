@@ -26,15 +26,15 @@ export default async function BatchesPage() {
     <div className="space-y-12 py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Header */}
       <FadeInUp duration={0.4}>
-        <div className="glass-card rounded-3xl p-8 sm:p-12 border border-purple-200/80 dark:border-purple-500/20 bg-gradient-to-br from-purple-50/80 via-indigo-50/60 to-sky-50/70 dark:from-slate-900 dark:via-purple-950/30 dark:to-slate-900 text-center space-y-4 shadow-sm">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-600 dark:text-purple-400 text-xs font-semibold uppercase tracking-wider mx-auto">
+        <div className="rounded-3xl p-8 sm:p-12 bg-[#ede9fe] dark:bg-[#13102d] border border-purple-200/60 dark:border-purple-900/40 text-center space-y-4 shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-100 dark:bg-purple-500/10 border border-purple-300 dark:border-purple-500/30 text-purple-700 dark:text-purple-400 text-xs font-black uppercase tracking-wider mx-auto">
             <Calendar className="w-4 h-4" />
             <span>Live Admissions Open</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-4xl sm:text-5xl font-black text-slate-950 dark:text-white tracking-tight">
             Upcoming <span className="gradient-text">Batch Schedules</span>
           </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+          <p className="text-slate-700 dark:text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed font-medium">
             Select from morning, evening, or weekend batches. Small batch sizes (max 25 students) ensure individual instructor attention.
           </p>
         </div>

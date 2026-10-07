@@ -133,8 +133,9 @@ body.light,
   color: #ea580c !important;
 }
 
-/* Active nav link */
-.light .text-blue-400 {
+/* Active nav link in header */
+.light header nav a.text-blue-400,
+.light nav a.text-blue-400 {
   color: #ea580c !important;
 }
 
@@ -575,19 +576,31 @@ body.light,
   background: #cbd5e1;
 }
 
-/* Moving Cycle Marquee Animations */
+/* Moving Cycle Marquee Animations with GPU Acceleration */
 @keyframes marquee {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
+  0% { transform: translate3d(0%, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
 }
 
 @keyframes marquee-reverse {
-  0% { transform: translateX(-50%); }
-  100% { transform: translateX(0%); }
+  0% { transform: translate3d(-50%, 0, 0); }
+  100% { transform: translate3d(0%, 0, 0); }
+}
+
+@keyframes equalizer-pulse {
+  0% { height: 6px; opacity: 0.2; }
+  50% { height: 26px; opacity: 0.7; }
+  100% { height: 10px; opacity: 0.3; }
 }
 
 .animate-marquee {
-  animation: marquee 28s linear infinite;
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  animation: marquee 24s linear infinite;
 }
 
 .animate-marquee:hover {
@@ -595,16 +608,33 @@ body.light,
 }
 
 .animate-marquee-reverse {
-  animation: marquee-reverse 28s linear infinite;
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  animation: marquee-reverse 24s linear infinite;
 }
 
 .animate-marquee-reverse:hover {
   animation-play-state: paused;
 }
 
+/* On mobile phones, calibrate duration and preserve 60fps GPU acceleration */
+@media (max-width: 768px) {
+  .animate-marquee {
+    animation-duration: 16s;
+  }
+  .animate-marquee-reverse {
+    animation-duration: 16s;
+  }
+}
+
 .mask-linear-gradient {
-  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  will-change: opacity;
 }
 
 /* Announcement Bar Triggering Effect */
@@ -937,9 +967,27 @@ html.light .nav-shimmer-beam,
 footer.site-footer,
 .light footer.site-footer,
 .dark footer.site-footer {
-  background: linear-gradient(135deg, #9d174d 0%, #be185d 30%, #db2777 65%, #e11d48 100%) !important;
+  background: linear-gradient(180deg, #be185d 0%, #9d174d 30%, #701a3c 65%, #380517 100%) !important;
   border-top: 2px solid rgba(255, 255, 255, 0.4) !important;
   color: #ffffff !important;
+}
+
+/* Global Tactile Click-Me Button Interaction for all working buttons */
+button:not(:disabled),
+a.btn,
+.btn-clickable,
+button[type="button"]:not(:disabled),
+button[type="submit"]:not(:disabled) {
+  cursor: pointer;
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s ease, border-color 0.15s ease, filter 0.15s ease !important;
+}
+
+button:not(:disabled):active,
+a.btn:active,
+.btn-clickable:active,
+button[type="button"]:not(:disabled):active,
+button[type="submit"]:not(:disabled):active {
+  transform: scale(0.96) translateY(1px) !important;
 }
 
 /* Ensure ALL text elements in the footer stay crystal-clear pure white */
@@ -1058,5 +1106,39 @@ footer.site-footer .footer-bottom-bar a:hover,
 .light footer.site-footer .footer-bottom-bar a:hover {
   color: #fef08a !important;
 }
+
+/* ==========================================================================
+   SLIDER & SLIDEBAR STYLING
+   ========================================================================== */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.35) transparent;
+}
+.scrollbar-thin::-webkit-scrollbar {
+  height: 5px;
+  width: 5px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 9999px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.35);
+  border-radius: 9999px;
+  transition: background-color 0.2s ease;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(59, 130, 246, 0.75);
+}
+.light .scrollbar-thin {
+  scrollbar-color: rgba(203, 213, 225, 0.7) transparent;
+}
+.light .scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: rgba(203, 213, 225, 0.7);
+}
+.light .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(59, 130, 246, 0.85);
+}
+
 
 

@@ -128,18 +128,12 @@ export default function FacultyLoginClient() {
           </div>
         </form>
 
-        <div className="pt-4 border-t dark:border-slate-800 border-slate-200 flex items-center justify-between text-xs">
+        <div className="pt-4 border-t dark:border-slate-800 border-slate-200 text-center text-xs">
           <Link
             href="/student/login"
-            className="text-violet-600 dark:text-violet-400 hover:underline flex items-center gap-1 font-semibold"
+            className="text-violet-600 dark:text-violet-400 hover:underline inline-flex items-center justify-center gap-1 font-semibold"
           >
             <span>Are you a Student? Login here</span>
-          </Link>
-          <Link
-            href="/admin/login"
-            className="text-slate-400 hover:text-slate-200 transition-colors"
-          >
-            Admin Desk
           </Link>
         </div>
       </div>

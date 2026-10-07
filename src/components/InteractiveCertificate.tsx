@@ -5,10 +5,10 @@ import { Award, QrCode, ShieldCheck, ArrowRight, Landmark, Globe } from 'lucide-
 
 export default function InteractiveCertificate() {
   return (
-    <section className="py-12 sm:py-16 relative overflow-hidden transition-colors duration-300 dark:bg-[#0b0f19] bg-[#fff8f3] border-y dark:border-slate-800 border-orange-100/80">
+    <section className="w-full py-16 sm:py-20 relative overflow-hidden transition-colors duration-300 dark:bg-[#1c130b] bg-[#ffedd5]">
       {/* Background Ambient Glows */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/10 dark:bg-indigo-600/15 blur-[160px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 right-10 w-[400px] h-[400px] bg-amber-500/10 dark:bg-amber-500/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-orange-400/20 dark:bg-amber-600/15 blur-[160px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 right-10 w-[400px] h-[400px] bg-amber-500/20 dark:bg-amber-500/5 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
@@ -18,51 +18,51 @@ export default function InteractiveCertificate() {
           {/* LEFT COLUMN: STRONG SLOGAN & ACCREDITATION PILLARS */}
           <div className="lg:col-span-5 space-y-6 text-left">
             
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full dark:bg-amber-500/10 bg-orange-500/10 border dark:border-amber-500/30 border-orange-200 text-amber-600 dark:text-amber-400 text-xs font-bold uppercase tracking-wider shadow-sm">
-              <Award className="w-4 h-4 text-amber-500" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full dark:bg-amber-500/10 bg-orange-100 border dark:border-amber-500/30 border-orange-300 text-orange-900 dark:text-amber-400 text-xs font-black uppercase tracking-wider shadow-sm">
+              <Award className="w-4 h-4 text-orange-600 dark:text-amber-400" />
               <span>Government & NSDC Accredited</span>
             </div>
 
             {/* Powerful Main Slogan */}
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black dark:text-white text-slate-900 tracking-tight leading-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black dark:text-white text-slate-950 tracking-tight leading-tight">
               Empowering Careers with <span className="gradient-text">Recognized Credentials</span>
             </h2>
 
             {/* Sub-slogan Description */}
-            <p className="dark:text-slate-300 text-slate-600 text-sm sm:text-base leading-relaxed">
-              Every NexGen Tech Academy graduate receives an official completion credential co-branded by <strong className="dark:text-white text-slate-900">Skill India</strong> and <strong className="dark:text-white text-slate-900">NSDC</strong>. Embedded with cryptographic QR codes for 24/7 instant employer validation.
+            <p className="dark:text-slate-300 text-slate-800 text-sm sm:text-base leading-relaxed font-medium">
+              Every NexGen Tech Academy graduate receives an official completion credential co-branded by <strong className="dark:text-white text-slate-950">Skill India</strong> and <strong className="dark:text-white text-slate-950">NSDC</strong>. Embedded with cryptographic QR codes for 24/7 instant employer validation.
             </p>
 
             {/* Accreditation Pillars */}
             <div className="space-y-3 pt-1">
               
-              <div className="flex items-start gap-3 p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-orange-100 shadow-sm">
-                <div className="p-2 rounded-xl bg-orange-500/10 text-orange-600 shrink-0 mt-0.5">
+              <div className="flex items-start gap-3 p-3.5 rounded-2xl dark:bg-slate-900/90 bg-white border-2 dark:border-slate-800 border-orange-200/90 shadow-md">
+                <div className="p-2 rounded-xl bg-orange-100 text-orange-700 shrink-0 mt-0.5">
                   <Landmark className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold dark:text-white text-slate-900 text-sm">NSDC & Skill India Endorsed</h4>
-                  <p className="dark:text-slate-400 text-slate-500 text-xs mt-0.5">Aligns with official national skill qualification guidelines for IT & AI roles.</p>
+                  <h4 className="font-black dark:text-white text-slate-950 text-sm">NSDC & Skill India Endorsed</h4>
+                  <p className="dark:text-slate-300 text-slate-700 text-xs mt-0.5 font-normal">Aligns with official national skill qualification guidelines for IT & AI roles.</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-orange-100 shadow-sm">
-                <div className="p-2 rounded-xl bg-blue-500/10 text-blue-500 shrink-0 mt-0.5">
+              <div className="flex items-start gap-3 p-3.5 rounded-2xl dark:bg-slate-900/90 bg-white border-2 dark:border-slate-800 border-orange-200/90 shadow-md">
+                <div className="p-2 rounded-xl bg-blue-100 text-blue-700 shrink-0 mt-0.5">
                   <QrCode className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold dark:text-white text-slate-900 text-sm">Instant Digital QR Verification</h4>
-                  <p className="dark:text-slate-400 text-slate-500 text-xs mt-0.5">Directly verifiable on LinkedIn, tech resumes, and HR verification portals.</p>
+                  <h4 className="font-black dark:text-white text-slate-950 text-sm">Instant Digital QR Verification</h4>
+                  <p className="dark:text-slate-300 text-slate-700 text-xs mt-0.5 font-normal">Directly verifiable on LinkedIn, tech resumes, and HR verification portals.</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-orange-100 shadow-sm">
-                <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-500 shrink-0 mt-0.5">
+              <div className="flex items-start gap-3 p-3.5 rounded-2xl dark:bg-slate-900/90 bg-white border-2 dark:border-slate-800 border-orange-200/90 shadow-md">
+                <div className="p-2 rounded-xl bg-emerald-100 text-emerald-700 shrink-0 mt-0.5">
                   <Globe className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold dark:text-white text-slate-900 text-sm">300+ Enterprise Hiring Partners</h4>
-                  <p className="dark:text-slate-400 text-slate-500 text-xs mt-0.5">Validates real hands-on GPU lab capstone experience and software projects.</p>
+                  <h4 className="font-black dark:text-white text-slate-950 text-sm">300+ Enterprise Hiring Partners</h4>
+                  <p className="dark:text-slate-300 text-slate-700 text-xs mt-0.5 font-normal">Validates real hands-on GPU lab capstone experience and software projects.</p>
                 </div>
               </div>
 
@@ -72,7 +72,7 @@ export default function InteractiveCertificate() {
             <div className="pt-2 flex flex-wrap items-center gap-3">
               <Link
                 href="/certificate"
-                className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs sm:text-sm transition-all shadow-lg shadow-blue-600/20 flex items-center gap-2 transform hover:scale-105"
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-xs sm:text-sm transition-all shadow-lg shadow-blue-600/20 flex items-center gap-2 transform hover:scale-105"
               >
                 <ShieldCheck className="w-4 h-4 text-amber-300" />
                 <span>Verify Certificate Online</span>
@@ -80,10 +80,10 @@ export default function InteractiveCertificate() {
 
               <Link
                 href="/courses"
-                className="px-5 py-3 rounded-xl dark:bg-slate-800 bg-white border dark:border-slate-700 border-orange-200 hover:border-orange-300 text-slate-800 dark:text-white font-bold text-xs sm:text-sm transition-all flex items-center gap-1.5 shadow-sm"
+                className="px-5 py-3 rounded-xl dark:bg-slate-800 bg-white border-2 dark:border-slate-700 border-orange-300 hover:border-orange-400 text-slate-950 dark:text-white font-black text-xs sm:text-sm transition-all flex items-center gap-1.5 shadow-md"
               >
                 <span>Browse Programs</span>
-                <ArrowRight className="w-4 h-4 text-slate-400" />
+                <ArrowRight className="w-4 h-4 text-slate-600 dark:text-slate-300" />
               </Link>
             </div>
 

@@ -9,7 +9,7 @@ const SECRET_KEY = new TextEncoder().encode(
 const COOKIE_NAME = 'admin_auth_session_v2';
 const LEGACY_COOKIE_NAME = 'admin_session_token';
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Protect /admin root route

@@ -14,9 +14,9 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>('dark');
-  const [mounted, setMounted] = useState(false);
 
   const applyThemeClasses = (targetTheme: Theme) => {
+    if (typeof document === 'undefined') return;
     const root = document.documentElement;
     const body = document.body;
 
@@ -34,10 +34,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    setMounted(true);
     const storedTheme = (localStorage.getItem('theme') as Theme | null) || 'dark';
-    setTheme(storedTheme);
     applyThemeClasses(storedTheme);
+    // Queue theme state synchronization in microtask to prevent synchronous cascade
+    queueMicrotask(() => {
+      setTheme(storedTheme);
+    });
   }, []);
 
   const setThemeMode = (mode: Theme) => {

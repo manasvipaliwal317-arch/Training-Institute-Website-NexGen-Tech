@@ -2,16 +2,36 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { Building2, Calendar, MapPin, Briefcase, CheckCircle2, Sparkles, ExternalLink } from 'lucide-react';
+import { Calendar, MapPin, Briefcase, CheckCircle2, Sparkles, ExternalLink } from 'lucide-react';
 import InquiryModal from './InquiryModal';
 
+export interface HiringDriveItem {
+  id: string;
+  slug: string;
+  companyName: string;
+  companyLogo: string;
+  role: string;
+  packageLpa: string;
+  jobType: string;
+  eligibility: string;
+  location: string;
+  experience: string;
+  driveDate: string;
+  registrationDeadline: string;
+  status: string;
+  openPositions: number;
+  skillsRequiredJson?: string;
+  description: string;
+  applyUrl?: string | null;
+}
+
 interface UpcomingHiringDrivesProps {
-  drives?: any[];
+  drives?: HiringDriveItem[];
 }
 
 export default function UpcomingHiringDrives({ drives: initialDrives }: UpcomingHiringDrivesProps) {
   const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
-  const [selectedDrive, setSelectedDrive] = useState<any | null>(null);
+  const [selectedDrive, setSelectedDrive] = useState<HiringDriveItem | null>(null);
 
   const drivesList = initialDrives && initialDrives.length > 0 ? initialDrives : [];
 
@@ -67,7 +87,7 @@ export default function UpcomingHiringDrives({ drives: initialDrives }: Upcoming
             let skills: string[] = [];
             try {
               skills = JSON.parse(drive.skillsRequiredJson || '[]');
-            } catch (e) {
+            } catch {
               skills = [];
             }
 
@@ -206,6 +226,7 @@ export default function UpcomingHiringDrives({ drives: initialDrives }: Upcoming
           subtitle={`Applying for ${selectedDrive.role} (${selectedDrive.packageLpa}) • ${selectedDrive.location}`}
           source={`Campus Placement Drive - ${selectedDrive.companyName} (${selectedDrive.role})`}
           submitButtonText={`Reserve My Seat for ${selectedDrive.companyName}`}
+          isPlacementDrive={true}
         />
       )}
     </div>

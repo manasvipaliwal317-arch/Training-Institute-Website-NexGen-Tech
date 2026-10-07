@@ -97,7 +97,7 @@ export async function generateSyllabusPdf(data: CourseSyllabusData): Promise<Uin
   const MARGIN_RIGHT = 45;
   const CONTENT_WIDTH = PAGE_WIDTH - MARGIN_LEFT - MARGIN_RIGHT; // 505.28 pt
 
-  let pages: PDFPage[] = [];
+  const pages: PDFPage[] = [];
   let currentPage = pdfDoc.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
   pages.push(currentPage);
   let y = PAGE_HEIGHT - 45;

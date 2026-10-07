@@ -13,6 +13,7 @@ import {
   Calendar,
   Award,
   ChevronRight,
+  ChevronLeft,
   ExternalLink,
   Brain,
   MessageSquare,
@@ -59,6 +60,14 @@ export default function AIChatbot() {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const latestBotMessageRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const chipsScrollRef = useRef<HTMLDivElement>(null);
+
+  const handleScrollChips = (direction: 'left' | 'right') => {
+    if (chipsScrollRef.current) {
+      const scrollAmount = direction === 'left' ? -220 : 220;
+      chipsScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     if (isOpen && !isMinimized) {
@@ -303,10 +312,10 @@ export default function AIChatbot() {
       {/* Chat Window Modal */}
       {isOpen && (
         <div
-          className={`chatbot-window fixed z-50 transition-all duration-300 flex flex-col bg-white dark:bg-slate-950 border border-slate-200 dark:border-cyan-500/40 shadow-2xl backdrop-blur-2xl ${
+          className={`chatbot-window fixed z-50 transition-all duration-300 flex flex-col bg-white dark:bg-slate-950 border-0 sm:border border-slate-200 dark:border-cyan-500/40 shadow-2xl backdrop-blur-2xl ${
             isMinimized
-              ? 'bottom-6 right-6 w-80 h-16 rounded-2xl overflow-hidden'
-              : 'bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-32px)] sm:w-[440px] h-[calc(100vh-100px)] sm:h-[630px] max-h-[88vh] rounded-3xl overflow-hidden'
+              ? 'bottom-4 right-4 sm:bottom-6 sm:right-6 w-72 sm:w-80 h-16 rounded-2xl overflow-hidden border border-slate-200 dark:border-cyan-500/40'
+              : 'inset-0 sm:inset-auto sm:bottom-6 sm:right-6 w-full sm:w-[440px] h-[100dvh] sm:h-[630px] max-h-[100dvh] sm:max-h-[88vh] rounded-none sm:rounded-3xl overflow-hidden'
           }`}
         >
           {/* Header */}
@@ -457,16 +466,38 @@ export default function AIChatbot() {
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Quick Starter Chips */}
-              <div className="chatbot-chips-area p-2.5 bg-slate-100/80 dark:bg-[#0b0f19] border-t border-slate-200 dark:border-slate-800">
+              {/* Quick Starter Chips with Slider Effect */}
+              <div className="chatbot-chips-area p-2.5 bg-slate-100/90 dark:bg-[#0b0f19] border-t border-slate-200 dark:border-slate-800 relative">
                 <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 px-1 mb-1.5 flex items-center justify-between">
                   <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300 font-bold">
                     <Sparkles className="w-3 h-3 text-blue-600 dark:text-cyan-400" />
                     Popular Questions
                   </span>
-                  <span className="text-blue-600 dark:text-cyan-400 font-semibold">Tap to Ask</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] text-blue-600 dark:text-cyan-400 font-semibold mr-0.5">Slide to explore</span>
+                    <button
+                      type="button"
+                      onClick={() => handleScrollChips('left')}
+                      className="p-1 rounded-md bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-blue-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 active:scale-90 transition-all cursor-pointer shadow-xs"
+                      title="Slide left"
+                    >
+                      <ChevronLeft className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleScrollChips('right')}
+                      className="p-1 rounded-md bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-blue-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 active:scale-90 transition-all cursor-pointer shadow-xs"
+                      title="Slide right"
+                    >
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+
+                <div
+                  ref={chipsScrollRef}
+                  className="flex items-center gap-2 overflow-x-auto pb-1.5 scrollbar-none scroll-smooth snap-x snap-mandatory"
+                >
                   {STARTER_PROMPTS.map((prompt, idx) => {
                     const IconComp = prompt.icon;
                     return (
@@ -475,7 +506,7 @@ export default function AIChatbot() {
                         type="button"
                         onClick={() => handleSendMessage(prompt.text)}
                         disabled={isLoading}
-                        className="chatbot-chip inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 text-[11px] font-semibold border border-slate-300 dark:border-slate-700 whitespace-nowrap transition-all duration-200 shrink-0 cursor-pointer disabled:opacity-50 shadow-xs"
+                        className="chatbot-chip snap-start inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 text-[11px] font-semibold border border-slate-300 dark:border-slate-700 whitespace-nowrap transition-all duration-200 shrink-0 cursor-pointer disabled:opacity-50 shadow-xs hover:border-blue-500 dark:hover:border-cyan-400 hover:bg-blue-50/50 dark:hover:bg-slate-800 active:scale-95"
                       >
                         <IconComp className="chatbot-chip-icon w-3.5 h-3.5 text-blue-600 dark:text-cyan-400 shrink-0" />
                         <span className="chatbot-chip-text text-slate-800 dark:text-slate-100 font-semibold">{prompt.text}</span>
@@ -486,7 +517,7 @@ export default function AIChatbot() {
               </div>
 
               {/* Bottom Quick CTA Banner */}
-              <div className="chatbot-cta-bar px-3.5 py-2.5 bg-gradient-to-r from-amber-500/10 via-blue-500/5 to-indigo-500/10 dark:from-blue-950/80 dark:via-slate-900 dark:to-purple-950/80 border-t border-slate-200 dark:border-cyan-500/20 flex items-center justify-between text-xs">
+              <div className="chatbot-cta-bar px-3 sm:px-3.5 py-2 sm:py-2.5 bg-gradient-to-r from-amber-500/10 via-blue-500/5 to-indigo-500/10 dark:from-blue-950/80 dark:via-slate-900 dark:to-purple-950/80 border-t border-slate-200 dark:border-cyan-500/20 flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 text-[11px] sm:text-xs">
                 <button
                   type="button"
                   onClick={() => setModalOpen(true)}
@@ -506,7 +537,7 @@ export default function AIChatbot() {
               </div>
 
               {/* Input Area */}
-              <div className="chatbot-input-area p-3 bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 flex items-center gap-2">
+              <div className="chatbot-input-area p-2.5 sm:p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 flex items-center gap-2">
                 <input
                   ref={inputRef}
                   type="text"
@@ -515,14 +546,14 @@ export default function AIChatbot() {
                   onKeyDown={handleKeyDown}
                   placeholder="Ask about courses, fees, batch timings, placements..."
                   disabled={isLoading}
-                  className="chatbot-input flex-1 bg-slate-50 dark:bg-[#0e1424] border border-slate-300 dark:border-slate-700 focus:border-blue-500 dark:focus:border-cyan-400 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-cyan-500/30 transition-all"
+                  className="chatbot-input flex-1 bg-slate-50 dark:bg-[#0e1424] border border-slate-300 dark:border-slate-700 focus:border-blue-500 dark:focus:border-cyan-400 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-cyan-500/30 transition-all"
                 />
 
                 <button
                   type="button"
                   onClick={() => handleSendMessage()}
                   disabled={isLoading || inputMessage.trim().length === 0}
-                  className="p-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-indigo-500 text-white disabled:opacity-40 disabled:cursor-not-allowed shadow-md transition-all cursor-pointer shrink-0"
+                  className="p-2 sm:p-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-indigo-500 text-white disabled:opacity-40 disabled:cursor-not-allowed shadow-md transition-all cursor-pointer shrink-0"
                   title="Send message"
                 >
                   <Send className="w-4 h-4" />
